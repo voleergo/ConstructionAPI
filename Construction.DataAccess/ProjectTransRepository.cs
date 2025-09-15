@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_ProjectTrans_GetAll");
         }
 
-        public override async Task<ProjectTrans> GetByIdAsync(long id)
+        public override async Task<ProjectTrans?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_ProjectTrans_GetById", new { ID_ProjectTrans = id });
         }
@@ -90,15 +90,15 @@ namespace Construction.DataAccess
         {
             return new ProjectTrans
             {
-                ID_ProjectTrans = reader.GetInt64("ID_ProjectTrans"),
-                FK_Project = reader.GetInt64("FK_Project"),
-                FK_Level = reader.GetInt64("FK_Level"),
-                FK_Item = reader.GetInt64("FK_Item"),
+                ID_ProjectTrans = reader.GetInt64(reader.GetOrdinal("ID_ProjectTrans")),
+                FK_Project = reader.GetInt64(reader.GetOrdinal("FK_Project")),
+                FK_Level = reader.GetInt64(reader.GetOrdinal("FK_Level")),
+                FK_Item = reader.GetInt64(reader.GetOrdinal("FK_Item")),
                 AccountType = GetNullableString(reader, "AccountType"),
                 Amount = GetNullableDecimal(reader, "Amount"),
                 Qty = GetNullableDecimal(reader, "Qty"),
                 Description = GetNullableString(reader, "Description"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")

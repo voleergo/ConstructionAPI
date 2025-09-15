@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Level_GetAll");
         }
 
-        public override async Task<Level> GetByIdAsync(long id)
+        public override async Task<Level?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Level_GetById", new { ID_Level = id });
         }
@@ -58,7 +58,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Level_Delete", new { ID_Level = id });
         }
 
-        public async Task<Level> GetByLevelCodeAsync(string levelCode)
+        public async Task<Level?> GetByLevelCodeAsync(string levelCode)
         {
             return await GetSingleStoredProcAsync("usp_Level_GetByCode", new { LevelCode = levelCode });
         }
@@ -72,12 +72,12 @@ namespace Construction.DataAccess
         {
             return new Level
             {
-                ID_Level = reader.GetInt64("ID_Level"),
-                LevelCode = reader.GetString("LevelCode"),
-                LevelName = reader.GetString("LevelName"),
+                ID_Level = reader.GetInt64(reader.GetOrdinal("ID_Level")),
+                LevelCode = reader.GetString(reader.GetOrdinal("LevelCode")),
+                LevelName = reader.GetString(reader.GetOrdinal("LevelName")),
                 LevelStatus = GetNullableString(reader, "LevelStatus"),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
                 UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
             };

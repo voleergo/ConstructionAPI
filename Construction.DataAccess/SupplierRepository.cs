@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Supplier_GetAll");
         }
 
-        public override async Task<Supplier> GetByIdAsync(long id)
+        public override async Task<Supplier?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Supplier_GetById", new { ID_Supplier = id });
         }
@@ -56,7 +56,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Supplier_Delete", new { ID_Supplier = id });
         }
 
-        public async Task<Supplier> GetBySupplierCodeAsync(string supplierCode)
+        public async Task<Supplier?> GetBySupplierCodeAsync(string supplierCode)
         {
             return await GetSingleStoredProcAsync("usp_Supplier_GetByCode", new { SupplierCode = supplierCode });
         }
@@ -70,10 +70,10 @@ namespace Construction.DataAccess
         {
             return new Supplier
             {
-                ID_Supplier = reader.GetInt64("ID_Supplier"),
-                SupplierCode = reader.GetString("SupplierCode"),
-                SupplierName = reader.GetString("SupplierName"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                ID_Supplier = reader.GetInt64(reader.GetOrdinal("ID_Supplier")),
+                SupplierCode = reader.GetString(reader.GetOrdinal("SupplierCode")),
+                SupplierName = reader.GetString(reader.GetOrdinal("SupplierName")),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")

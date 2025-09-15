@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System;
 
 namespace Construction.DataAccess
 {
@@ -10,7 +11,7 @@ namespace Construction.DataAccess
 
         public DatabaseConnectionHelper(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'DefaultConnection' not found.");
         }
 
         public IDbConnection CreateConnection()

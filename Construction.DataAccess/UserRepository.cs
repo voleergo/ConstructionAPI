@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_User_GetAll");
         }
 
-        public override async Task<User> GetByIdAsync(long id)
+        public override async Task<User?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_User_GetById", new { ID_Users = id });
         }
@@ -64,12 +64,12 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_User_Delete", new { ID_Users = id });
         }
 
-        public async Task<User> GetByUserNameAsync(string userName)
+        public async Task<User?> GetByUserNameAsync(string userName)
         {
             return await GetSingleStoredProcAsync("usp_User_GetByUserName", new { UserName = userName });
         }
 
-        public async Task<User> ValidateUserAsync(string userName, string password)
+        public async Task<User?> ValidateUserAsync(string userName, string password)
         {
             return await GetSingleStoredProcAsync("usp_User_ValidateUser", new { UserName = userName, Password = password });
         }
@@ -83,14 +83,14 @@ namespace Construction.DataAccess
         {
             return new User
             {
-                ID_Users = reader.GetInt64("ID_Users"),
-                UserName = reader.GetString("UserName"),
-                UserPassword = reader.GetString("UserPassword"),
+                ID_Users = reader.GetInt64(reader.GetOrdinal("ID_Users")),
+                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                UserPassword = reader.GetString(reader.GetOrdinal("UserPassword")),
                 MobileNumber = GetNullableString(reader, "MobileNumber"),
                 Email = GetNullableString(reader, "Email"),
                 FK_UserRoles = GetNullableLong(reader, "FK_UserRoles"),
                 UserStatus = GetNullableString(reader, "UserStatus"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")

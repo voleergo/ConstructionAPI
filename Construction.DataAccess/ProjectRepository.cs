@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Project_GetAll");
         }
 
-        public override async Task<Project> GetByIdAsync(long id)
+        public override async Task<Project?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Project_GetById", new { ID_Project = id });
         }
@@ -68,7 +68,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Project_Delete", new { ID_Project = id });
         }
 
-        public async Task<Project> GetByProjectCodeAsync(string projectCode)
+        public async Task<Project?> GetByProjectCodeAsync(string projectCode)
         {
             return await GetSingleStoredProcAsync("usp_Project_GetByCode", new { ProjectCode = projectCode });
         }
@@ -87,9 +87,9 @@ namespace Construction.DataAccess
         {
             return new Project
             {
-                ID_Project = reader.GetInt64("ID_Project"),
-                ProjectCode = reader.GetString("ProjectCode"),
-                ProjectName = reader.GetString("ProjectName"),
+                ID_Project = reader.GetInt64(reader.GetOrdinal("ID_Project")),
+                ProjectCode = reader.GetString(reader.GetOrdinal("ProjectCode")),
+                ProjectName = reader.GetString(reader.GetOrdinal("ProjectName")),
                 FK_Customer = GetNullableLong(reader, "FK_Customer"),
                 EstimateAmt = GetNullableDecimal(reader, "EstimateAmt"),
                 StartDate = GetNullableDateTime(reader, "StartDate"),
@@ -97,7 +97,7 @@ namespace Construction.DataAccess
                 ProjectType = GetNullableString(reader, "ProjectType"),
                 ProjectStatus = GetNullableString(reader, "ProjectStatus"),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
                 UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
             };

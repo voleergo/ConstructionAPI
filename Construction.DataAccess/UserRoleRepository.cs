@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_UserRole_GetAll");
         }
 
-        public override async Task<UserRole> GetByIdAsync(long id)
+        public override async Task<UserRole?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_UserRole_GetById", new { ID_UserRole = id });
         }
@@ -54,7 +54,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_UserRole_Delete", new { ID_UserRole = id });
         }
 
-        public async Task<UserRole> GetByRoleNameAsync(string roleName)
+        public async Task<UserRole?> GetByRoleNameAsync(string roleName)
         {
             return await GetSingleStoredProcAsync("usp_UserRole_GetByName", new { RoleName = roleName });
         }
@@ -63,9 +63,9 @@ namespace Construction.DataAccess
         {
             return new UserRole
             {
-                ID_UserRole = reader.GetInt64("ID_UserRole"),
-                RoleName = reader.GetString("RoleName"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                ID_UserRole = reader.GetInt64(reader.GetOrdinal("ID_UserRole")),
+                RoleName = reader.GetString(reader.GetOrdinal("RoleName")),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")

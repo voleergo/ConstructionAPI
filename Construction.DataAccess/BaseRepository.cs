@@ -18,12 +18,12 @@ namespace Construction.DataAccess
         }
 
         public abstract Task<IEnumerable<T>> GetAllAsync();
-        public abstract Task<T> GetByIdAsync(long id);
+        public abstract Task<T?> GetByIdAsync(long id);
         public abstract Task<long> AddAsync(T entity);
         public abstract Task<bool> UpdateAsync(T entity);
         public abstract Task<bool> DeleteAsync(long id);
 
-        protected async Task<T> GetSingleStoredProcAsync(string storedProcName, object parameters = null)
+        protected async Task<T?> GetSingleStoredProcAsync(string storedProcName, object? parameters = null)
         {
             using var connection = (SqlConnection)_connectionHelper.CreateConnection();
             await connection.OpenAsync();
@@ -46,7 +46,7 @@ namespace Construction.DataAccess
             return null;
         }
 
-        protected async Task<IEnumerable<T>> GetMultipleStoredProcAsync(string storedProcName, object parameters = null)
+        protected async Task<IEnumerable<T>> GetMultipleStoredProcAsync(string storedProcName, object? parameters = null)
         {
             var results = new List<T>();
             using var connection = (SqlConnection)_connectionHelper.CreateConnection();

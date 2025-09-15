@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Customer_GetAll");
         }
 
-        public override async Task<Customer> GetByIdAsync(long id)
+        public override async Task<Customer?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Customer_GetById", new { ID_Customer = id });
         }
@@ -56,7 +56,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Customer_Delete", new { ID_Customer = id });
         }
 
-        public async Task<Customer> GetByCustomerCodeAsync(string customerCode)
+        public async Task<Customer?> GetByCustomerCodeAsync(string customerCode)
         {
             return await GetSingleStoredProcAsync("usp_Customer_GetByCode", new { CustomerCode = customerCode });
         }
@@ -70,10 +70,10 @@ namespace Construction.DataAccess
         {
             return new Customer
             {
-                ID_Customer = Convert.ToInt64( reader["ID_Customer"]),
-                CustomerCode = Convert.ToString(reader["CustomerCode"]),
-                CustomerName = Convert.ToString(reader["CustomerName"]),
-                CreatedOn = GetNullableDateTime(reader, "ModifiedOn"),               
+                ID_Customer = reader.GetInt64(reader.GetOrdinal("ID_Customer")),
+                CustomerCode = reader.GetString(reader.GetOrdinal("CustomerCode")),
+                CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),               
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")

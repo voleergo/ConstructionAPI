@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Item_GetAll");
         }
 
-        public override async Task<Item> GetByIdAsync(long id)
+        public override async Task<Item?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Item_GetById", new { ID_Item = id });
         }
@@ -58,7 +58,7 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Item_Delete", new { ID_Item = id });
         }
 
-        public async Task<Item> GetByItemCodeAsync(string itemCode)
+        public async Task<Item?> GetByItemCodeAsync(string itemCode)
         {
             return await GetSingleStoredProcAsync("usp_Item_GetByCode", new { ItemCode = itemCode });
         }
@@ -72,12 +72,12 @@ namespace Construction.DataAccess
         {
             return new Item
             {
-                ID_Item = reader.GetInt64("ID_Item"),
-                ItemCode = reader.GetString("ItemCode"),
-                ItemName = reader.GetString("ItemName"),
+                ID_Item = reader.GetInt64(reader.GetOrdinal("ID_Item")),
+                ItemCode = reader.GetString(reader.GetOrdinal("ItemCode")),
+                ItemName = reader.GetString(reader.GetOrdinal("ItemName")),
                 ItemType = GetNullableString(reader, "ItemType"),
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                 UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
                 UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
             };

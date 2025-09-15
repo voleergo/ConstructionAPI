@@ -21,7 +21,7 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_ProjectLevel_GetAll");
         }
 
-        public override async Task<ProjectLevel> GetByIdAsync(long id)
+        public override async Task<ProjectLevel?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_ProjectLevel_GetById", new { ID_ProjectLevel = id });
         }
@@ -64,9 +64,9 @@ namespace Construction.DataAccess
         {
             return new ProjectLevel
             {
-                ID_ProjectLevel = reader.GetInt64("ID_ProjectLevel"),
-                FK_Project = reader.GetInt64("FK_Project"),
-                FK_Level = reader.GetInt64("FK_Level")
+                ID_ProjectLevel = reader.GetInt64(reader.GetOrdinal("ID_ProjectLevel")),
+                FK_Project = reader.GetInt64(reader.GetOrdinal("FK_Project")),
+                FK_Level = reader.GetInt64(reader.GetOrdinal("FK_Level"))
             };
         }
     }
