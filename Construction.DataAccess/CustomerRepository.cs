@@ -70,10 +70,10 @@ namespace Construction.DataAccess
         {
             return new Customer
             {
-                ID_Customer = reader.GetInt64("ID_Customer"),
-                CustomerCode = reader.GetString("CustomerCode"),
-                CustomerName = reader.GetString("CustomerName"),
-                CreatedOn = reader.GetDateTime("CreatedOn"),
+                ID_Customer = Convert.ToInt64( reader["ID_Customer"]),
+                CustomerCode = Convert.ToString(reader["CustomerCode"]),
+                CustomerName = Convert.ToString(reader["CustomerName"]),
+                CreatedOn = GetNullableDateTime(reader, "ModifiedOn"),               
                 CreatedBy = GetNullableLong(reader, "CreatedBy"),
                 ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
                 ModifiedBy = GetNullableLong(reader, "ModifiedBy")
