@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Construction.Interface\Construction.Interface.csproj" />
+    <ProjectReference Include="..\Construction.DataAccess\Construction.DataAccess.csproj" />
+    <ProjectReference Include="..\Construction.DomainModel\Construction.DomainModel.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
