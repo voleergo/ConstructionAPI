@@ -1,5 +1,6 @@
-using Microsoft.Data.SqlClient;
+using Microsoft.Practices.EnterpriseLibrary.Data;
 using System.Data;
+using System.Data.Common;
 using Construction.Interface;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,13 +9,13 @@ namespace Construction.DataAccess
 {
     public abstract class BaseRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly DatabaseConnectionHelper _connectionHelper;
+        protected readonly Database _database;
         protected abstract string TableName { get; }
         protected abstract string IdColumn { get; }
 
         protected BaseRepository(DatabaseConnectionHelper connectionHelper)
         {
-            _connectionHelper = connectionHelper;
+            _database = connectionHelper.GetDatabase();
         }
 
         public abstract Task<IEnumerable<T>> GetAllAsync();
@@ -25,88 +26,72 @@ namespace Construction.DataAccess
 
         protected async Task<T?> GetSingleStoredProcAsync(string storedProcName, object? parameters = null)
         {
-            using var connection = (SqlConnection)_connectionHelper.CreateConnection();
-            await connection.OpenAsync();
-            
-            using var command = new SqlCommand(storedProcName, connection)
+            return await Task.Run(() =>
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            
-            if (parameters != null)
-            {
-                AddParameters(command, parameters);
-            }
+                using var command = _database.GetStoredProcCommand(storedProcName);
+                
+                if (parameters != null)
+                {
+                    AddParameters(command, parameters);
+                }
 
-            using var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
-            {
-                return MapFromReader(reader);
-            }
-            return null;
+                using var reader = _database.ExecuteReader(command);
+                if (reader.Read())
+                {
+                    return MapFromReader(reader);
+                }
+                return null;
+            });
         }
 
         protected async Task<IEnumerable<T>> GetMultipleStoredProcAsync(string storedProcName, object? parameters = null)
         {
-            var results = new List<T>();
-            using var connection = (SqlConnection)_connectionHelper.CreateConnection();
-            await connection.OpenAsync();
-            
-            using var command = new SqlCommand(storedProcName, connection)
+            return await Task.Run(() =>
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            
-            if (parameters != null)
-            {
-                AddParameters(command, parameters);
-            }
+                var results = new List<T>();
+                using var command = _database.GetStoredProcCommand(storedProcName);
+                
+                if (parameters != null)
+                {
+                    AddParameters(command, parameters);
+                }
 
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                results.Add(MapFromReader(reader));
-            }
-            return results;
+                using var reader = _database.ExecuteReader(command);
+                while (reader.Read())
+                {
+                    results.Add(MapFromReader(reader));
+                }
+                return (IEnumerable<T>)results;
+            });
         }
 
         protected async Task<long> ExecuteInsertStoredProcAsync(string storedProcName, object parameters)
         {
-            using var connection = (SqlConnection)_connectionHelper.CreateConnection();
-            await connection.OpenAsync();
-            
-            using var command = new SqlCommand(storedProcName, connection)
+            return await Task.Run(() =>
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            
-            AddParameters(command, parameters);
-            
-            // Add output parameter for ID
-            var outputParam = new SqlParameter("@ID", SqlDbType.BigInt)
-            {
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(outputParam);
-            
-            await command.ExecuteNonQueryAsync();
-            return Convert.ToInt64(outputParam.Value);
+                using var command = _database.GetStoredProcCommand(storedProcName);
+                
+                AddParameters(command, parameters);
+                
+                // Add output parameter for ID
+                _database.AddOutParameter(command, "@ID", DbType.Int64, 8);
+                
+                _database.ExecuteNonQuery(command);
+                return Convert.ToInt64(_database.GetParameterValue(command, "@ID"));
+            });
         }
 
         protected async Task<bool> ExecuteNonQueryStoredProcAsync(string storedProcName, object parameters)
         {
-            using var connection = (SqlConnection)_connectionHelper.CreateConnection();
-            await connection.OpenAsync();
-            
-            using var command = new SqlCommand(storedProcName, connection)
+            return await Task.Run(() =>
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            
-            AddParameters(command, parameters);
-            
-            var rowsAffected = await command.ExecuteNonQueryAsync();
-            return rowsAffected > 0;
+                using var command = _database.GetStoredProcCommand(storedProcName);
+                
+                AddParameters(command, parameters);
+                
+                var rowsAffected = _database.ExecuteNonQuery(command);
+                return rowsAffected > 0;
+            });
         }
 
         protected abstract T MapFromReader(IDataReader reader);
@@ -135,13 +120,13 @@ namespace Construction.DataAccess
             return reader.IsDBNull(ordinal) ? null : reader.GetDecimal(ordinal);
         }
 
-        private void AddParameters(SqlCommand command, object parameters)
+        private void AddParameters(DbCommand command, object parameters)
         {
             var properties = parameters.GetType().GetProperties();
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(parameters) ?? DBNull.Value;
-                command.Parameters.AddWithValue($"@{prop.Name}", value);
+                _database.AddInParameter(command, $"@{prop.Name}", DbType.Object, value);
             }
         }
     }

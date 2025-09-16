@@ -7,7 +7,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Construction API",
+        Version = "v1",
+        Description = "A comprehensive API for Construction Management System",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Construction Team"
+        }
+    });
+    
+    // Enable XML comments if you want to add them later
+    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    // c.IncludeXmlComments(xmlPath);
+});
 
 // Register connection helper
 builder.Services.AddSingleton<DatabaseConnectionHelper>();
@@ -51,7 +68,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Construction API v1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI at app's root
+        c.DocumentTitle = "Construction API Documentation";
+        c.DefaultModelsExpandDepth(-1); // Disable swagger schemas at bottom
+        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+    });
 }
 
 app.UseHttpsRedirection();

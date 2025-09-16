@@ -1,22 +1,23 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
-using System.Data;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using System;
 
 namespace Construction.DataAccess
 {
     public class DatabaseConnectionHelper
     {
-        private readonly string _connectionString;
+        private readonly Database _database;
 
         public DatabaseConnectionHelper(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'DefaultConnection' not found.");
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration), "Connection string 'DefaultConnection' not found.");
+            _database = new SqlDatabase(connectionString);
         }
 
-        public IDbConnection CreateConnection()
+        public Database GetDatabase()
         {
-            return new SqlConnection(_connectionString);
+            return _database;
         }
     }
 }
