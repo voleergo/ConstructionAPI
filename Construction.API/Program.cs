@@ -31,8 +31,6 @@ builder.Services.AddSingleton<DatabaseConnectionHelper>();
 
 // Register repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ILevelRepository, LevelRepository>();
@@ -42,7 +40,6 @@ builder.Services.AddScoped<IProjectTransRepository, ProjectTransRepository>();
 
 // Register services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();

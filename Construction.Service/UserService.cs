@@ -1,81 +1,223 @@
+/*----------------------------------- UsersDataService  -----------------------------------------------------------------------------------------------------------------------
+Purpose    : AuthService Class
+Author     : Jinesh Kumar C
+Copyright  :
+Created on :01-11-2023 09:32:03
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MODIFICATIONS 
+On                          By                    TaskID          Description
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+01-11-2023 09:32:03          Jinesh Kumar C                       AuthService Class initially  created
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 using Construction.DomainModel;
+using Construction.DomainModel.User;
 using Construction.Interface;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.Text;
+using Construction.DataAccess;
+using Newtonsoft.Json;
+using Construction.Common;
+
 
 namespace Construction.Service
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        public string? ConnectionStrings { get; set; }
 
-        public UserService(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await _userRepository.GetAllAsync();
-        }
 
-        public async Task<User> GetUserByIdAsync(long id)
-        {
-            return await _userRepository.GetByIdAsync(id);
-        }
 
-        public async Task<User> GetUserByNameAsync(string userName)
-        {
-            return await _userRepository.GetByUserNameAsync(userName);
-        }
 
-        public async Task<User> ValidateUserAsync(string userName, string password)
+        public SignUpResponse UsersUpdate(UsersModel inputModel)
         {
-            // Hash the password for comparison
-            string hashedPassword = HashPassword(password);
-            return await _userRepository.ValidateUserAsync(userName, hashedPassword);
-        }
-
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(long roleId)
-        {
-            return await _userRepository.GetUsersByRoleAsync(roleId);
-        }
-
-        public async Task<long> CreateUserAsync(User user)
-        {
-            // Hash the password before storing
-            user.UserPassword = HashPassword(user.UserPassword);
-            user.CreatedOn = DateTime.Now;
-            
-            return await _userRepository.AddAsync(user);
-        }
-
-        public async Task<bool> UpdateUserAsync(User user)
-        {
-            user.ModifiedOn = DateTime.Now;
-            return await _userRepository.UpdateAsync(user);
-        }
-
-        public async Task<bool> DeleteUserAsync(long id)
-        {
-            return await _userRepository.DeleteAsync(id);
-        }
-
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            if (inputModel.ID_Users == 0)
             {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+                inputModel.UserPasswordStr = inputModel.UserPassword;
+                //inputModel.UserPasswordStr = GeneratePassword();
+                inputModel.UserPassword = Cryptography.GetMd5Hash(inputModel.MobileNumber ?? "");
             }
+            return dataService.UsersUpdate(inputModel);
+        }
+        public HttpResponses UsersDelete(UsersModel inputModel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UsersDelete(inputModel);
+        }
+
+
+        public List<UsersModel> UsersSelect(UsersModel inputModel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UsersSelect(inputModel);
+        }
+        public List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UsersUpdateSelect(FK_Users);
+        }
+
+
+        public HttpResponses UserDataUpdate(UsersModel inputModel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UsersDataUpdate(inputModel);
+        }
+
+
+
+
+        public HttpResponses DropDownData()
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.DropDownData();
+        }
+        public HttpResponses CommonDropDownData()
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.CommonDropDownData();
+        }
+
+        public string GenerateRandomUniqueID()
+        {
+            var random = new Random(Guid.NewGuid().GetHashCode());
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            string uniqueID = new string(Enumerable.Range(0, 10).Select(_ => chars[random.Next(chars.Length)]).ToArray());
+
+            Console.WriteLine($"Generated UniqueID: {uniqueID}");
+
+            return uniqueID;
+        }
+
+        public HttpResponses AdminLogin(UsersModel model)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.AdminLogin(model);
+        }
+
+
+
+
+        public List<ClientMenuModel> GetMenuClient(ClientMenuModel inputmodel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetMenuClient(inputmodel);
+        }
+        public HttpResponses UpdateMenuClient(ClientMenuModel client)
+        {
+
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UpdateMenuClient(client);
+
+        }
+
+        public string GetTenantData()
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetTenantData();
+        }
+
+
+        public List<MenuRoleModel> GetMenuRoleModel(MenuRoleModel menumodel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetMenuRoleModel(menumodel);
+        }
+        public HttpResponses UpdateMenuRole(MenuRoleModel menu)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+
+            // MenuJson can be generated or passed; if you only want updates, make sure it matches DB fields
+            menu.MenuJson = GenerateMenu(menu.JsonData);
+
+            return dataService.UpdateMenuRole(menu);
+        }
+        public List<RoleModel> GetRoles(int idRole)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetRoles(idRole);
+        }
+
+        private string GenerateMenu(string menuString)
+        {
+            List<MenuPermission> permissions = JsonConvert.DeserializeObject<List<MenuPermission>>(menuString);
+
+            List<NavMenu> mnuList = new List<NavMenu>();
+            var parentMenus = permissions.Where(menu => menu.Header == 1).ToList();
+
+            foreach (var item in parentMenus)
+            {
+                List<MenuPermission> permissionList = new List<MenuPermission>();
+                NavMenu navMenu = new NavMenu();
+                permissionList = permissions.Where(parent => parent.ModuleCode == item.ModuleCode && parent.Header == 0).ToList();
+                navMenu.Children = permissionList.Select(root => new NavItemModel
+                {
+                    Path = root.Url,
+                    Title = root.MenuName,
+                    Icon = "icon('" + root.IconName + "')"
+                }).ToList();
+                navMenu.Title = item.MenuName;
+                navMenu.Path = item.Url;
+                navMenu.Icon = "icon('" + item.IconName + "')";
+                mnuList.Add(navMenu);
+            }
+            return JsonConvert.SerializeObject(mnuList);
+        }
+
+
+        //public HttpResponses RoleModelUpdate(RoleModel userRole)
+        //{
+        //    UserDataService dataService = new UserDataService(ConnectionStrings);
+        //    return dataService.RoleModelUpdate(userRole);
+        //}
+        //public HttpResponses userRoleDelete(RoleModel userRole)
+        //{
+        //    UserDataService dataService = new UserDataService(ConnectionStrings);
+        //    return dataService.userRoleDelete(userRole);
+        //}
+
+        //public List<RoleModel> getUserRole(RoleModel userRole)
+        //{
+        //    UserDataService dataService = new UserDataService(ConnectionStrings);
+        //    return dataService.getUserRole(userRole);
+        //}
+        public HttpResponses PostMenuModel(MenuModel menu)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.PostMenuModel(menu);
+        }
+        public HttpResponses MenuDelete(MenuModel model)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.MenuDelete(model);
+        }
+        public List<MenuModel> GetMenuModel(MenuModel menu)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetMenuModel(menu);
+        }
+
+
+
+
+        public HttpResponses RoleModelUpdate(RoleModel userRole)
+        {
+            throw new NotImplementedException();
+        }
+
+        public HttpResponses userRoleDelete(RoleModel role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<RoleModel> getUserRole(RoleModel role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<RoleModel> GetRoles(RoleModel role)
+        {
+            throw new NotImplementedException();
         }
     }
 }

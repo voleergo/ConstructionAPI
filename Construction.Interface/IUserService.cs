@@ -1,18 +1,61 @@
+﻿/*----------------------------------- UsersDataService  -----------------------------------------------------------------------------------------------------------------------
+Purpose    : AuthService Interface Class
+Author     : Jinesh Kumar C
+Copyright  :
+Created on :01-11-2023 09:32:03
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MODIFICATIONS 
+On                          By                    TaskID          Description
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+01-11-2023 09:32:03          Jinesh Kumar C                       AuthService Interface Class initially  created
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+using System.Reflection;
 using Construction.DomainModel;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Construction.DomainModel.HttpResponse;
+using Construction.DomainModel.User;
 
 namespace Construction.Interface
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<User> GetUserByIdAsync(long id);
-        Task<User> GetUserByNameAsync(string userName);
-        Task<User> ValidateUserAsync(string userName, string password);
-        Task<IEnumerable<User>> GetUsersByRoleAsync(long roleId);
-        Task<long> CreateUserAsync(User user);
-        Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(long id);
+        public string? ConnectionStrings { get; set; }
+
+        #region Users
+
+        SignUpResponse UsersUpdate(UsersModel inputModel);
+        HttpResponses UserDataUpdate(UsersModel inputModel);
+
+        HttpResponses UsersDelete(UsersModel inputModel);
+        string GenerateRandomUniqueID();
+        List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users);
+
+        List<UsersModel> UsersSelect(UsersModel inputModel);
+
+        #endregion Users
+
+
+        HttpResponses DropDownData();
+        HttpResponses CommonDropDownData();
+        string GetTenantData();
+
+        public List<ClientMenuModel> GetMenuClient(ClientMenuModel inputmodel);
+        HttpResponses UpdateMenuClient(ClientMenuModel client);
+
+        public List<MenuRoleModel> GetMenuRoleModel(MenuRoleModel menumodel);
+
+        public HttpResponses RoleModelUpdate(RoleModel userRole);
+
+        public HttpResponses userRoleDelete(RoleModel role);
+        HttpResponses PostMenuModel(MenuModel menu);
+        public HttpResponses UpdateMenuRole(MenuRoleModel menu);
+
+        public List<RoleModel> getUserRole(RoleModel role);
+
+        public List<MenuModel> GetMenuModel(MenuModel model);
+        HttpResponses MenuDelete(MenuModel model);
+        public List<RoleModel> GetRoles(int idRole); // ✅ correct
+
+
     }
 }

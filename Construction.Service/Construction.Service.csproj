@@ -1,6 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="EnterpriseLibrary.Data" Version="6.0.1304" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Construction.Common\Construction.Common.csproj" />
     <ProjectReference Include="..\Construction.Interface\Construction.Interface.csproj" />
     <ProjectReference Include="..\Construction.DataAccess\Construction.DataAccess.csproj" />
     <ProjectReference Include="..\Construction.DomainModel\Construction.DomainModel.csproj" />
