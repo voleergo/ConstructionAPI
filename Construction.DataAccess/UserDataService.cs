@@ -40,6 +40,55 @@ namespace Construction.DataAccess
             _connectionString = connectionString;
         }
 
+        public UsersModel ValidateLogin(LoginModel model)
+        {
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            UsersModel userModel = new UsersModel();
+            string sqlCommand = Procedures.SP_ValidateLogin;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@UserCode", DbType.String, model.Username);
+            db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
+            db.AddInParameter(dbCommand, "@IP", DbType.String, model.IPAddress);
+            db.AddInParameter(dbCommand, "@MAC", DbType.String, string.Empty);
+            db.AddInParameter(dbCommand, "@IsMobile", DbType.Boolean, false);
+
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        userModel = new UsersModel();
+                        userModel.ID_Users = Convert.ToInt64(dataReader["ID_Users"]);
+                        //userModel.ID_PartyMember = Convert.ToInt32(dataReader["ID_PartyMember"]);
+                        userModel.Email = Convert.ToString(dataReader["Email"]);
+                        userModel.MobileNumber = Convert.ToString(dataReader["Mobile"]);
+                        userModel.UserName = Convert.ToString(dataReader["Username"]);
+                        //userModel.FirstName = Convert.ToString(dataReader["FirstName"]);
+                        //userModel.LastName = Convert.ToString(dataReader["LastName"]);
+                        userModel.MessageText = Convert.ToString(dataReader["MessageText"]);
+                        userModel.FK_UserRole = Convert.ToInt16(dataReader["FK_UserRole"]);
+                        //userModel.StateName = Convert.ToString(dataReader["StateName"]);
+                        //userModel.FK_State = Convert.ToInt16(dataReader["FK_State"]);
+                        //userModel.ImageURL = Convert.ToString(dataReader["ImageURL"]);
+                        //userModel.IsUserProfileExists = Convert.ToString(dataReader["IsUserProfileExists"]);
+                        //userModel.FK_Company = Convert.ToString(dataReader["CompanyName"]);
+                        //userModel.Company = Convert.ToInt32(dataReader["FK_Company"]);
+                        //userModel.IsUserExist = Convert.ToInt32(dataReader["IsUserProfileExists"]);
+                        userModel.MenuJson = Convert.ToString(dataReader["MenuJson"]);
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return userModel;
+        }
 
         public string GetTenantData()
         {

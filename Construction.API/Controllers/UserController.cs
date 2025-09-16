@@ -77,7 +77,61 @@ namespace JWTAuthentication.NET6._0.Controllers
 
         }
 
+        [HttpPost]
+        [ActionName("login")]
+        [EnableCors("AllowOrigin")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            var result = new HttpLoginResponse();
+            IActionResult response = Unauthorized();
+            JwtSecurityToken token = new JwtSecurityToken();
+            UsersModel userModel = new UsersModel();
+            try
+            {
+                //Validlogin checking cod here
+                model.IPAddress = base.IPAddress;
+                model.MACAddress = base.MACAddress;
+                userModel = _authService.ValidateLogin(model);
+                if (userModel.ID_Users > 0)
+                {
+                    token = _tokenService.GenerateToekn(userModel);
+                    result.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                    result.Expiration = token.ValidTo;
+                    result.Sid = Cryptography.EncryptSID(Convert.ToString(userModel.ID_Users) ?? "");
+                    userModel.FK_UserRoleStr = Cryptography.Encryptstring(Convert.ToString(userModel.FK_UserRole));
+                    result.ResponseStatus = true;
+                    result.ResponseID = 1;
+                    result.ResponseCode = "1";
+                    result.Response = userModel;
+                    result.MenuJson = userModel.MenuJson;
 
+                }
+                else
+                {
+                    result.ResponseMessage = userModel.MessageText;
+                    result.ResponseStatus = false;
+                    result.ResponseID = 0;
+                    result.ResponseCode = "0";
+                    result.Response = userModel;
+                }
+
+
+
+                return Task.FromResult<IActionResult>(Ok(new
+                {
+                    Result = result
+                }));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(response = BadRequest(new { Result = result }));
+            }
+            finally
+            {
+
+            }
+        }
 
         #region Users
 

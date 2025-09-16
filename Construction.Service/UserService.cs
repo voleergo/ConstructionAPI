@@ -26,7 +26,13 @@ namespace Construction.Service
 
 
 
-
+        public UsersModel ValidateLogin(LoginModel model)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            //model.Password = Cryptography.GetMd5Hash(model.Password);
+            // model.Password = Cryptography.GetMd5Hash(model.Password ?? "");
+            return dataService.ValidateLogin(model);
+        }
 
         public SignUpResponse UsersUpdate(UsersModel inputModel)
         {
