@@ -270,20 +270,17 @@ namespace JWTAuthentication.NET6._0.Controllers
         [ActionName("User")]
         [Authorize]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UsersSelect(Int64 id_Users, Int64 createdBy)
+        public Task<IActionResult> UsersSelect(Int64 id_Users)
         {
             List<UsersModel> result = new List<UsersModel>();
             IActionResult response = Unauthorized();
             UsersModel model = new UsersModel();
             try
             {
-                // Int64 id_user = base.ID_Users;
-
-                model.IPAddress = base.IPAddress;
-                model.MACAddress = base.MACAddress;
+               
                 model.ID_Users = id_Users;
-                model.CreatedBy = createdBy;
-                result = _authService.UsersSelect(model);
+               
+                result = _authService.GetUsers(model);
                 return Task.FromResult<IActionResult>(Ok(new
                 {
                     Result = result
