@@ -66,17 +66,17 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Customer_SearchByName", new { CustomerName = customerName });
         }
 
-        protected override Customer MapFromReader(IDataReader reader)
+        protected override Customer MapFromReader(IDataReader dataReader)
         {
             return new Customer
             {
-                ID_Customer = reader.GetInt64(reader.GetOrdinal("ID_Customer")),
-                CustomerCode = reader.GetString(reader.GetOrdinal("CustomerCode")),
-                CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),               
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
-                ModifiedBy = GetNullableLong(reader, "ModifiedBy")
+                ID_Customer = Convert.ToInt64(dataReader["ID_Customer"]),
+                CustomerCode = Convert.ToString(dataReader["CustomerCode"]) ?? string.Empty,
+                CustomerName = Convert.ToString(dataReader["CustomerName"]) ?? string.Empty,
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),               
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["ModifiedBy"])
             };
         }
     }

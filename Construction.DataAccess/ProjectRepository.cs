@@ -83,23 +83,23 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Project_GetByStatus", new { ProjectStatus = status });
         }
 
-        protected override Project MapFromReader(IDataReader reader)
+        protected override Project MapFromReader(IDataReader dataReader)
         {
             return new Project
             {
-                ID_Project = reader.GetInt64(reader.GetOrdinal("ID_Project")),
-                ProjectCode = reader.GetString(reader.GetOrdinal("ProjectCode")),
-                ProjectName = reader.GetString(reader.GetOrdinal("ProjectName")),
-                FK_Customer = GetNullableLong(reader, "FK_Customer"),
-                EstimateAmt = GetNullableDecimal(reader, "EstimateAmt"),
-                StartDate = GetNullableDateTime(reader, "StartDate"),
-                EndDate = GetNullableDateTime(reader, "EndDate"),
-                ProjectType = GetNullableString(reader, "ProjectType"),
-                ProjectStatus = GetNullableString(reader, "ProjectStatus"),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
-                UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
+                ID_Project = Convert.ToInt64(dataReader["ID_Project"]),
+                ProjectCode = Convert.ToString(dataReader["ProjectCode"]) ?? string.Empty,
+                ProjectName = Convert.ToString(dataReader["ProjectName"]) ?? string.Empty,
+                FK_Customer = dataReader["FK_Customer"] == DBNull.Value ? null : Convert.ToInt64(dataReader["FK_Customer"]),
+                EstimateAmt = dataReader["EstimateAmt"] == DBNull.Value ? null : Convert.ToDecimal(dataReader["EstimateAmt"]),
+                StartDate = dataReader["StartDate"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["StartDate"]),
+                EndDate = dataReader["EndDate"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["EndDate"]),
+                ProjectType = dataReader["ProjectType"] == DBNull.Value ? null : Convert.ToString(dataReader["ProjectType"]),
+                ProjectStatus = dataReader["ProjectStatus"] == DBNull.Value ? null : Convert.ToString(dataReader["ProjectStatus"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                UpdatedBy = dataReader["UpdatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["UpdatedBy"]),
+                UpdatedOn = dataReader["UpdatedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["UpdatedOn"])
             };
         }
     }

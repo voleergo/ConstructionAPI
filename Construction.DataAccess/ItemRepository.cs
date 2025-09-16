@@ -68,18 +68,18 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Item_GetByType", new { ItemType = itemType });
         }
 
-        protected override Item MapFromReader(IDataReader reader)
+        protected override Item MapFromReader(IDataReader dataReader)
         {
             return new Item
             {
-                ID_Item = reader.GetInt64(reader.GetOrdinal("ID_Item")),
-                ItemCode = reader.GetString(reader.GetOrdinal("ItemCode")),
-                ItemName = reader.GetString(reader.GetOrdinal("ItemName")),
-                ItemType = GetNullableString(reader, "ItemType"),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
-                UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
+                ID_Item = Convert.ToInt64(dataReader["ID_Item"]),
+                ItemCode = Convert.ToString(dataReader["ItemCode"]) ?? string.Empty,
+                ItemName = Convert.ToString(dataReader["ItemName"]) ?? string.Empty,
+                ItemType = dataReader["ItemType"] == DBNull.Value ? null : Convert.ToString(dataReader["ItemType"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                UpdatedBy = dataReader["UpdatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["UpdatedBy"]),
+                UpdatedOn = dataReader["UpdatedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["UpdatedOn"])
             };
         }
     }

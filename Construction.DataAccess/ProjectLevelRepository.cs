@@ -60,13 +60,13 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_ProjectLevel_GetByLevel", new { FK_Level = levelId });
         }
 
-        protected override ProjectLevel MapFromReader(IDataReader reader)
+        protected override ProjectLevel MapFromReader(IDataReader dataReader)
         {
             return new ProjectLevel
             {
-                ID_ProjectLevel = reader.GetInt64(reader.GetOrdinal("ID_ProjectLevel")),
-                FK_Project = reader.GetInt64(reader.GetOrdinal("FK_Project")),
-                FK_Level = reader.GetInt64(reader.GetOrdinal("FK_Level"))
+                ID_ProjectLevel = Convert.ToInt64(dataReader["ID_ProjectLevel"]),
+                FK_Project = Convert.ToInt64(dataReader["FK_Project"]),
+                FK_Level = Convert.ToInt64(dataReader["FK_Level"])
             };
         }
     }

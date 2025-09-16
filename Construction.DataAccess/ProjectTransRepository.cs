@@ -86,22 +86,22 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_ProjectTrans_GetByAccountType", new { AccountType = accountType });
         }
 
-        protected override ProjectTrans MapFromReader(IDataReader reader)
+        protected override ProjectTrans MapFromReader(IDataReader dataReader)
         {
             return new ProjectTrans
             {
-                ID_ProjectTrans = reader.GetInt64(reader.GetOrdinal("ID_ProjectTrans")),
-                FK_Project = reader.GetInt64(reader.GetOrdinal("FK_Project")),
-                FK_Level = reader.GetInt64(reader.GetOrdinal("FK_Level")),
-                FK_Item = reader.GetInt64(reader.GetOrdinal("FK_Item")),
-                AccountType = GetNullableString(reader, "AccountType"),
-                Amount = GetNullableDecimal(reader, "Amount"),
-                Qty = GetNullableDecimal(reader, "Qty"),
-                Description = GetNullableString(reader, "Description"),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
-                ModifiedBy = GetNullableLong(reader, "ModifiedBy")
+                ID_ProjectTrans = Convert.ToInt64(dataReader["ID_ProjectTrans"]),
+                FK_Project = Convert.ToInt64(dataReader["FK_Project"]),
+                FK_Level = Convert.ToInt64(dataReader["FK_Level"]),
+                FK_Item = Convert.ToInt64(dataReader["FK_Item"]),
+                AccountType = dataReader["AccountType"] == DBNull.Value ? null : Convert.ToString(dataReader["AccountType"]),
+                Amount = dataReader["Amount"] == DBNull.Value ? null : Convert.ToDecimal(dataReader["Amount"]),
+                Qty = dataReader["Qty"] == DBNull.Value ? null : Convert.ToDecimal(dataReader["Qty"]),
+                Description = dataReader["Description"] == DBNull.Value ? null : Convert.ToString(dataReader["Description"]),
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["ModifiedBy"])
             };
         }
     }

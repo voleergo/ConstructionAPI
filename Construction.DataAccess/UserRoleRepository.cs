@@ -59,16 +59,16 @@ namespace Construction.DataAccess
             return await GetSingleStoredProcAsync("usp_UserRole_GetByName", new { RoleName = roleName });
         }
 
-        protected override UserRole MapFromReader(IDataReader reader)
+        protected override UserRole MapFromReader(IDataReader dataReader)
         {
             return new UserRole
             {
-                ID_UserRole = reader.GetInt64(reader.GetOrdinal("ID_UserRole")),
-                RoleName = reader.GetString(reader.GetOrdinal("RoleName")),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
-                ModifiedBy = GetNullableLong(reader, "ModifiedBy")
+                ID_UserRole = Convert.ToInt64(dataReader["ID_UserRole"]),
+                RoleName = Convert.ToString(dataReader["RoleName"]) ?? string.Empty,
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["ModifiedBy"])
             };
         }
     }

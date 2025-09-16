@@ -68,18 +68,18 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_Level_GetByStatus", new { LevelStatus = status });
         }
 
-        protected override Level MapFromReader(IDataReader reader)
+        protected override Level MapFromReader(IDataReader dataReader)
         {
             return new Level
             {
-                ID_Level = reader.GetInt64(reader.GetOrdinal("ID_Level")),
-                LevelCode = reader.GetString(reader.GetOrdinal("LevelCode")),
-                LevelName = reader.GetString(reader.GetOrdinal("LevelName")),
-                LevelStatus = GetNullableString(reader, "LevelStatus"),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                UpdatedBy = GetNullableLong(reader, "UpdatedBy"),
-                UpdatedOn = GetNullableDateTime(reader, "UpdatedOn")
+                ID_Level = Convert.ToInt64(dataReader["ID_Level"]),
+                LevelCode = Convert.ToString(dataReader["LevelCode"]) ?? string.Empty,
+                LevelName = Convert.ToString(dataReader["LevelName"]) ?? string.Empty,
+                LevelStatus = dataReader["LevelStatus"] == DBNull.Value ? null : Convert.ToString(dataReader["LevelStatus"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                UpdatedBy = dataReader["UpdatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["UpdatedBy"]),
+                UpdatedOn = dataReader["UpdatedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["UpdatedOn"])
             };
         }
     }

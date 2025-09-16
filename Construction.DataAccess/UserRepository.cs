@@ -79,21 +79,21 @@ namespace Construction.DataAccess
             return await GetMultipleStoredProcAsync("usp_User_GetByRole", new { FK_UserRoles = roleId });
         }
 
-        protected override User MapFromReader(IDataReader reader)
+        protected override User MapFromReader(IDataReader dataReader)
         {
             return new User
             {
-                ID_Users = reader.GetInt64(reader.GetOrdinal("ID_Users")),
-                UserName = reader.GetString(reader.GetOrdinal("UserName")),
-                UserPassword = reader.GetString(reader.GetOrdinal("UserPassword")),
-                MobileNumber = GetNullableString(reader, "MobileNumber"),
-                Email = GetNullableString(reader, "Email"),
-                FK_UserRoles = GetNullableLong(reader, "FK_UserRoles"),
-                UserStatus = GetNullableString(reader, "UserStatus"),
-                CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
-                CreatedBy = GetNullableLong(reader, "CreatedBy"),
-                ModifiedOn = GetNullableDateTime(reader, "ModifiedOn"),
-                ModifiedBy = GetNullableLong(reader, "ModifiedBy")
+                ID_Users = Convert.ToInt64(dataReader["ID_Users"]),
+                UserName = Convert.ToString(dataReader["UserName"]) ?? string.Empty,
+                UserPassword = Convert.ToString(dataReader["UserPassword"]) ?? string.Empty,
+                MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? null : Convert.ToString(dataReader["MobileNumber"]),
+                Email = dataReader["Email"] == DBNull.Value ? null : Convert.ToString(dataReader["Email"]),
+                FK_UserRoles = dataReader["FK_UserRoles"] == DBNull.Value ? null : Convert.ToInt64(dataReader["FK_UserRoles"]),
+                UserStatus = dataReader["UserStatus"] == DBNull.Value ? null : Convert.ToString(dataReader["UserStatus"]),
+                CreatedOn = Convert.ToDateTime(dataReader["CreatedOn"]),
+                CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["CreatedBy"]),
+                ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? null : Convert.ToInt64(dataReader["ModifiedBy"])
             };
         }
     }

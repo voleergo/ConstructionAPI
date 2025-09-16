@@ -9,13 +9,13 @@ namespace Construction.DataAccess
 {
     public abstract class BaseRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly Database _database;
+        protected readonly DatabaseConnectionHelper _connectionHelper;
         protected abstract string TableName { get; }
         protected abstract string IdColumn { get; }
 
         protected BaseRepository(DatabaseConnectionHelper connectionHelper)
         {
-            _database = connectionHelper.GetDatabase();
+            _connectionHelper = connectionHelper;
         }
 
         public abstract Task<IEnumerable<T>> GetAllAsync();
@@ -28,17 +28,28 @@ namespace Construction.DataAccess
         {
             return await Task.Run(() =>
             {
-                using var command = _database.GetStoredProcCommand(storedProcName);
+                Database db = _connectionHelper.GetDatabase();
+                DbCommand dbCommand = db.GetStoredProcCommand(storedProcName);
+                dbCommand.CommandTimeout = 0;
                 
                 if (parameters != null)
                 {
-                    AddParameters(command, parameters);
+                    AddParameters(db, dbCommand, parameters);
                 }
 
-                using var reader = _database.ExecuteReader(command);
-                if (reader.Read())
+                try
                 {
-                    return MapFromReader(reader);
+                    using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                    {
+                        if (dataReader.Read())
+                        {
+                            return MapFromReader(dataReader);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
                 return null;
             });
@@ -49,17 +60,28 @@ namespace Construction.DataAccess
             return await Task.Run(() =>
             {
                 var results = new List<T>();
-                using var command = _database.GetStoredProcCommand(storedProcName);
+                Database db = _connectionHelper.GetDatabase();
+                DbCommand dbCommand = db.GetStoredProcCommand(storedProcName);
+                dbCommand.CommandTimeout = 0;
                 
                 if (parameters != null)
                 {
-                    AddParameters(command, parameters);
+                    AddParameters(db, dbCommand, parameters);
                 }
 
-                using var reader = _database.ExecuteReader(command);
-                while (reader.Read())
+                try
                 {
-                    results.Add(MapFromReader(reader));
+                    using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                    {
+                        while (dataReader.Read())
+                        {
+                            results.Add(MapFromReader(dataReader));
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
                 return (IEnumerable<T>)results;
             });
@@ -69,15 +91,24 @@ namespace Construction.DataAccess
         {
             return await Task.Run(() =>
             {
-                using var command = _database.GetStoredProcCommand(storedProcName);
+                Database db = _connectionHelper.GetDatabase();
+                DbCommand dbCommand = db.GetStoredProcCommand(storedProcName);
+                dbCommand.CommandTimeout = 0;
                 
-                AddParameters(command, parameters);
+                AddParameters(db, dbCommand, parameters);
                 
                 // Add output parameter for ID
-                _database.AddOutParameter(command, "@ID", DbType.Int64, 8);
+                db.AddOutParameter(dbCommand, "@ID", DbType.Int64, 8);
                 
-                _database.ExecuteNonQuery(command);
-                return Convert.ToInt64(_database.GetParameterValue(command, "@ID"));
+                try
+                {
+                    db.ExecuteNonQuery(dbCommand);
+                    return Convert.ToInt64(db.GetParameterValue(dbCommand, "@ID"));
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             });
         }
 
@@ -85,49 +116,53 @@ namespace Construction.DataAccess
         {
             return await Task.Run(() =>
             {
-                using var command = _database.GetStoredProcCommand(storedProcName);
+                Database db = _connectionHelper.GetDatabase();
+                DbCommand dbCommand = db.GetStoredProcCommand(storedProcName);
+                dbCommand.CommandTimeout = 0;
                 
-                AddParameters(command, parameters);
+                AddParameters(db, dbCommand, parameters);
                 
-                var rowsAffected = _database.ExecuteNonQuery(command);
-                return rowsAffected > 0;
+                try
+                {
+                    var rowsAffected = db.ExecuteNonQuery(dbCommand);
+                    return rowsAffected > 0;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             });
         }
 
         protected abstract T MapFromReader(IDataReader reader);
 
-        protected static long? GetNullableLong(IDataReader reader, string columnName)
-        {
-            var ordinal = reader.GetOrdinal(columnName);
-            return reader.IsDBNull(ordinal) ? null : reader.GetInt64(ordinal);
-        }
+        // Helper methods removed - now using Convert.To... pattern directly in MapFromReader methods
 
-        protected static DateTime? GetNullableDateTime(IDataReader reader, string columnName)
-        {
-            var ordinal = reader.GetOrdinal(columnName);
-            return reader.IsDBNull(ordinal) ? null : reader.GetDateTime(ordinal);
-        }
-
-        protected static string? GetNullableString(IDataReader reader, string columnName)
-        {
-            var ordinal = reader.GetOrdinal(columnName);
-            return reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
-        }
-
-        protected static decimal? GetNullableDecimal(IDataReader reader, string columnName)
-        {
-            var ordinal = reader.GetOrdinal(columnName);
-            return reader.IsDBNull(ordinal) ? null : reader.GetDecimal(ordinal);
-        }
-
-        private void AddParameters(DbCommand command, object parameters)
+        private void AddParameters(Database db, DbCommand dbCommand, object parameters)
         {
             var properties = parameters.GetType().GetProperties();
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(parameters) ?? DBNull.Value;
-                _database.AddInParameter(command, $"@{prop.Name}", DbType.Object, value);
+                var dbType = GetDbType(prop.PropertyType);
+                db.AddInParameter(dbCommand, $"@{prop.Name}", dbType, value);
             }
+        }
+
+        private DbType GetDbType(Type type)
+        {
+            return Type.GetTypeCode(type) switch
+            {
+                TypeCode.Int16 => DbType.Int16,
+                TypeCode.Int32 => DbType.Int32,
+                TypeCode.Int64 => DbType.Int64,
+                TypeCode.String => DbType.String,
+                TypeCode.DateTime => DbType.DateTime,
+                TypeCode.Boolean => DbType.Boolean,
+                TypeCode.Decimal => DbType.Decimal,
+                TypeCode.Double => DbType.Double,
+                _ => DbType.String
+            };
         }
     }
 }
