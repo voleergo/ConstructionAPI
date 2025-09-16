@@ -63,10 +63,10 @@ namespace Construction.Service
         }
 
 
-        public List<UsersModel> UsersSelect(UsersModel inputModel)
+        public List<UsersModel> GetUsers(UsersModel inputModel)
         {
             UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.UsersSelect(inputModel);
+            return dataService.GetUsers(inputModel);
         }
         public List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users)
         {
@@ -228,6 +228,11 @@ namespace Construction.Service
         }
 
         public List<RoleModel> GetRoles(RoleModel role)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<UsersModel> UsersSelect(UsersModel inputModel)
         {
             throw new NotImplementedException();
         }

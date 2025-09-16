@@ -41,6 +41,7 @@ using Construction.API.Controllers;
 using Construction.Interface;
 using Construction.DomainModel.User;
 using Construction.DomainModel;
+using Microsoft.Extensions.Options;
 
 namespace JWTAuthentication.NET6._0.Controllers
 {
@@ -49,7 +50,7 @@ namespace JWTAuthentication.NET6._0.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        private const string connectstring = "ConnectionString";
+        private const string connectstring = "ConnectionString:DefaultConnection";
         private readonly IConfiguration _configuration;
         private IUserService _authService;
         private ITokenService _tokenService;
@@ -61,7 +62,12 @@ namespace JWTAuthentication.NET6._0.Controllers
         private readonly OTPConfig _otp;
 
 
-        public UserController(IConfiguration configuration, IUserService authService, ITokenService tokenService, ILoggerService loggerService, IWebHostEnvironment environment, OTPConfig otp) : base(configuration)
+
+
+
+
+
+        public UserController(IConfiguration configuration, IUserService authService, ITokenService tokenService, ILoggerService loggerService, IWebHostEnvironment environment, IOptions<OTPConfig> otp) : base(configuration)
         {
             _authService = authService;
             _configuration = configuration;
@@ -74,7 +80,6 @@ namespace JWTAuthentication.NET6._0.Controllers
             _clientid = _configuration["CliendID"];
             _clientsecret = _configuration["ClientSecret"];
             _otp = _configuration.GetSection("OTPConfig").Get<OTPConfig>();
-        }
 
 
 
@@ -300,20 +305,19 @@ namespace JWTAuthentication.NET6._0.Controllers
         [ActionName("User")]
         [Authorize]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UsersSelect(Int64 id_Users, Int64 createdBy)
+        public Task<IActionResult> UsersSelect(Int64 id_Users)
         {
             List<UsersModel> result = new List<UsersModel>();
             IActionResult response = Unauthorized();
             UsersModel model = new UsersModel();
             try
             {
+                // Int64 id_user = base.ID_Users;
+
                 model.IPAddress = base.IPAddress;
                 model.MACAddress = base.MACAddress;
                 model.ID_Users = id_Users;
-
-                // Fix for CS0029: Convert 'createdBy' (long) to string before assignment
-                model.CreatedBy = createdBy.ToString();
-
+                model.CreatedBy = createdBy;
                 result = _authService.UsersSelect(model);
                 return Task.FromResult<IActionResult>(Ok(new
                 {

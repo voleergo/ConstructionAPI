@@ -210,19 +210,19 @@ namespace Construction.DataAccess
             return response;
         }
 
-        public List<UsersModel> UsersSelect(UsersModel inputModel)
+        public List<UsersModel> GetUsers(UsersModel inputModel)
         {
             List<UsersModel> resultList = new List<UsersModel>();
             UsersModel model = new UsersModel();
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_UsersSelect;
+            string sqlCommand = Procedures.SP_GetUsers;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
             db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
             //db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, inputModel.CreatedBy);
-            db.AddInParameter(dbCommand, "@SearchField", DbType.String, inputModel.SearchField);
-            db.AddInParameter(dbCommand, "@SearchValue", DbType.String, inputModel.SearchValue);
+            //db.AddInParameter(dbCommand, "@SearchField", DbType.String, inputModel.SearchField);
+            //db.AddInParameter(dbCommand, "@SearchValue", DbType.String, inputModel.SearchValue);
             try
             {
                 using (IDataReader dataReader = db.ExecuteReader(dbCommand))
@@ -231,9 +231,10 @@ namespace Construction.DataAccess
                     {
                         model = new UsersModel();
                         model.ID_Users = Convert.ToInt32(dataReader["ID_Users"]);
-                        model.FirstName = Convert.ToString(dataReader["FirstName"]);
-                        model.LastName = Convert.ToString(dataReader["LastName"]);
+                        model.UserName = Convert.ToString(dataReader["UserName"]);
+                        model.UserPassword = Convert.ToString(dataReader["UserPassword"]);
                         model.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
+                        model.Email = Convert.ToString(dataReader["Email"]);
                         resultList.Add(model);
                     }
                 }

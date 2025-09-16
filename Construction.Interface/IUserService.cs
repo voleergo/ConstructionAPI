@@ -44,12 +44,14 @@ namespace Construction.Interface
 
         public List<MenuRoleModel> GetMenuRoleModel(MenuRoleModel menumodel);
 
+        List<UsersModel> GetUsers(UsersModel data);
+
         public HttpResponses RoleModelUpdate(RoleModel userRole);
 
         public HttpResponses userRoleDelete(RoleModel role);
         HttpResponses PostMenuModel(MenuModel menu);
         public HttpResponses UpdateMenuRole(MenuRoleModel menu);
-
+        
         public List<RoleModel> getUserRole(RoleModel role);
 
         public List<MenuModel> GetMenuModel(MenuModel model);
