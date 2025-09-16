@@ -22,7 +22,7 @@ namespace Construction.Interface
         public string? ConnectionStrings { get; set; }
 
         #region Users
-
+        UsersModel ValidateLogin(LoginModel model);
         SignUpResponse UsersUpdate(UsersModel inputModel);
         HttpResponses UserDataUpdate(UsersModel inputModel);
 
