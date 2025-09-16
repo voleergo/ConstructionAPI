@@ -19,7 +19,7 @@ namespace Construction.Common
 {
     public static class Procedures
     {
-        public const string SP_UsersSelect = "usp_SelectUsers";
+        public const string SP_UsersSelects = "usp_SelectUsers";
         public const string SP_UsersDelete = "usp_DeleteUsers";
         public const string SP_UpdateUser = "usp_InsertUsers";
         public const string SP_SelectMenuTenant = "usp_SelectMenuTenant";
