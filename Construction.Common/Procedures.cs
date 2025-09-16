@@ -35,7 +35,13 @@ namespace Construction.Common
         public const string Sp_DeleteMenuData = "usp_DeleteMenuData";
         public const string SP_GetTenantData = "usp_GetTenantData";
         public const string SP_GetRoles = "usp_SelectRole";
+<<<<<<< HEAD
+        public const string SP_ValidateLogin = "usp_ValidateLogin";
+
         /* Stored Procedure - Construction */
+=======
+        /* Stored Procedure - Construction ---------------------------------------------*/
+>>>>>>> f412f3745199e314375ef52866739d9ed30c63b1
 
 
 
