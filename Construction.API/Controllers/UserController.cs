@@ -41,6 +41,7 @@ using Construction.API.Controllers;
 using Construction.Interface;
 using Construction.DomainModel.User;
 using Construction.DomainModel;
+using Microsoft.Extensions.Options;
 
 namespace JWTAuthentication.NET6._0.Controllers
 {
@@ -49,7 +50,7 @@ namespace JWTAuthentication.NET6._0.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        private const string connectstring = "ConnectionString";
+        private const string connectstring = "ConnectionString:DefaultConnection";
         private readonly IConfiguration _configuration;
         private IUserService _authService;
         private ITokenService _tokenService;
@@ -60,7 +61,12 @@ namespace JWTAuthentication.NET6._0.Controllers
         private readonly OTPConfig _otp;
 
 
-        public UserController(IConfiguration configuration, IUserService authService, ITokenService tokenService, ILoggerService loggerService, IWebHostEnvironment environment, OTPConfig otp) : base(configuration)
+
+
+
+
+
+        public UserController(IConfiguration configuration, IUserService authService, ITokenService tokenService, ILoggerService loggerService, IWebHostEnvironment environment, IOptions<OTPConfig> otp) : base(configuration)
         {
             _authService = authService;
             _configuration = configuration;
@@ -72,8 +78,7 @@ namespace JWTAuthentication.NET6._0.Controllers
 
             _clientid = _configuration["CliendID"];
             _clientsecret = _configuration["ClientSecret"];
-            _otp = _configuration.GetSection("OTPConfig").Get<OTPConfig>();
-
+            _otp = otp.Value;
 
         }
 
