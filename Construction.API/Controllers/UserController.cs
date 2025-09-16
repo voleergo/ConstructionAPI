@@ -55,6 +55,7 @@ namespace JWTAuthentication.NET6._0.Controllers
         private ITokenService _tokenService;
         private ILoggerService _logger;
         private IWebHostEnvironment _environment;
+        private object _userService;
         private readonly string _clientid = string.Empty;
         private readonly string _clientsecret = string.Empty;
         private readonly OTPConfig _otp;
@@ -73,65 +74,94 @@ namespace JWTAuthentication.NET6._0.Controllers
             _clientid = _configuration["CliendID"];
             _clientsecret = _configuration["ClientSecret"];
             _otp = _configuration.GetSection("OTPConfig").Get<OTPConfig>();
-
-
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
         [ActionName("login")]
         [EnableCors("AllowOrigin")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var result = new HttpLoginResponse();
             IActionResult response = Unauthorized();
             JwtSecurityToken token = new JwtSecurityToken();
-            UsersModel userModel = new UsersModel();
+            UsersModel user = new UsersModel();
+
             try
             {
-                //Validlogin checking cod here
-                model.IPAddress = base.IPAddress;
-                model.MACAddress = base.MACAddress;
-                userModel = _authService.ValidateLogin(model);
-                if (userModel.ID_Users > 0)
+                if (model == null)
+                    return BadRequest(new { Result = "Invalid login request." });
+
+                // attach extra info
+                model.IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                // model.MACAddress = ... (depends how you’re capturing it)
+
+                UsersModel userModel = _authService.ValidateLogin(model);
+
+                if (userModel != null && userModel.ID_Users > 0)
                 {
+                    // generate token
                     token = _tokenService.GenerateToekn(userModel);
+
                     result.Token = new JwtSecurityTokenHandler().WriteToken(token);
                     result.Expiration = token.ValidTo;
-                    result.Sid = Cryptography.EncryptSID(Convert.ToString(userModel.ID_Users) ?? "");
-                    userModel.FK_UserRoleStr = Cryptography.Encryptstring(Convert.ToString(userModel.FK_UserRole));
+                    result.Sid = Cryptography.EncryptSID(userModel.ID_Users.ToString() ?? "");
+                    userModel.FK_UserRoleStr = Cryptography.Encryptstring(userModel.FK_UserRole.ToString());
                     result.ResponseStatus = true;
                     result.ResponseID = 1;
                     result.ResponseCode = "1";
                     result.Response = userModel;
                     result.MenuJson = userModel.MenuJson;
 
+                    response = Ok(new { Result = result });
                 }
                 else
                 {
-                    result.ResponseMessage = userModel.MessageText;
+                    result.ResponseMessage = userModel?.MessageText ?? "Invalid username or password.";
                     result.ResponseStatus = false;
                     result.ResponseID = 0;
                     result.ResponseCode = "0";
                     result.Response = userModel;
+
+                    response = Ok(new { Result = result });
                 }
-
-
-
-                return Task.FromResult<IActionResult>(Ok(new
-                {
-                    Result = result
-                }));
             }
             catch (Exception ex)
             {
-                return Task.FromResult(response = BadRequest(new { Result = result }));
+                result.ResponseMessage = "Error while validating login.";
+                result.ResponseStatus = false;
+                response = BadRequest(new { Result = result, Error = ex.Message });
             }
-            finally
-            {
 
-            }
+            return await Task.FromResult(response);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region Users
 
@@ -277,12 +307,13 @@ namespace JWTAuthentication.NET6._0.Controllers
             UsersModel model = new UsersModel();
             try
             {
-                // Int64 id_user = base.ID_Users;
-
                 model.IPAddress = base.IPAddress;
                 model.MACAddress = base.MACAddress;
                 model.ID_Users = id_Users;
-                model.CreatedBy = createdBy;
+
+                // Fix for CS0029: Convert 'createdBy' (long) to string before assignment
+                model.CreatedBy = createdBy.ToString();
+
                 result = _authService.UsersSelect(model);
                 return Task.FromResult<IActionResult>(Ok(new
                 {

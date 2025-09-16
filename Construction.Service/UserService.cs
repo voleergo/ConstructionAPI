@@ -24,15 +24,26 @@ namespace Construction.Service
     {
         public string? ConnectionStrings { get; set; }
 
-
+       
 
         public UsersModel ValidateLogin(LoginModel model)
         {
+           
+            // Call the DataService
             UserDataService dataService = new UserDataService(ConnectionStrings);
-            //model.Password = Cryptography.GetMd5Hash(model.Password);
-            // model.Password = Cryptography.GetMd5Hash(model.Password ?? "");
             return dataService.ValidateLogin(model);
+
+            
         }
+
+
+
+
+
+
+
+
+
 
         public SignUpResponse UsersUpdate(UsersModel inputModel)
         {
@@ -95,12 +106,7 @@ namespace Construction.Service
             return uniqueID;
         }
 
-        public HttpResponses AdminLogin(UsersModel model)
-        {
-            UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.AdminLogin(model);
-        }
-
+       
 
 
 

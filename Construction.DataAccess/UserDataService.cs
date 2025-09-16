@@ -40,55 +40,62 @@ namespace Construction.DataAccess
             _connectionString = connectionString;
         }
 
+
+
+
+
         public UsersModel ValidateLogin(LoginModel model)
         {
+            // Initialize database
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+
             UsersModel userModel = new UsersModel();
-            string sqlCommand = Procedures.SP_ValidateLogin;
+            string sqlCommand = Procedures.SP_ValidateLogin; // Your SP constant
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@UserCode", DbType.String, model.Username);
-            db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
-            db.AddInParameter(dbCommand, "@IP", DbType.String, model.IPAddress);
-            db.AddInParameter(dbCommand, "@MAC", DbType.String, string.Empty);
-            db.AddInParameter(dbCommand, "@IsMobile", DbType.Boolean, false);
 
+            // Add parameters for SP
+            db.AddInParameter(dbCommand, "@UserInput", DbType.String, model.UserInput); // Email or Mobile
+            db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
 
             try
             {
                 using (IDataReader dataReader = db.ExecuteReader(dbCommand))
                 {
-                    while (dataReader.Read())
+                    if (dataReader.Read())
                     {
-                        userModel = new UsersModel();
                         userModel.ID_Users = Convert.ToInt64(dataReader["ID_Users"]);
-                        //userModel.ID_PartyMember = Convert.ToInt32(dataReader["ID_PartyMember"]);
+                        userModel.UserName = Convert.ToString(dataReader["UserName"]);
                         userModel.Email = Convert.ToString(dataReader["Email"]);
-                        userModel.MobileNumber = Convert.ToString(dataReader["Mobile"]);
-                        userModel.UserName = Convert.ToString(dataReader["Username"]);
-                        //userModel.FirstName = Convert.ToString(dataReader["FirstName"]);
-                        //userModel.LastName = Convert.ToString(dataReader["LastName"]);
-                        userModel.MessageText = Convert.ToString(dataReader["MessageText"]);
-                        userModel.FK_UserRole = Convert.ToInt16(dataReader["FK_UserRole"]);
-                        //userModel.StateName = Convert.ToString(dataReader["StateName"]);
-                        //userModel.FK_State = Convert.ToInt16(dataReader["FK_State"]);
-                        //userModel.ImageURL = Convert.ToString(dataReader["ImageURL"]);
-                        //userModel.IsUserProfileExists = Convert.ToString(dataReader["IsUserProfileExists"]);
-                        //userModel.FK_Company = Convert.ToString(dataReader["CompanyName"]);
-                        //userModel.Company = Convert.ToInt32(dataReader["FK_Company"]);
-                        //userModel.IsUserExist = Convert.ToInt32(dataReader["IsUserProfileExists"]);
-                        userModel.MenuJson = Convert.ToString(dataReader["MenuJson"]);
-
+                        userModel.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
+                        userModel.FK_UserRole = Convert.ToInt16(dataReader["FK_Role"]);
+                        userModel.IsActive = Convert.ToBoolean(dataReader["IsActive"]);
+                        userModel.UserStatus = Convert.ToString(dataReader["UserStatus"]);
+                        userModel.CreatedOn = dataReader["CreatedOn"] as DateTime?;
+                        userModel.CreatedBy = dataReader["CreatedBy"] as string;
+                        userModel.ModifiedOn = dataReader["ModifiedOn"] as DateTime?;
+                        userModel.ModifiedBy = dataReader["ModifiedBy"] as string;
+                        userModel.LastPasswordChangeDate = dataReader["LastPasswordChangeDate"] as DateTime?;
+                        
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error while validating user login.", ex);
             }
+
             return userModel;
         }
+
+
+
+
+
+
+
+
 
         public string GetTenantData()
         {
@@ -377,38 +384,38 @@ namespace Construction.DataAccess
             }
             return result;
         }
-        public HttpResponses AdminLogin(UsersModel model)
-        {
-            HttpResponses result = new HttpResponses();
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_ValidateLogin;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@UserCode", DbType.String, model.UserName);
-            db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
-            db.AddInParameter(dbCommand, "@IP", DbType.String, model.IPAddress);
-            db.AddInParameter(dbCommand, "@MAC", DbType.String, model.MACAddress);
-            db.AddInParameter(dbCommand, "@IsMobile", DbType.Boolean, model.IsMobile);
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    while (dataReader.Read())
-                    {
-                        result.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
-                        result.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-                        result.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        result.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-            return result;
-        }
+        //public HttpResponses AdminLogin(UsersModel model)
+        //{
+        //    HttpResponses result = new HttpResponses();
+        //    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+        //    Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+        //    string sqlCommand = Procedures.SP_ValidateLogin;
+        //    DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+        //    dbCommand.CommandTimeout = 0;
+        //    db.AddInParameter(dbCommand, "@UserCode", DbType.String, model.UserName);
+        //    db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
+        //    db.AddInParameter(dbCommand, "@IP", DbType.String, model.IPAddress);
+        //    db.AddInParameter(dbCommand, "@MAC", DbType.String, model.MACAddress);
+        //    db.AddInParameter(dbCommand, "@IsMobile", DbType.Boolean, model.IsMobile);
+        //    try
+        //    {
+        //        using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+        //        {
+        //            while (dataReader.Read())
+        //            {
+        //                result.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+        //                result.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+        //                result.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+        //                result.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw;
+        //    }
+        //    return result;
+        //}
 
 
         public List<ClientMenuModel> GetMenuClient(ClientMenuModel inputmodel)

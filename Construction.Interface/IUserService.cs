@@ -22,7 +22,7 @@ namespace Construction.Interface
         public string? ConnectionStrings { get; set; }
 
         #region Users
-        UsersModel ValidateLogin(LoginModel model);
+        UsersModel ValidateLogin(LoginModel model); 
         SignUpResponse UsersUpdate(UsersModel inputModel);
         HttpResponses UserDataUpdate(UsersModel inputModel);
 
@@ -54,8 +54,6 @@ namespace Construction.Interface
 
         public List<MenuModel> GetMenuModel(MenuModel model);
         HttpResponses MenuDelete(MenuModel model);
-        public List<RoleModel> GetRoles(int idRole); // ✅ correct
-
-
+        public List<RoleModel> GetRoles(int idRole);
     }
 }

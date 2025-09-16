@@ -39,10 +39,23 @@ namespace Construction.DomainModel.User
         public string? LastName { get; set; }
         public string? MobileNumber { get; set; }
         public string? Email { get; set; }
+        public int FK_Role { get; set; }
         public string? CompanyEmail { get; set; }
         public Int32 FK_UserRole { get; set; }
+        public bool IsActive { get; set; }
         public int Company { get; set; }
+        public string? UserStatus { get; set; }
+
+        public DateTime? CreatedOn { get; set; }
+
+        public string? CreatedBy { get; set; }
         public string? IDProof { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public string? ModifiedBy { get; set; }
+
+        public DateTime? LastPasswordChangeDate { get; set; }
         public string? Photo { get; set; }
         public Int64 FK_UserImages { get; set; }
         public string? TmpCompany { get; set; }
@@ -77,9 +90,11 @@ namespace Construction.DomainModel.User
         {
             ID_Users = 0;
             ID_PartyMember = 0;
+            FK_Role = 0;
             RegistrationID = string.Empty;
             UserName = string.Empty;
             UserPassword = string.Empty;
+            IsActive = false;
             FirstName = string.Empty;
             LastName = string.Empty;
             MobileNumber = string.Empty;
