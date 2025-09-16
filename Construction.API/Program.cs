@@ -1,4 +1,5 @@
 using Construction.DataAccess;
+using Construction.DomainModel.User;
 using Construction.Interface;
 using Construction.Service;
 
@@ -37,6 +38,9 @@ builder.Services.AddScoped<ILevelRepository, LevelRepository>();
 builder.Services.AddScoped<IProjectLevelRepository, ProjectLevelRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IProjectTransRepository, ProjectTransRepository>();
+builder.Services.Configure<OTPConfig>(
+    builder.Configuration.GetSection("OTPConfig"));
+
 
 // Register services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -45,6 +49,8 @@ builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<IProjectLevelService, ProjectLevelService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILoggerService, LoggerService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IProjectTransService, ProjectTransService>();
 
