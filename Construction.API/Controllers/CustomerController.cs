@@ -1,11 +1,13 @@
 using Construction.DomainModel;
 using Construction.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace Construction.API.Controllers
 {
     [ApiController]
     [Route("v1/[action]")]
+    [EnableCors] // Enable CORS for all actions in this controller
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
