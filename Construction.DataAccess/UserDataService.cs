@@ -69,7 +69,9 @@ namespace Construction.DataAccess
                         userModel.UserName = Convert.ToString(dataReader["UserName"]);
                         userModel.Email = Convert.ToString(dataReader["Email"]);
                         userModel.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
-                        userModel.FK_UserRole = Convert.ToInt16(dataReader["FK_Role"]);
+                        userModel.FK_UserRole = dataReader["FK_Role"] == DBNull.Value ? (short)0 : Convert.ToInt16(dataReader["FK_Role"]);
+                        userModel.IsSuccess = Convert.ToBoolean(dataReader["IsSuccess"]);
+                        userModel.Message = Convert.ToString(dataReader["Message"]);
                         userModel.IsActive = Convert.ToBoolean(dataReader["IsActive"]);
                         userModel.UserStatus = Convert.ToString(dataReader["UserStatus"]);
                         userModel.CreatedOn = dataReader["CreatedOn"] as DateTime?;
@@ -122,6 +124,113 @@ namespace Construction.DataAccess
             }
             return response;
         }
+
+
+        public List<RoleModel> GetRoles(int idRole)
+        {
+            List<RoleModel> roles = new List<RoleModel>();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetRoles;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            db.AddInParameter(dbCommand, "@ID_Role", DbType.Int32, idRole);
+
+            using (IDataReader reader = db.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    RoleModel role = new RoleModel
+                    {
+                        ID_Role = Convert.ToInt32(reader["ID_Role"]),
+                        Roles = Convert.ToString(reader["Roles"]),
+                        CreatedBy = Convert.ToString(reader["CreatedBy"]),
+                        CreatedDate = Convert.ToDateTime(reader["CreatedDate"]),
+                        ModifiedBy = reader["ModifiedBy"] == DBNull.Value ? null : Convert.ToString(reader["ModifiedBy"]),
+                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"])
+                    };
+                    roles.Add(role);
+                }
+            }
+            return roles;
+        }
+
+
+
+
+
+        public HttpResponses UpdateRoles(RoleModel model)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_InsertRole; // "usp_InsertRole"
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            var jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(new[] {
+     new {
+        ID_Role = model.ID_Role == 0 ? (int?)null : model.ID_Role,
+        Roles = model.Roles,
+        CreatedBy = model.CreatedBy,
+        ModifiedBy = model.ModifiedBy
+    }
+});
+
+            db.AddInParameter(dbCommand, "@JsonData", DbType.String, jsonData);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = dataReader["ResponseIDs"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseIDs"]) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseCode = "0";
+                response.ResponseMessage = ex.Message;
+                response.ResponseStatus = false;
+            }
+            return response;
+        }
+
+
+
+        public HttpResponses DeleteRoles(int idRole)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_DeleteRole;                   // "usp_DeleteRole
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            db.AddInParameter(dbCommand, "@ID_Role", DbType.Int32, idRole);
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        // Note: Your stored procedure doesn't return ResponseID, so remove this line
+                        // response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // Add proper error handling instead of just throwing
+                response.ResponseCode = "0";
+                response.ResponseMessage = e.Message;
+                response.ResponseStatus = false;
+            }
+            return response;
+        }
+
 
 
 
@@ -779,32 +888,7 @@ namespace Construction.DataAccess
             return result;
         }
 
-        public List<RoleModel> GetRoles(int idRole)
-        {
-            List<RoleModel> roles = new List<RoleModel>();
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_GetRoles;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            db.AddInParameter(dbCommand, "@ID_Role", DbType.Int32, idRole);
-
-            using (IDataReader reader = db.ExecuteReader(dbCommand))
-            {
-                while (reader.Read())
-                {
-                    RoleModel role = new RoleModel
-                    {
-                        ID_Role = Convert.ToInt32(reader["ID_Role"]),
-                        Roles = Convert.ToString(reader["Roles"]),
-                        CreatedBy = Convert.ToString(reader["CreatedBy"]),
-                        CreatedDate = Convert.ToDateTime(reader["CreatedDate"]),
-                        ModifiedBy = reader["ModifiedBy"] == DBNull.Value ? null : Convert.ToString(reader["ModifiedBy"]),
-                        ModifiedDate = reader["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(reader["ModifiedDate"])
-                    };
-                    roles.Add(role);
-                }
-            }
-            return roles;
-        }
+       
 
         public List<MenuModel> GetMenuModel(MenuModel menu)
         {

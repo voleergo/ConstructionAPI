@@ -325,18 +325,26 @@ namespace JWTAuthentication.NET6._0.Controllers
             }
         }
 
+        #region Role
         [HttpPost]
         [EnableCors("AllowOrigin")]
-        [ActionName("role")]
+        [ActionName("Roles")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult RoleModelUpdate(RoleModel userRole)
+        public IActionResult UpdateRole([FromBody] RoleModel model)
         {
-            var result = _authService.RoleModelUpdate(userRole);
-            return Ok(result);
+            try
+            {
+                var result = _authService.UpdateRoles(model);
+                return Ok(new { Result = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating role", details = ex.Message });
+            }
         }
 
         [HttpGet]
-        [ActionName("GetRoles")]
+        [ActionName("Roles")]
         [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetRoles(int idRole)
@@ -352,6 +360,30 @@ namespace JWTAuthentication.NET6._0.Controllers
             }
         }
 
+
+        [HttpDelete]
+        [ActionName("Roles")]
+        [EnableCors]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult DeleteRoles(int idRole)
+        {
+            try
+            {
+                var result = _authService.DeleteRoles(idRole);
+                return Ok(new
+                {
+                    ResponseMessage = result.ResponseMessage,
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error deleting role", details = ex.Message });
+            }
+        }
+
+        #endregion Role
         #endregion
+
     }
 }

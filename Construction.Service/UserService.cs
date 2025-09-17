@@ -39,13 +39,31 @@ namespace Construction.Service
 
 
 
+        public List<RoleModel> GetRoles(int idRole)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.GetRoles(idRole);
+        }
+
+
+        public HttpResponses UpdateRoles(RoleModel model)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UpdateRoles(model);
+        }
+
+
+        public HttpResponses DeleteRoles(int idRole)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.DeleteRoles(idRole);
+        }
 
 
 
 
 
-
-       public HttpResponses UsersUpdate(UsersModel inputModel)
+        public HttpResponses UsersUpdate(UsersModel inputModel)
      {
          UserDataService dataService = new UserDataService(ConnectionStrings);
          return dataService.UsersUpdate(inputModel);
@@ -142,11 +160,7 @@ namespace Construction.Service
 
             return dataService.UpdateMenuRole(menu);
         }
-        public List<RoleModel> GetRoles(int idRole)
-        {
-            UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.GetRoles(idRole);
-        }
+        
 
         private string GenerateMenu(string menuString)
         {
