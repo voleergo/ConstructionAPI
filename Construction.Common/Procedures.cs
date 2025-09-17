@@ -48,12 +48,13 @@ namespace Construction.Common
         
         public const string SP_ValidateLogin = "usp_ValidateLogin";
 
+        public const string SP_ForgotPassword = "usp_ForgotPassword";
 
 
 
         public const string SP_Users_Update = "usp_UpdateUserSignUp";
        
-        public const string SP_ForgotPasswordUpdate = "usp_UpdateForgotPassword";
+        
         public const string SP_UserPasswordUpdate = "usp_UpdateUserPassword";
         public const string SP_UpdateUserProfile = "usp_UpdateUserProfile";
         public const string SP_SelectUserProfile = "usp_SelectUserProfile";
@@ -63,6 +64,7 @@ namespace Construction.Common
         public const string SP_UpdateNominationDocuments = "usp_UpdateNominationDocuments";
         public const string SP_DeleteProjectDocumentUrl = "usp_DeleteProjectDocumentUrl";
         
+
         public const string SP_SelectPages = "usp_SelectPages";
         public const string SP_DeleteDoctorDetails = "usp_DeleteDoctorDetails";
         public const string SP_DeleteDepartmentDetails = "usp_DeleteDepartmentDetails";

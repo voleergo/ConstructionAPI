@@ -35,7 +35,7 @@ namespace Construction.Interface
         string GenerateRandomUniqueID();
         List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users);
 
-
+        HttpResponses ForgotPassword(PasswordModel inputModel);
 
         public List<RoleModel> GetRoles(int idRole);
         public HttpResponses UpdateRoles(RoleModel model);

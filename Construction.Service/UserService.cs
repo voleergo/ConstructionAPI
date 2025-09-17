@@ -38,6 +38,14 @@ namespace Construction.Service
 
 
 
+        public HttpResponses ForgotPassword(PasswordModel inputModel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+
+            return dataService.ForgotPassword(inputModel);
+        }
+
+
 
         public List<RoleModel> GetRoles(int idRole)
         {
@@ -122,7 +130,12 @@ namespace Construction.Service
             return uniqueID;
         }
 
-       
+
+      
+
+
+
+
 
 
 

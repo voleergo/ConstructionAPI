@@ -94,6 +94,47 @@ namespace Construction.DataAccess
 
 
 
+        #region Forgot Password
+        public HttpResponses ForgotPassword(PasswordModel inputModel)
+        {
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            HttpResponses response = new HttpResponses();
+            string sqlCommand = "usp_ForgotPassword";   // Procedure name
+
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            // Map stored procedure parameters
+            db.AddInParameter(dbCommand, "@UserInput", DbType.String, inputModel.UserInput);
+            db.AddInParameter(dbCommand, "@NewPassword", DbType.String, inputModel.UserPasswordStr);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+                        response.ResponseType = Convert.ToString(dataReader["UserName"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+                     
+            }
+
+            return response;
+        }
+        #endregion
+
+
+
+
 
         public HttpResponses UsersDelete(UsersModel inputModel)
         {

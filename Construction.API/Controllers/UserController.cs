@@ -112,6 +112,66 @@ namespace JWTAuthentication.NET6._0.Controllers
             return await Task.FromResult(response);
         }
 
+
+
+
+
+
+
+
+
+        #region Forgot Password
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("forgotpassword")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public Task<IActionResult> ForgotPassword([FromBody] PasswordModel model)
+        {
+            HttpResponses result = new HttpResponses();
+            IActionResult response = Unauthorized();
+
+            try
+            {
+                if (model == null || string.IsNullOrEmpty(model.UserInput) || string.IsNullOrEmpty(model.UserPasswordStr))
+                {
+                    return Task.FromResult<IActionResult>(BadRequest(new
+                    {
+                        Message = "Invalid request. Please provide user input and new password."
+                    }));
+                }
+
+                // Capture IP address (optional: MAC can be added later if needed)
+                model.IPAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                model.MACAddress = "NA";
+
+                // Call the service that hits usp_ForgotPassword
+                result = _authService.ForgotPassword(model);
+
+                return Task.FromResult<IActionResult>(Ok(new
+                {
+                    Result = result
+                }));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ForgotPassword");
+                return Task.FromResult<IActionResult>(BadRequest(new
+                {
+                    Result = result,
+                    Error = ex.Message
+                }));
+            }
+        }
+
+        #endregion
+
+
+
+
+
+
+
         #endregion
 
         #region Users
