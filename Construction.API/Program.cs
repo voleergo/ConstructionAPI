@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -80,41 +81,18 @@ builder.Services.AddAuthentication(options =>
 // Add CORS - Cross Origin Resource Sharing for all endpoints
 builder.Services.AddCors(options =>
 {
-    // Development/Permissive Policy - Allows everything
     options.AddPolicy("AllowAll", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .WithExposedHeaders("*");
+              .AllowAnyHeader();
     });
-
-    // Production Policy - More restrictive (uncomment and modify as needed)
-    options.AddPolicy("ProductionPolicy", policy =>
-    {
-        policy.WithOrigins(
-                "http://localhost:3000",     // React development
-                "http://localhost:4200",     // Angular development
-                "http://localhost:8080",     // Vue development
-                "https://localhost:3000",    // React HTTPS
-                "https://localhost:4200",    // Angular HTTPS
-                "https://localhost:8080",    // Vue HTTPS
-                "https://yourdomain.com",    // Your production domain
-                "https://www.yourdomain.com" // Your production domain with www
-              )
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials()
-              .WithExposedHeaders("Content-Disposition", "Content-Length", "X-Total-Count");
-    });
-
-    // Set default policy to AllowAll for development
-    options.AddDefaultPolicy(policy =>
+    // Match controller attributes using "AllowOrigin"
+    options.AddPolicy("AllowOrigin", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .WithExposedHeaders("Content-Disposition", "Content-Length", "X-Total-Count", "Authorization");
+              .AllowAnyHeader();
     });
 });
 
@@ -135,9 +113,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 // Enable CORS - Must be called before UseAuthorization
-app.UseCors();
+app.UseCors("AllowOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
