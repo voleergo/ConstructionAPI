@@ -29,6 +29,10 @@ namespace Construction.Common
         public const string SP_UpdateUser = "usp_UserUpdate";
         public const string SP_GetUsers = "usp_User_GetAll";
 
+        public const string SP_GetRoles = "usp_SelectRole";
+        public const string SP_InsertRole = "usp_InsertRole";
+        public const string SP_DeleteRole = "usp_DeleteRole";
+
         public const string SP_SelectMenuTenant = "usp_SelectMenuTenant";
         public const string SP_InsertMenuClient = "usp_InsertMenuClient";
         public const string SP_SelectMenuRole = "usp_SelectMenuRole";
@@ -40,7 +44,7 @@ namespace Construction.Common
         public const string SP_SelectMenuData = "usp_SelectMenuData";
         public const string Sp_DeleteMenuData = "usp_DeleteMenuData";
         public const string SP_GetTenantData = "usp_GetTenantData";
-        public const string SP_GetRoles = "usp_SelectRole";
+        
         
         public const string SP_ValidateLogin = "usp_ValidateLogin";
 

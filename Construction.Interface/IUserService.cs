@@ -35,7 +35,14 @@ namespace Construction.Interface
         string GenerateRandomUniqueID();
         List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users);
 
-        
+
+
+        public List<RoleModel> GetRoles(int idRole);
+        public HttpResponses UpdateRoles(RoleModel model);
+
+        public HttpResponses DeleteRoles(int idRole);
+
+
 
         #endregion Users
 
@@ -61,6 +68,6 @@ namespace Construction.Interface
 
         public List<MenuModel> GetMenuModel(MenuModel model);
         HttpResponses MenuDelete(MenuModel model);
-        public List<RoleModel> GetRoles(int idRole);
+       
     }
 }
