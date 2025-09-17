@@ -21,8 +21,14 @@ namespace Construction.Common
     {
         /* Stored Procedure - Construction */
         public const string SP_UsersSelect = "usp_SelectUsers";
-        public const string SP_UsersDelete = "usp_DeleteUsers";
-        public const string SP_UpdateUser = "usp_InsertUsers";
+
+        //public const string SP_UsersDelete = "usp_DeleteUsers";
+        //public const string SP_UpdateUser = "usp_InsertUsers";
+
+        public const string SP_UsersDelete = "usp_User_Delete";
+        public const string SP_UpdateUser = "usp_UserUpdate";
+        public const string SP_GetUsers = "usp_User_GetAll";
+
         public const string SP_SelectMenuTenant = "usp_SelectMenuTenant";
         public const string SP_InsertMenuClient = "usp_InsertMenuClient";
         public const string SP_SelectMenuRole = "usp_SelectMenuRole";
@@ -35,14 +41,8 @@ namespace Construction.Common
         public const string Sp_DeleteMenuData = "usp_DeleteMenuData";
         public const string SP_GetTenantData = "usp_GetTenantData";
         public const string SP_GetRoles = "usp_SelectRole";
-<<<<<<< HEAD
+        
         public const string SP_ValidateLogin = "usp_ValidateLogin";
-
-        /* Stored Procedure - Construction */
-=======
-        /* Stored Procedure - Construction ---------------------------------------------*/
->>>>>>> f412f3745199e314375ef52866739d9ed30c63b1
-
 
 
 

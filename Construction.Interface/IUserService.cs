@@ -23,14 +23,19 @@ namespace Construction.Interface
 
         #region Users
         UsersModel ValidateLogin(LoginModel model); 
-        SignUpResponse UsersUpdate(UsersModel inputModel);
+        
         HttpResponses UserDataUpdate(UsersModel inputModel);
 
+        List<UsersModel> GetUsers(UsersModel data);
+        public HttpResponses UsersUpdate(UsersModel inputModel);
+
         HttpResponses UsersDelete(UsersModel inputModel);
+
+
         string GenerateRandomUniqueID();
         List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users);
 
-        List<UsersModel> UsersSelect(UsersModel inputModel);
+        
 
         #endregion Users
 
@@ -44,7 +49,7 @@ namespace Construction.Interface
 
         public List<MenuRoleModel> GetMenuRoleModel(MenuRoleModel menumodel);
 
-        List<UsersModel> GetUsers(UsersModel data);
+        
 
         public HttpResponses RoleModelUpdate(RoleModel userRole);
 

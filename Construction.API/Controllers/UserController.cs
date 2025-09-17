@@ -116,133 +116,111 @@ namespace JWTAuthentication.NET6._0.Controllers
 
         #region Users
 
+
+
+
         [HttpPost]
         [EnableCors("AllowOrigin")]
-        [ActionName("AddUser")]
+        [ActionName("User")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> UsersUpdate([FromBody] UsersModel model)
         {
-            SignUpResponse result = new SignUpResponse();
+            IActionResult response = Unauthorized();
             try
             {
-                bool isNewUser = model.ID_Users == 0;
-                model.IPAddress = base.IPAddress;
-                model.MACAddress = base.MACAddress;
-                result = _authService.UsersUpdate(model);
-
-                if (result.ResponseStatus && result.ResponseID > 0 && isNewUser)
-                {
-                    model.RegistrationID = result.RegID;
-                }
-
+                var result = _authService.UsersUpdate(model);
                 return Task.FromResult<IActionResult>(Ok(new { Result = result }));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UsersUpdate");
-                return Task.FromResult<IActionResult>(BadRequest(new { Result = result }));
-            }
-        }
-
-        [HttpPost]
-        [EnableCors("AllowOrigin")]
-        [ActionName("updateUserDetails")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UserDataUpdate([FromBody] UsersModel inputModel)
-        {
-            HttpResponses result = new HttpResponses();
-            try
-            {
-                inputModel.IPAddress = string.IsNullOrEmpty(base.IPAddress) ? "Unknown" : base.IPAddress;
-                inputModel.MACAddress = string.IsNullOrEmpty(base.MACAddress) ? "Unknown" : base.MACAddress;
-
-                result = _authService.UserDataUpdate(inputModel);
-
-                bool isUpdate = inputModel.ID_UserProfile > 0;
-                if (result.ResponseStatus && result.ResponseID > 0 && isUpdate)
-                {
-                    return Task.FromResult<IActionResult>(Ok(new
-                    {
-                        Message = "User details updated successfully",
-                        Result = result
-                    }));
-                }
-                else if (result.ResponseStatus && result.ResponseID == 0 && !isUpdate)
-                {
-                    return Task.FromResult<IActionResult>(Ok(new
-                    {
-                        Message = "User details inserted successfully",
-                        Result = result
-                    }));
-                }
-
                 return Task.FromResult<IActionResult>(BadRequest(new
                 {
-                    Message = "Failed to update user details",
-                    Result = result
+                    Message = "Failed to update"
                 }));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating user details");
-                return Task.FromResult<IActionResult>(BadRequest(new
-                {
-                    Message = "An error occurred while updating user details",
-                    Error = ex.Message,
-                    StackTrace = ex.StackTrace,
-                    Result = result
-                }));
-            }
+
         }
+
+
+
 
         [HttpDelete]
         [EnableCors("AllowOrigin")]
         [ActionName("User")]
-        [Authorize]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UsersDelete(long id_Users, long createdBy)
+        public Task<IActionResult> UsersDelete(Int64 id_Users)
         {
             HttpResponses result = new HttpResponses();
+            IActionResult response = Unauthorized();
             UsersModel model = new UsersModel();
             try
             {
-                model.IPAddress = base.IPAddress;
-                model.MACAddress = base.MACAddress;
+
                 model.ID_Users = id_Users;
-                model.CreatedBy = createdBy;
                 result = _authService.UsersDelete(model);
-                return Task.FromResult<IActionResult>(Ok(new { Result = result }));
+                return Task.FromResult<IActionResult>(Ok(new
+                {
+                    Result = result
+                }));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UsersDelete");
-                return Task.FromResult<IActionResult>(BadRequest(new { Result = result }));
+                return Task.FromResult<IActionResult>(BadRequest(new
+                {
+                    Result = result
+                }));
+            }
+            finally
+            {
             }
         }
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
         [ActionName("User")]
-        [Authorize]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UsersSelect(long id_Users)
+        public Task<IActionResult> UsersSelect(Int64 id_Users)
         {
             List<UsersModel> result = new List<UsersModel>();
-            UsersModel model = new UsersModel();
+            IActionResult response = Unauthorized();
             try
             {
-                model.IPAddress = base.IPAddress;
-                model.MACAddress = base.MACAddress;
+                UsersModel model = new UsersModel();
+
                 model.ID_Users = id_Users;
-                result = _authService.UsersSelect(model);
-                return Task.FromResult<IActionResult>(Ok(new { Result = result }));
+
+                result = _authService.GetUsers(model);
+                if (result == null || result.Count == 0)
+                {
+                    return Task.FromResult<IActionResult>(NotFound(new
+                    {
+                        Message = "No user found"
+
+                    }));
+                }
+                return Task.FromResult<IActionResult>(Ok(new
+                {
+                    Result = result
+                }));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UsersSelect");
-                return Task.FromResult<IActionResult>(BadRequest(new { Result = result }));
+                return Task.FromResult<IActionResult>(BadRequest(new
+                {
+                    Result = result
+                }));
+            }
+            finally
+            {
+
             }
         }
+
+
+
 
         #endregion
 

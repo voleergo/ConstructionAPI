@@ -93,6 +93,121 @@ namespace Construction.DataAccess
 
 
 
+        public HttpResponses UsersDelete(UsersModel inputModel)
+        {
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            HttpResponses response = new HttpResponses();
+            string sqlCommand = Procedures.SP_UsersDelete;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return response;
+        }
+
+
+
+        public List<UsersModel> GetUsers(UsersModel inputModel)
+        {
+            List<UsersModel> resultList = new List<UsersModel>();
+            UsersModel model = new UsersModel();
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetUsers;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
+            //db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, inputModel.CreatedBy);
+            //db.AddInParameter(dbCommand, "@SearchField", DbType.String, inputModel.SearchField);
+            //db.AddInParameter(dbCommand, "@SearchValue", DbType.String, inputModel.SearchValue);
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        model = new UsersModel();
+                        model.ID_Users = Convert.ToInt32(dataReader["ID_Users"]);
+                        model.UserName = Convert.ToString(dataReader["UserName"]);
+                        model.Password = Convert.ToString(dataReader["UserPassword"]);
+                        model.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
+                        model.Email = Convert.ToString(dataReader["Email"]);
+                        resultList.Add(model);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return resultList;
+        }
+
+
+        public HttpResponses UsersUpdate(UsersModel inputModel)
+        {
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            SignUpResponse response = new SignUpResponse();
+            string sqlCommand = Procedures.SP_UpdateUser;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int32, inputModel.ID_Users);
+            //db.AddInParameter(dbCommand, "@UserName", DbType.String, inputModel.UserName);
+            db.AddInParameter(dbCommand, "@UserPassword", DbType.String, inputModel.Password);
+            db.AddInParameter(dbCommand, "@UserName", DbType.String, inputModel.UserName);
+            db.AddInParameter(dbCommand, "@Email", DbType.String, inputModel.Email);
+            db.AddInParameter(dbCommand, "@MobileNumber", DbType.String, inputModel.MobileNumber);
+            //db.AddInParameter(dbCommand, "@FK_State", DbType.Int32, inputModel.FK_State);
+            //db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, inputModel.CreatedBy);
+            //db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, inputModel.ModifiedBy);
+            //db.AddInParameter(dbCommand, "@IPAddress", DbType.String, inputModel.IPAddress);
+            //db.AddInParameter(dbCommand, "@MACAddress", DbType.String, inputModel.MACAddress);
+            //db.AddInParameter(dbCommand, "@FK_UserImages", DbType.Int64, inputModel.FK_UserImages);
+
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+                        // response.RegID = Convert.ToString(dataReader["RegID"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+        }
+
+       
+
+
+
 
 
 
@@ -123,47 +238,7 @@ namespace Construction.DataAccess
         }
 
 
-        public SignUpResponse UsersUpdate(UsersModel inputModel)
-        {
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            SignUpResponse response = new SignUpResponse();
-            string sqlCommand = Procedures.SP_Users_Update;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int32, inputModel.ID_Users);
-            //db.AddInParameter(dbCommand, "@UserName", DbType.String, inputModel.UserName);
-            db.AddInParameter(dbCommand, "@UserPassword", DbType.String, inputModel.UserPassword);
-            db.AddInParameter(dbCommand, "@FirstName", DbType.String, inputModel.FirstName);
-            db.AddInParameter(dbCommand, "@LastName", DbType.String, inputModel.LastName);
-            db.AddInParameter(dbCommand, "@MobileNumber", DbType.String, inputModel.MobileNumber);
-            db.AddInParameter(dbCommand, "@FK_State", DbType.Int32, inputModel.FK_State);
-            db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, inputModel.CreatedBy);
-            db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, inputModel.ModifiedBy);
-            db.AddInParameter(dbCommand, "@IPAddress", DbType.String, inputModel.IPAddress);
-            db.AddInParameter(dbCommand, "@MACAddress", DbType.String, inputModel.MACAddress);
-            //db.AddInParameter(dbCommand, "@FK_UserImages", DbType.Int64, inputModel.FK_UserImages);
-
-
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    while (dataReader.Read())
-                    {
-                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
-                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
-                        response.RegID = Convert.ToString(dataReader["RegID"]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return response;
-        }
+        
 
 
         public HttpResponses UsersDataUpdate(UsersModel inputModel)
@@ -210,41 +285,16 @@ namespace Construction.DataAccess
             return response;
         }
 
-        public List<UsersModel> GetUsers(UsersModel inputModel)
-        {
-            List<UsersModel> resultList = new List<UsersModel>();
-            UsersModel model = new UsersModel();
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_GetUsers;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
-            //db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, inputModel.CreatedBy);
-            //db.AddInParameter(dbCommand, "@SearchField", DbType.String, inputModel.SearchField);
-            //db.AddInParameter(dbCommand, "@SearchValue", DbType.String, inputModel.SearchValue);
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    while (dataReader.Read())
-                    {
-                        model = new UsersModel();
-                        model.ID_Users = Convert.ToInt32(dataReader["ID_Users"]);
-                        model.UserName = Convert.ToString(dataReader["UserName"]);
-                        model.UserPassword = Convert.ToString(dataReader["UserPassword"]);
-                        model.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
-                        model.Email = Convert.ToString(dataReader["Email"]);
-                        resultList.Add(model);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-            return resultList;
-        }
+
+
+
+
+
+
+
+
+
+       
 
         public List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users)
         {
@@ -304,35 +354,7 @@ namespace Construction.DataAccess
             }
             return resultList;
         }
-        public HttpResponses UsersDelete(UsersModel inputModel)
-        {
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            HttpResponses response = new HttpResponses();
-            string sqlCommand = Procedures.SP_UsersDelete;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
-            db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, inputModel.CreatedBy);
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    while (dataReader.Read())
-                    {
-                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
-                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-            return response;
-        }
+       
 
 
 

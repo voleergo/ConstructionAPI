@@ -60,15 +60,29 @@ namespace Construction.DomainModel.User
         public Int64 FK_UserImages { get; set; }
         public string? TmpCompany { get; set; }
 
-        public string? UserPasswordStr { get; set; }
         public string? MessageText { get; set; }
-        public string? CompanyIDNumber { get; set; }
+
         public string? FK_UserRoleStr { get; set; }
+
+        public int IsUserExist { get; set; }
+
+        public int ID_UserProfile { get; set; }
+
+        public bool IsMobile { get; set; }
+        public string? MenuJson { get; set; }
+
+
+
+
+        public string? UserPasswordStr { get; set; }
+        
+        public string? CompanyIDNumber { get; set; }
+        
         public string? StateName { get; set; }
         public string? ImageURL { get; set; }
-        public int IsUserExist { get; set; }
+        
         public int Designation { get; set; }
-        public int ID_UserProfile { get; set; }
+        
         public int FK_Gender { get; set; }
         public int FK_Profession { get; set; }
         public int FK_IdentityProofType { get; set; }
@@ -83,8 +97,8 @@ namespace Construction.DomainModel.User
         
         public string? City { get; set; }
         public string? PostalCode { get; set; }
-        public bool IsMobile { get; set; }
-        public string? MenuJson { get; set; }
+        
+        
 
         public UsersModel()
         {
@@ -93,7 +107,7 @@ namespace Construction.DomainModel.User
             FK_Role = 0;
             RegistrationID = string.Empty;
             UserName = string.Empty;
-            UserPassword = string.Empty;
+            Password = string.Empty;
             IsActive = false;
             FirstName = string.Empty;
             LastName = string.Empty;
@@ -127,6 +141,9 @@ namespace Construction.DomainModel.User
             Company = 0;
             IsMobile = false;
             Designation = 0;
+
+
+
         }
     }
 }

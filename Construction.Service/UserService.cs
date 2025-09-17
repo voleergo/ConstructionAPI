@@ -45,29 +45,27 @@ namespace Construction.Service
 
 
 
-        public SignUpResponse UsersUpdate(UsersModel inputModel)
-        {
-            UserDataService dataService = new UserDataService(ConnectionStrings);
-            if (inputModel.ID_Users == 0)
-            {
-                inputModel.UserPasswordStr = inputModel.UserPassword;
-                //inputModel.UserPasswordStr = GeneratePassword();
-                inputModel.UserPassword = Cryptography.GetMd5Hash(inputModel.MobileNumber ?? "");
-            }
-            return dataService.UsersUpdate(inputModel);
-        }
-        public HttpResponses UsersDelete(UsersModel inputModel)
-        {
-            UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.UsersDelete(inputModel);
-        }
+       public HttpResponses UsersUpdate(UsersModel inputModel)
+     {
+         UserDataService dataService = new UserDataService(ConnectionStrings);
+         return dataService.UsersUpdate(inputModel);
+     }
+     public HttpResponses UsersDelete(UsersModel inputModel)
+     {
+         UserDataService dataService = new UserDataService(ConnectionStrings);
+         return dataService.UsersDelete(inputModel);
+     }
 
 
-        public List<UsersModel> GetUsers(UsersModel inputModel)
-        {
-            UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.GetUsers(inputModel);
-        }
+     public List<UsersModel> GetUsers(UsersModel inputModel)
+     {
+         UserDataService dataService = new UserDataService(ConnectionStrings);
+         return dataService.GetUsers(inputModel);
+     }
+      
+
+
+        
         public List<UserDataUpdate> UsersUpdateSelect(Int64 FK_Users)
         {
             UserDataService dataService = new UserDataService(ConnectionStrings);
