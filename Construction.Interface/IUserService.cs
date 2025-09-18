@@ -27,7 +27,6 @@ namespace Construction.Interface
         HttpResponses UserDataUpdate(UsersModel inputModel);
 
         List<UsersModel> GetUsers(UsersModel data);
-        public HttpResponses UsersUpdate(UsersModel inputModel);
 
         HttpResponses UsersDelete(UsersModel inputModel);
 
@@ -38,7 +37,7 @@ namespace Construction.Interface
         HttpResponses ForgotPassword(PasswordModel inputModel);
 
         public List<RoleModel> GetRoles(int idRole);
-        public HttpResponses UpdateRoles(RoleModel model);
+        
 
         public HttpResponses DeleteRoles(int idRole);
 
@@ -56,7 +55,9 @@ namespace Construction.Interface
 
         public List<MenuRoleModel> GetMenuRoleModel(MenuRoleModel menumodel);
 
-        
+        public HttpResponses UsersUpdate(UserUpdateModel inputModel);
+
+        public HttpResponses UpdateRoles(JsonModel package);
 
         public HttpResponses RoleModelUpdate(RoleModel userRole);
 
@@ -68,6 +69,8 @@ namespace Construction.Interface
 
         public List<MenuModel> GetMenuModel(MenuModel model);
         HttpResponses MenuDelete(MenuModel model);
-       
+
+        
+
     }
 }

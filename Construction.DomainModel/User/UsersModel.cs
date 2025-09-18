@@ -36,9 +36,12 @@ namespace Construction.DomainModel.User
         public string? CollegeName { get; set; }
 
         public string? FirstName { get; set; }
+
+        public string? Email { get; set; } = string.Empty;
+        public string? MobileNumber { get; set; } = string.Empty;
+
         public string? LastName { get; set; }
-        public string? MobileNumber { get; set; }
-        public string? Email { get; set; }
+        
         public int FK_Role { get; set; }
         public string? CompanyEmail { get; set; }
         public Int32 FK_UserRole { get; set; }
@@ -147,5 +150,15 @@ namespace Construction.DomainModel.User
 
 
         }
+
+    }
+    public class UserUpdateModel
+    {
+        public Int64 ID_Users { get; set; } = 0;
+        public string? UserName { get; set; } = string.Empty;
+        public string? Password { get; set; } = string.Empty;
+
+        public string? Email { get; set; } = string.Empty;
+        public string? MobileNumber { get; set; } = string.Empty;
     }
 }

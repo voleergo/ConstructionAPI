@@ -46,6 +46,12 @@ namespace Construction.Service
         }
 
 
+        public HttpResponses UsersUpdate(UserUpdateModel inputModel)
+        {
+            UserDataService dataService = new UserDataService(ConnectionStrings);
+            return dataService.UsersUpdate(inputModel);
+        }
+
 
         public List<RoleModel> GetRoles(int idRole)
         {
@@ -54,10 +60,10 @@ namespace Construction.Service
         }
 
 
-        public HttpResponses UpdateRoles(RoleModel model)
+        public HttpResponses UpdateRoles(JsonModel package)
         {
             UserDataService dataService = new UserDataService(ConnectionStrings);
-            return dataService.UpdateRoles(model);
+            return dataService.UpdateRoles(package);
         }
 
 
@@ -67,15 +73,7 @@ namespace Construction.Service
             return dataService.DeleteRoles(idRole);
         }
 
-
-
-
-
-        public HttpResponses UsersUpdate(UsersModel inputModel)
-     {
-         UserDataService dataService = new UserDataService(ConnectionStrings);
-         return dataService.UsersUpdate(inputModel);
-     }
+      
      public HttpResponses UsersDelete(UsersModel inputModel)
      {
          UserDataService dataService = new UserDataService(ConnectionStrings);

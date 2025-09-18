@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Construction.DataAccess
 {
-    public class ProjectRepository : BaseRepository<Project>, IProjectRepository
+    public class ProjectRepository : BaseRepository<ProjectModel>, IProjectRepository
     {
         protected override string TableName => "Projects";
         protected override string IdColumn => "ID_Project";
@@ -16,17 +16,17 @@ namespace Construction.DataAccess
         {
         }
 
-        public override async Task<IEnumerable<Project>> GetAllAsync()
+        public override async Task<IEnumerable<ProjectModel>> GetAllAsync()
         {
             return await GetMultipleStoredProcAsync("usp_Project_GetAll");
         }
 
-        public override async Task<Project?> GetByIdAsync(long id)
+        public override async Task<ProjectModel?> GetByIdAsync(long id)
         {
             return await GetSingleStoredProcAsync("usp_Project_GetById", new { ID_Project = id });
         }
 
-        public override async Task<long> AddAsync(Project project)
+        public override async Task<long> AddAsync(ProjectModel project)
         {
             return await ExecuteInsertStoredProcAsync("usp_Project_Insert", new
             {
@@ -45,7 +45,7 @@ namespace Construction.DataAccess
             });
         }
 
-        public override async Task<bool> UpdateAsync(Project project)
+        public override async Task<bool> UpdateAsync(ProjectModel project)
         {
             return await ExecuteNonQueryStoredProcAsync("usp_Project_Update", new
             {
@@ -68,24 +68,24 @@ namespace Construction.DataAccess
             return await ExecuteNonQueryStoredProcAsync("usp_Project_Delete", new { ID_Project = id });
         }
 
-        public async Task<Project?> GetByProjectCodeAsync(string projectCode)
+        public async Task<ProjectModel?> GetByProjectCodeAsync(string projectCode)
         {
             return await GetSingleStoredProcAsync("usp_Project_GetByCode", new { ProjectCode = projectCode });
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsByCustomerAsync(long customerId)
+        public async Task<IEnumerable<ProjectModel>> GetProjectsByCustomerAsync(long customerId)
         {
             return await GetMultipleStoredProcAsync("usp_Project_GetByCustomer", new { FK_Customer = customerId });
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsByStatusAsync(string status)
+        public async Task<IEnumerable<ProjectModel>> GetProjectsByStatusAsync(string status)
         {
             return await GetMultipleStoredProcAsync("usp_Project_GetByStatus", new { ProjectStatus = status });
         }
 
-        protected override Project MapFromReader(IDataReader dataReader)
+        protected override ProjectModel MapFromReader(IDataReader dataReader)
         {
-            return new Project
+            return new ProjectModel
             {
                 ID_Project = Convert.ToInt64(dataReader["ID_Project"]),
                 ProjectCode = Convert.ToString(dataReader["ProjectCode"]) ?? string.Empty,

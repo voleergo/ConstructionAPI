@@ -6,13 +6,13 @@ namespace Construction.Interface
 {
     public interface IProjectService
     {
-        Task<IEnumerable<Project>> GetAllProjectsAsync();
-        Task<Project> GetProjectByIdAsync(long id);
-        Task<Project> GetProjectByCodeAsync(string projectCode);
-        Task<IEnumerable<Project>> GetProjectsByCustomerAsync(long customerId);
-        Task<IEnumerable<Project>> GetProjectsByStatusAsync(string status);
-        Task<long> CreateProjectAsync(Project project);
-        Task<bool> UpdateProjectAsync(Project project);
+        Task<IEnumerable<ProjectModel>> GetAllProjectsAsync();
+        Task<ProjectModel> GetProjectByIdAsync(long id);
+        Task<ProjectModel> GetProjectByCodeAsync(string projectCode);
+        Task<IEnumerable<ProjectModel>> GetProjectsByCustomerAsync(long customerId);
+        Task<IEnumerable<ProjectModel>> GetProjectsByStatusAsync(string status);
+        Task<long> CreateProjectAsync(ProjectModel project);
+        Task<bool> UpdateProjectAsync(ProjectModel project);
         Task<bool> DeleteProjectAsync(long id);
     }
 }

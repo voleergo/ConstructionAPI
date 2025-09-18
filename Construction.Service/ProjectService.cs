@@ -15,38 +15,38 @@ namespace Construction.Service
             _projectRepository = projectRepository;
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjectsAsync()
+        public async Task<IEnumerable<ProjectModel>> GetAllProjectsAsync()
         {
             return await _projectRepository.GetAllAsync();
         }
 
-        public async Task<Project> GetProjectByIdAsync(long id)
+        public async Task<ProjectModel> GetProjectByIdAsync(long id)
         {
             return await _projectRepository.GetByIdAsync(id);
         }
 
-        public async Task<Project> GetProjectByCodeAsync(string projectCode)
+        public async Task<ProjectModel> GetProjectByCodeAsync(string projectCode)
         {
             return await _projectRepository.GetByProjectCodeAsync(projectCode);
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsByCustomerAsync(long customerId)
+        public async Task<IEnumerable<ProjectModel>> GetProjectsByCustomerAsync(long customerId)
         {
             return await _projectRepository.GetProjectsByCustomerAsync(customerId);
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsByStatusAsync(string status)
+        public async Task<IEnumerable<ProjectModel>> GetProjectsByStatusAsync(string status)
         {
             return await _projectRepository.GetProjectsByStatusAsync(status);
         }
 
-        public async Task<long> CreateProjectAsync(Project project)
+        public async Task<long> CreateProjectAsync(ProjectModel project)
         {
             project.CreatedOn = DateTime.Now;
             return await _projectRepository.AddAsync(project);
         }
 
-        public async Task<bool> UpdateProjectAsync(Project project)
+        public async Task<bool> UpdateProjectAsync(ProjectModel project)
         {
             project.UpdatedOn = DateTime.Now;
             return await _projectRepository.UpdateAsync(project);

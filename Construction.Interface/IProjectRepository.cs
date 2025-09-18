@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Construction.Interface
 {
-    public interface IProjectRepository : IGenericRepository<Project>
+    public interface IProjectRepository : IGenericRepository<ProjectModel>
     {
-        Task<Project> GetByProjectCodeAsync(string projectCode);
-        Task<IEnumerable<Project>> GetProjectsByCustomerAsync(long customerId);
-        Task<IEnumerable<Project>> GetProjectsByStatusAsync(string status);
+        Task<ProjectModel> GetByProjectCodeAsync(string projectCode);
+        Task<IEnumerable<ProjectModel>> GetProjectsByCustomerAsync(long customerId);
+        Task<IEnumerable<ProjectModel>> GetProjectsByStatusAsync(string status);
     }
 }

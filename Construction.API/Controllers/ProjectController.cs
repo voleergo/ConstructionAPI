@@ -18,7 +18,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetAllProjects()
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetAllProjects()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(long id)
+        public async Task<ActionResult<ProjectModel>> GetProject(long id)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet("by-code/{projectCode}")]
-        public async Task<ActionResult<Project>> GetProjectByCode(string projectCode)
+        public async Task<ActionResult<ProjectModel>> GetProjectByCode(string projectCode)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet("by-customer/{customerId}")]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsByCustomer(long customerId)
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByCustomer(long customerId)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet("by-status/{status}")]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjectsByStatus(string status)
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByStatus(string status)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<long>> CreateProject([FromBody] Project project)
+        public async Task<ActionResult<long>> CreateProject([FromBody] ProjectModel project)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace Construction.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProject(long id, [FromBody] Project project)
+        public async Task<ActionResult> UpdateProject(long id, [FromBody] ProjectModel project)
         {
             try
             {

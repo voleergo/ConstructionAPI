@@ -51,7 +51,6 @@ namespace Construction.Common
         public const string SP_ForgotPassword = "usp_ForgotPassword";
 
 
-
         public const string SP_Users_Update = "usp_UpdateUserSignUp";
        
         

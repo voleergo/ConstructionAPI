@@ -115,7 +115,36 @@ namespace JWTAuthentication.NET6._0.Controllers
 
 
 
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("User")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public async Task<IActionResult> UsersUpdate([FromBody] UserUpdateModel model)
+        {
+            try
+            {
+                var result = _authService.UsersUpdate(model);  // Calls your service which runs usp_UserUpdate
 
+                // Return the stored procedure's response directly
+                return Ok(new { Result = result });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UsersUpdate");
+
+                // Even on exception, send proper response format like SP does
+                return Ok(new
+                {
+                    Result = new
+                    {
+                        ResponseCode = -1,
+                        ResponseMessage = ex.Message,
+                        ResponseStatus = 0,
+                        ResponseID = model.ID_Users
+                    }
+                });
+            }
+        }
 
 
 
@@ -169,39 +198,9 @@ namespace JWTAuthentication.NET6._0.Controllers
 
 
 
-
-
-
         #endregion
 
         #region Users
-
-
-
-
-        [HttpPost]
-        [EnableCors("AllowOrigin")]
-        [ActionName("User")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public Task<IActionResult> UsersUpdate([FromBody] UsersModel model)
-        {
-            IActionResult response = Unauthorized();
-            try
-            {
-                var result = _authService.UsersUpdate(model);
-                return Task.FromResult<IActionResult>(Ok(new { Result = result }));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "UsersUpdate");
-                return Task.FromResult<IActionResult>(BadRequest(new
-                {
-                    Message = "Failed to update"
-                }));
-            }
-
-        }
-
 
 
 
@@ -387,14 +386,14 @@ namespace JWTAuthentication.NET6._0.Controllers
 
         #region Role
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("Roles")]
+        [EnableCors("AllowOrigin")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult UpdateRole([FromBody] RoleModel model)
+        public IActionResult UpdateRole([FromBody] JsonModel package)
         {
             try
             {
-                var result = _authService.UpdateRoles(model);
+                var result = _authService.UpdateRoles(package);
                 return Ok(new { Result = result });
             }
             catch (Exception ex)
@@ -402,6 +401,10 @@ namespace JWTAuthentication.NET6._0.Controllers
                 return StatusCode(500, new { message = "Error updating role", details = ex.Message });
             }
         }
+
+
+
+
 
         [HttpGet]
         [ActionName("Roles")]
@@ -419,6 +422,9 @@ namespace JWTAuthentication.NET6._0.Controllers
                 return StatusCode(500, new { message = "Error fetching roles", details = ex.Message });
             }
         }
+
+
+
 
 
         [HttpDelete]

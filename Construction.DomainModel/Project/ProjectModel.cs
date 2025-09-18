@@ -2,7 +2,7 @@ using System;
 
 namespace Construction.DomainModel
 {
-    public class Project
+    public class ProjectModel
     {
         public long ID_Project { get; set; }
         public string ProjectCode { get; set; }
