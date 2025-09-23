@@ -64,8 +64,6 @@ namespace Construction.API.Controllers
         {
             var result = new HttpLoginResponse();
             IActionResult response = Unauthorized();
-            JwtSecurityToken token = new JwtSecurityToken();
-            UsersModel user = new UsersModel();
 
             try
             {
@@ -76,9 +74,10 @@ namespace Construction.API.Controllers
 
                 UsersModel userModel = _authService.ValidateLogin(model);
 
-                if (userModel != null && userModel.ID_Users > 0)
+                // Check if login was successful using IsSuccess flag
+                if (userModel != null && userModel.IsSuccess && userModel.ID_Users > 0)
                 {
-                    token = _tokenService.GenerateToekn(userModel);
+                    var token = _tokenService.GenerateToekn(userModel);
                     result.Token = new JwtSecurityTokenHandler().WriteToken(token);
                     result.Expiration = token.ValidTo;
                     result.Sid = Cryptography.EncryptSID(userModel.ID_Users.ToString() ?? "");
@@ -93,13 +92,13 @@ namespace Construction.API.Controllers
                 }
                 else
                 {
-                    result.ResponseMessage = userModel?.MessageText ?? "Invalid username or password.";
+                    result.ResponseMessage = userModel?.Message ?? "Invalid username or password.";
                     result.ResponseStatus = false;
                     result.ResponseID = 0;
                     result.ResponseCode = "0";
                     result.Response = userModel;
 
-                    response = Ok(new { Result = result });
+                    response = Unauthorized(new { Result = result });
                 }
             }
             catch (Exception ex)
@@ -115,7 +114,6 @@ namespace Construction.API.Controllers
 
 
 
-       
 
 
 

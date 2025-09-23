@@ -46,17 +46,15 @@ namespace Construction.DataAccess
 
         public UsersModel ValidateLogin(LoginModel model)
         {
-            // Initialize database
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
 
             UsersModel userModel = new UsersModel();
-            string sqlCommand = Procedures.SP_ValidateLogin; // Your SP constant
+            string sqlCommand = Procedures.SP_ValidateLogin;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
-            // Add parameters for SP
-            db.AddInParameter(dbCommand, "@UserInput", DbType.String, model.UserInput); // Email or Mobile
+            db.AddInParameter(dbCommand, "@UserInput", DbType.String, model.UserInput);
             db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
 
             try
@@ -65,21 +63,21 @@ namespace Construction.DataAccess
                 {
                     if (dataReader.Read())
                     {
-                        userModel.ID_Users = Convert.ToInt64(dataReader["ID_Users"]);
-                        userModel.UserName = Convert.ToString(dataReader["UserName"]);
-                        userModel.Email = Convert.ToString(dataReader["Email"]);
-                        userModel.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
+                        // Handle NULL values properly for all columns
+                        userModel.ID_Users = dataReader["ID_Users"] == DBNull.Value ? 0 : Convert.ToInt64(dataReader["ID_Users"]);
+                        userModel.UserName = dataReader["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserName"]);
+                        userModel.Email = dataReader["Email"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Email"]);
+                        userModel.MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["MobileNumber"]);
                         userModel.FK_UserRole = dataReader["FK_Role"] == DBNull.Value ? (short)0 : Convert.ToInt16(dataReader["FK_Role"]);
-                        userModel.IsSuccess = Convert.ToBoolean(dataReader["IsSuccess"]);
-                        userModel.Message = Convert.ToString(dataReader["Message"]);
-                        userModel.IsActive = Convert.ToBoolean(dataReader["IsActive"]);
-                        userModel.UserStatus = Convert.ToString(dataReader["UserStatus"]);
-                        userModel.CreatedOn = dataReader["CreatedOn"] as DateTime?;
-                        userModel.CreatedBy = dataReader["CreatedBy"] as string;
-                        userModel.ModifiedOn = dataReader["ModifiedOn"] as DateTime?;
-                        userModel.ModifiedBy = dataReader["ModifiedBy"] as string;
-                        userModel.LastPasswordChangeDate = dataReader["LastPasswordChangeDate"] as DateTime?;
-                        
+                        userModel.IsSuccess = dataReader["IsSuccess"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsSuccess"]);
+                        userModel.Message = dataReader["Message"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Message"]);
+                        userModel.IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]);
+                        userModel.UserStatus = dataReader["UserStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserStatus"]);
+                        userModel.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["CreatedOn"]);
+                        userModel.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]);
+                        userModel.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]);
+                        userModel.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
+                        userModel.LastPasswordChangeDate = dataReader["LastPasswordChangeDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["LastPasswordChangeDate"]);
                     }
                 }
             }
@@ -90,7 +88,6 @@ namespace Construction.DataAccess
 
             return userModel;
         }
-
 
 
 
@@ -149,6 +146,7 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@UserName", DbType.String, inputModel.UserName);
             db.AddInParameter(dbCommand, "@Email", DbType.String, inputModel.Email);
             db.AddInParameter(dbCommand, "@MobileNumber", DbType.String, inputModel.MobileNumber);
+            db.AddInParameter(dbCommand, "@FK_Role", DbType.Int32, inputModel.FK_Role);
             //db.AddInParameter(dbCommand, "@FK_State", DbType.Int32, inputModel.FK_State);
             //db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, inputModel.CreatedBy);
             //db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, inputModel.ModifiedBy);
@@ -181,9 +179,48 @@ namespace Construction.DataAccess
 
 
 
+        public List<UsersModel> GetUsers(UsersModel inputModel)
+        {
+            List<UsersModel> resultList = new List<UsersModel>();
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetUsers;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
 
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        UsersModel model = new UsersModel();
 
-
+                        // Handle NULL values properly for each field
+                        model.ID_Users = dataReader["ID_Users"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_Users"]);
+                        model.UserName = dataReader["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserName"]);
+                        model.Password = dataReader["UserPassword"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserPassword"]);
+                        model.MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["MobileNumber"]);
+                        model.Email = dataReader["Email"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Email"]);
+                        model.FK_Role = dataReader["FK_Role"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Role"]);
+                        model.IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]);
+                        model.UserStatus = dataReader["UserStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserStatus"]);
+                        model.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]);
+                        model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]);
+                        model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
+                        model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["ModifiedOn"]);
+                       
+                        resultList.Add(model);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return resultList;
+        }
         public HttpResponses UsersDelete(UsersModel inputModel)
         {
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
@@ -213,8 +250,6 @@ namespace Construction.DataAccess
             }
             return response;
         }
-
-
         public List<RoleModel> GetRoles(int idRole)
         {
             List<RoleModel> roles = new List<RoleModel>();
@@ -312,52 +347,6 @@ namespace Construction.DataAccess
             }
             return response;
         }
-
-
-
-
-        public List<UsersModel> GetUsers(UsersModel inputModel)
-        {
-            List<UsersModel> resultList = new List<UsersModel>();
-            UsersModel model = new UsersModel();
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_GetUsers;
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@ID_Users", DbType.Int64, inputModel.ID_Users);
-            //db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, inputModel.CreatedBy);
-            //db.AddInParameter(dbCommand, "@SearchField", DbType.String, inputModel.SearchField);
-            //db.AddInParameter(dbCommand, "@SearchValue", DbType.String, inputModel.SearchValue);
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    while (dataReader.Read())
-                    {
-                        model = new UsersModel();
-                        model.ID_Users = Convert.ToInt32(dataReader["ID_Users"]);
-                        model.UserName = Convert.ToString(dataReader["UserName"]);
-                        model.Password = Convert.ToString(dataReader["UserPassword"]);
-                        model.MobileNumber = Convert.ToString(dataReader["MobileNumber"]);
-                        model.Email = Convert.ToString(dataReader["Email"]);
-                        resultList.Add(model);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-            return resultList;
-        }
-
-
-    
-
-
-
-
 
 
         public string GetTenantData()

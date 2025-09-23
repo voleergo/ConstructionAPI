@@ -22,43 +22,54 @@ namespace Construction.DomainModel.User
     public class UsersModel : BaseModel
     {
         public Int64 ID_Users { get; set; }
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
+        public string? MobileNumber { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
+        public int FK_Role { get; set; }
+        public bool IsActive { get; set; }
+        public string? UserStatus { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedBy { get; set; } = 0;
+        public DateTime? ModifiedOn { get; set; }
+
+        public int? ModifiedBy { get; set; } = 0;
+        public DateTime? LastPasswordChangeDate { get; set; }
+        public int? LoginAttemptCount { get; set; }
+
+
         public Int32 FK_Users { get; set; }
-        
+
         public string? IsUserProfileExists { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Int32 FK_Company { get; set; }
 
         public string? RegistrationID { get; set; }
-        public string? UserName { get; set; }
+
         public string? UserPassword { get; set; }
-        public string? Password { get; set; }
+
 
         public string? CollegeName { get; set; }
 
         public string? FirstName { get; set; }
 
-        public string? Email { get; set; } = string.Empty;
-        public string? MobileNumber { get; set; } = string.Empty;
+
+
 
         public string? LastName { get; set; }
-        
-        public int FK_Role { get; set; }
+
         public string? CompanyEmail { get; set; }
         public Int32 FK_UserRole { get; set; }
-        public bool IsActive { get; set; }
+
         public int Company { get; set; }
-        public string? UserStatus { get; set; }
 
-        public DateTime? CreatedOn { get; set; }
 
-        public string? CreatedBy { get; set; }
+
         public string? IDProof { get; set; }
 
-        public DateTime? ModifiedOn { get; set; }
 
-        public string? ModifiedBy { get; set; }
 
-        public DateTime? LastPasswordChangeDate { get; set; }
+
         public string? Photo { get; set; }
         public Int64 FK_UserImages { get; set; }
         public string? TmpCompany { get; set; }
@@ -80,14 +91,14 @@ namespace Construction.DomainModel.User
 
 
         public string? UserPasswordStr { get; set; }
-        
+
         public string? CompanyIDNumber { get; set; }
-        
+
         public string? StateName { get; set; }
         public string? ImageURL { get; set; }
-        
+
         public int Designation { get; set; }
-        
+
         public int FK_Gender { get; set; }
         public int FK_Profession { get; set; }
         public int FK_IdentityProofType { get; set; }
@@ -99,11 +110,11 @@ namespace Construction.DomainModel.User
         public string? Address2 { get; set; }
         public int ID_PartyMember { get; set; }
 
-        
+
         public string? City { get; set; }
         public string? PostalCode { get; set; }
-        
-        
+
+
 
         public UsersModel()
         {
@@ -160,5 +171,7 @@ namespace Construction.DomainModel.User
 
         public string? Email { get; set; } = string.Empty;
         public string? MobileNumber { get; set; } = string.Empty;
+
+        public int FK_Role { get; set; } = 0;
     }
 }
