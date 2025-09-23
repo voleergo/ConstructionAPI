@@ -6,6 +6,7 @@ namespace Construction.Interface
 {
     public interface IProjectService
     {
+        public string? ConnectionStrings { get; set; }
         Task<IEnumerable<ProjectModel>> GetAllProjectsAsync();
         Task<ProjectModel> GetProjectByIdAsync(long id);
         Task<ProjectModel> GetProjectByCodeAsync(string projectCode);

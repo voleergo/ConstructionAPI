@@ -14,7 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace JWTAuthentication.NET6._0.Controllers
+namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
@@ -115,37 +115,7 @@ namespace JWTAuthentication.NET6._0.Controllers
 
 
 
-        [HttpPost]
-        [EnableCors("AllowOrigin")]
-        [ActionName("User")]
-        [ApiExplorerSettings(IgnoreApi = false)]
-        public async Task<IActionResult> UsersUpdate([FromBody] UserUpdateModel model)
-        {
-            try
-            {
-                var result = _authService.UsersUpdate(model);  // Calls your service which runs usp_UserUpdate
-
-                // Return the stored procedure's response directly
-                return Ok(new { Result = result });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "UsersUpdate");
-
-                // Even on exception, send proper response format like SP does
-                return Ok(new
-                {
-                    Result = new
-                    {
-                        ResponseCode = -1,
-                        ResponseMessage = ex.Message,
-                        ResponseStatus = 0,
-                        ResponseID = model.ID_Users
-                    }
-                });
-            }
-        }
-
+       
 
 
 
@@ -235,6 +205,38 @@ namespace JWTAuthentication.NET6._0.Controllers
             {
             }
         }
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("User")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public async Task<IActionResult> UsersUpdate([FromBody] UserUpdateModel model)
+        {
+            try
+            {
+                var result = _authService.UsersUpdate(model);  // Calls your service which runs usp_UserUpdate
+
+                // Return the stored procedure's response directly
+                return Ok(new { Result = result });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UsersUpdate");
+
+                // Even on exception, send proper response format like SP does
+                return Ok(new
+                {
+                    Result = new
+                    {
+                        ResponseCode = -1,
+                        ResponseMessage = ex.Message,
+                        ResponseStatus = 0,
+                        ResponseID = model.ID_Users
+                    }
+                });
+            }
+        }
+
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
@@ -449,6 +451,49 @@ namespace JWTAuthentication.NET6._0.Controllers
         }
 
         #endregion Role
+        #endregion
+
+        #region MenuRole
+        [HttpGet]
+        [ActionName("menurole")]
+        [EnableCors]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public Task<IActionResult> GetMenuRole(int FK_Role, int FK_Tenant)
+        {
+            List<MenuRoleModel> result = new List<MenuRoleModel>();
+            IActionResult response = Unauthorized();
+            MenuRoleModel menu = new MenuRoleModel();
+            try
+            {
+                menu.FK_Role = FK_Role;
+                menu.FK_Tenant = FK_Tenant;
+                result = _authService.GetMenuRoleModel(menu);
+                return Task.FromResult<IActionResult>(Ok(new
+                {
+                    Result = result
+                }));
+
+
+            }
+            catch (Exception e)
+            {
+                return Task.FromResult<IActionResult>(BadRequest(new
+                {
+                    Result = result
+                }));
+            }
+
+        }
+        [HttpPost]
+        [ActionName("UpdateMenuRole")]
+        [EnableCors]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult UpdateMenuRole([FromBody] MenuRoleModel menu)
+        {
+            var result = _authService.UpdateMenuRole(menu);
+            return Ok(result);
+        }
+
         #endregion
 
     }

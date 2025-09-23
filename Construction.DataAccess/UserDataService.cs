@@ -555,39 +555,7 @@ namespace Construction.DataAccess
             }
             return result;
         }
-        //public HttpResponses AdminLogin(UsersModel model)
-        //{
-        //    HttpResponses result = new HttpResponses();
-        //    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-        //    Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-        //    string sqlCommand = Procedures.SP_ValidateLogin;
-        //    DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-        //    dbCommand.CommandTimeout = 0;
-        //    db.AddInParameter(dbCommand, "@UserCode", DbType.String, model.UserName);
-        //    db.AddInParameter(dbCommand, "@Password", DbType.String, model.Password);
-        //    db.AddInParameter(dbCommand, "@IP", DbType.String, model.IPAddress);
-        //    db.AddInParameter(dbCommand, "@MAC", DbType.String, model.MACAddress);
-        //    db.AddInParameter(dbCommand, "@IsMobile", DbType.Boolean, model.IsMobile);
-        //    try
-        //    {
-        //        using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-        //        {
-        //            while (dataReader.Read())
-        //            {
-        //                result.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
-        //                result.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-        //                result.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
-        //                result.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw;
-        //    }
-        //    return result;
-        //}
-
+       
 
         public List<ClientMenuModel> GetMenuClient(ClientMenuModel inputmodel)
         {
@@ -766,93 +734,6 @@ namespace Construction.DataAccess
         }
 
 
-        //public HttpResponses RoleModelUpdate(RoleModel userRole)
-        //{
-        //    Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-        //    HttpResponses responses = new HttpResponses();
-        //    String sqlCommand = Procedures.SP_db_Role;
-        //    DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-        //    dbCommand.CommandTimeout = 0;
-        //    db.AddInParameter(dbCommand, "@ID", DbType.Int32, userRole.ID);
-        //    db.AddInParameter(dbCommand, "@Name", DbType.String, userRole.Name);
-        //    db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, userRole.ModifiedBy);
-        //    db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, userRole.CreatedBy);
-
-        //   try
-        //    {
-        //        using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-        //        {
-        //            while (dataReader.Read())
-        //            {
-        //                responses.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-
-        //            }
-        //        }
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        throw;
-        //    }
-        //    return responses;
-        //}
-
-
-        //public HttpResponses userRoleDelete(RoleModel userRoleModel)
-        //{
-        //    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-        //    Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-        //    HttpResponses response = new HttpResponses();
-        //    string sqlCommand = Procedures.SP_db_DeleteRole;
-        //    DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-        //    dbCommand.CommandTimeout = 0;
-        //    db.AddInParameter(dbCommand, "@ID", DbType.Int32, userRoleModel.ID);
-
-        //    try
-        //    {
-        //        using (IDataReader dataReader = db.ExecuteReader(dbCommand)) 
-        //        {
-        //            while (dataReader.Read())
-        //            {
-
-        //                response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
-
-        //            }
-        //        }
-        //    }
-        //    catch( Exception e)
-        //    {
-        //        throw;
-        //    }
-        //    return response;
-        //}
-
-        //public List<RoleModel> getUserRole(RoleModel userRole)
-        //{
-        //    List<RoleModel> menuRoleModel = new List<RoleModel>();
-        //    DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
-        //    Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-        //    string sqlCommand = Procedures.SP_db_GetUserRole;
-        //    DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-        //    dbCommand.CommandTimeout = 0;
-        //    db.AddInParameter(dbCommand, "@ID", DbType.Int32, userRole.ID);
-        //    //db.AddInParameter(dbCommand, "@Name", DbType.String, userRole.Name);
-        //    //db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, userRole.CreatedBy);
-        //    //db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, userRole.ModifiedBy);
-        //    using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-        //    {
-        //        while (dataReader.Read())
-        //        {
-        //            var UserData = new RoleModel();
-        //            UserData.ID = Convert.ToInt32(dataReader["ID"]);
-        //            UserData.Name = Convert.ToString(dataReader["Name"]);
-        //            UserData.CreatedBy = Convert.ToInt32(dataReader["CreatedBy"]);
-        //            UserData.ModifiedBy = Convert.ToInt32(dataReader["ModifiedBy"]);
-        //            menuRoleModel.Add(UserData);
-        //        }
-
-        //    }
-        //    return menuRoleModel;
-        //}
 
         public HttpResponses PostMenuModel(MenuModel model)
         {

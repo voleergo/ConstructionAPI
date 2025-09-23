@@ -200,22 +200,6 @@ namespace Construction.Service
         }
 
 
-        //public HttpResponses RoleModelUpdate(RoleModel userRole)
-        //{
-        //    UserDataService dataService = new UserDataService(ConnectionStrings);
-        //    return dataService.RoleModelUpdate(userRole);
-        //}
-        //public HttpResponses userRoleDelete(RoleModel userRole)
-        //{
-        //    UserDataService dataService = new UserDataService(ConnectionStrings);
-        //    return dataService.userRoleDelete(userRole);
-        //}
-
-        //public List<RoleModel> getUserRole(RoleModel userRole)
-        //{
-        //    UserDataService dataService = new UserDataService(ConnectionStrings);
-        //    return dataService.getUserRole(userRole);
-        //}
         public HttpResponses PostMenuModel(MenuModel menu)
         {
             UserDataService dataService = new UserDataService(ConnectionStrings);

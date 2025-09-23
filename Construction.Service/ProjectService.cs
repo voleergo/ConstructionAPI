@@ -8,6 +8,7 @@ namespace Construction.Service
 {
     public class ProjectService : IProjectService
     {
+        public string? ConnectionStrings { get; set; }
         private readonly IProjectRepository _projectRepository;
 
         public ProjectService(IProjectRepository projectRepository)

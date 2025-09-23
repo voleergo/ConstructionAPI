@@ -1,22 +1,62 @@
+using Construction.API.Controllers;
+using Construction.Common;
 using Construction.DomainModel;
+using Construction.DomainModel.User;
 using Construction.Interface;
-using Microsoft.AspNetCore.Mvc;
+using Construction.Service;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Construction.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [EnableCors] // Enable CORS for all actions in this controller
-    public class ProjectController : ControllerBase
+    public class ProjectController : BaseController
     {
+        private const string connectstring = "ConnectionString:DefaultConnection";
+
+        private readonly IConfiguration _configuration;
         private readonly IProjectService _projectService;
+        private readonly ITokenService _tokenService;
+        private readonly ILoggerService _logger;
+        private readonly IWebHostEnvironment _environment;
+        private readonly OTPConfig _otp;
+        private readonly string _clientid;
+        private readonly string _clientsecret;
 
-        public ProjectController(IProjectService projectService)
+        public ProjectController(
+            IConfiguration configuration,
+            IProjectService projectService,
+            ITokenService tokenService,
+            ILoggerService loggerService,
+            IWebHostEnvironment environment,
+            IOptions<OTPConfig> otp
+        ) : base(configuration)
         {
+            _configuration = configuration;
             _projectService = projectService;
-        }
+            _tokenService = tokenService;
+            _logger = loggerService;
+            _environment = environment;
 
+            _projectService.ConnectionStrings = configuration[connectstring];
+            _logger.ConnectionStrings = configuration[connectstring];
+
+            _clientid = configuration["ClientID"];
+            _clientsecret = configuration["ClientSecret"];
+            _otp = configuration.GetSection("OTPConfig").Get<OTPConfig>();
+        }
+        
+
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProjectModel>>> GetAllProjects()
         {
