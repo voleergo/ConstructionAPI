@@ -56,6 +56,14 @@ namespace Construction.API.Controllers
                 project.projectID = Id_Project;
                 result = _projectService.GetProject(project);
 
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Message = "No project found"
+
+                    });
+                }
                 return Ok(new
                 {
                     Result = result
@@ -63,10 +71,38 @@ namespace Construction.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Project Get");
-                return BadRequest(new
+                return StatusCode(500, new
                 {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while displaying the project.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+        [HttpDelete]
+        [ActionName("Project")]
+        [EnableCors]
+        [ApiExplorerSettings(IgnoreApi = false)]
+
+        public IActionResult DeleteProject(int id_project)
+        {
+            try
+            {
+                var result = _projectService.DeleteProjects(id_project);
+                return Ok(new
+                {
+                    ResponseMessage = result.ResponseMessage,
                     Result = result
+                });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while deleting the project.",
+                    Error = ex.Message
                 });
             }
         }
