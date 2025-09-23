@@ -1,4 +1,5 @@
 using Construction.Common;
+using Construction.DomainModel;
 using Construction.DomainModel.Project; // Use the actual namespace
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace Construction.DataAccess
                     {
                         ProjectModel model = new ProjectModel();
 
-                        model.projectID = dataReader["ID_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_Project"]);
+                        model.projectID =Convert.ToInt32(dataReader["ID_Project"]);
                         model.projectCode = dataReader["ProjectCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectCode"]);
                         model.projectName = dataReader["ProjectName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectName"]);                  
                         model.projectStatus = dataReader["ProjectStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectStatus"]);
@@ -66,6 +67,37 @@ namespace Construction.DataAccess
             }
 
             return resultList;
+        }
+
+        public HttpResponses DeleteProjects(int id_project)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_DeleteProject;                   // "usp_DeleteRole
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            db.AddInParameter(dbCommand, "@ID_Project", DbType.Int32, id_project);
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        // Note: Your stored procedure doesn't return ResponseID, so remove this line
+                        response.ResponseID = Convert.ToInt64(dataReader["ResponseID"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // Add proper error handling instead of just throwing
+                response.ResponseCode = "0";
+                response.ResponseMessage = e.Message;
+                response.ResponseStatus = false;
+            }
+            return response;
         }
     }
 }

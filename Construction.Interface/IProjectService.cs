@@ -7,6 +7,9 @@ namespace Construction.Interface
     public interface IProjectService
     {
         public string? ConnectionStrings { get; set; }
-        List<ProjectModel> GetProject(ProjectModel data); // Use the actual type, not alias
+        List<ProjectModel> GetProject(ProjectModel data);
+
+        HttpResponses DeleteProjects(int id_project);
+
     }
 }
