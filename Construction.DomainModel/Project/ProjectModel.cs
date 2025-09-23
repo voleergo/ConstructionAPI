@@ -1,21 +1,36 @@
-using System;
+//projectModel
 
-namespace Construction.DomainModel
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Construction.DomainModel.Project
 {
     public class ProjectModel
     {
-        public long ID_Project { get; set; }
-        public string ProjectCode { get; set; }
-        public string ProjectName { get; set; }
-        public long? FK_Customer { get; set; }
-        public decimal? EstimateAmt { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public string ProjectType { get; set; }
-        public string ProjectStatus { get; set; }
-        public long? CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public long? UpdatedBy { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public int projectID { get; set; }
+        public string projectName { get; set; }
+
+        public string projectType { get; set; }
+        public string projectStatus { get; set; }
+        public string? customerCode { get; set; }
+        public int? FK_Customer { get; set; }
+        public DateTime? startDate { get; set; }
+        public DateTime? endDate { get; set; }
+        public decimal? budget { get; set; }
+        public decimal? expenses { get; set; }
+        public string description { get; set; }
+        public int? FK_User { get; set; }
+        public bool? IsActive { get; set; }
+        public bool? IsDelete { get; set; }
+        public string projectCode { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public int? CreatedBy { get; set; } = 0;
+        public DateTime? ModifiedOn { get; set; }
+
+        public int? ModifiedBy { get; set; } = 0;
     }
 }

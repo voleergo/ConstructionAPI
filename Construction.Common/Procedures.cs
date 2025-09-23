@@ -20,7 +20,7 @@ namespace Construction.Common
     public static class Procedures
     {
         //Project Management
-        public const string SP_GetProjectServices = "usp_GetProjectServices";
+        public const string SP_GetProject = "usp_SelectProject";
         public const string SP_GetProjectStatus = "usp_GetProjectStatus";
         public const string SP_GetProjectType = "usp_GetProjectType";
 
