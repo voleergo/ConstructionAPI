@@ -22,6 +22,7 @@ namespace Construction.Common
         //Project Management
         public const string SP_GetProject = "usp_SelectProject";
         public const string SP_DeleteProject = "usp_Project_Delete";
+        public const string SP_UpdateProject = "usp_UpdateProject";
 
         public const string SP_GetProjectStatus = "usp_GetProjectStatus";
         public const string SP_GetProjectType = "usp_GetProjectType";

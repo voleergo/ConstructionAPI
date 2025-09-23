@@ -79,7 +79,47 @@ namespace Construction.API.Controllers
                 });
             }
         }
+        
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("Project")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult UpdateProject([FromBody] ProjectModel project)
+        {
+            HttpResponses response = new HttpResponses();
+            try
+            {
+                if (project == null || string.IsNullOrEmpty(project.json))
+                {
+                    return BadRequest(new
+                    {
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid input data",
+                        ResponseStatus = false
+                    });
+                }
 
+                response = _projectService.UpdateProject(project);
+
+                return Ok(new
+                {
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    ResponseProjectID = response.ResponseID,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Project Upsert");
+                return BadRequest(new
+                {
+                    ResponseCode = 0,
+                    ResponseMessage = ex.Message,
+                    ResponseStatus = false
+                });
+            }
+        }
         [HttpDelete]
         [ActionName("Project")]
         [EnableCors]

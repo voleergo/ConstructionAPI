@@ -69,6 +69,42 @@ namespace Construction.DataAccess
             return resultList;
         }
 
+
+        ///ProjectDataService
+
+        public HttpResponses UpdateProject(ProjectModel project)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_UpdateProject; // "usp_UpdateProject"
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            db.AddInParameter(dbCommand, "@JsonData", DbType.String, project.json);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = dataReader["ResponseProjectID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseProjectID"]) : 0;
+                        // response.ExtraID = dataReader["ResponseCustomerID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseCustomerID"]) : 0; // optional field for new customer ID
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseCode = "0";
+                response.ResponseMessage = ex.Message;
+                response.ResponseStatus = false;
+            }
+
+            return response;
+        }
         public HttpResponses DeleteProjects(int id_project)
         {
             HttpResponses response = new HttpResponses();

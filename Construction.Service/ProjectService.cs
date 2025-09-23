@@ -16,6 +16,17 @@ namespace Construction.Service
             return dataService.GetProject(data);
         }
 
+        
+
+        public Construction.DomainModel.HttpResponses UpdateProject(ProjectModel jsonModel)
+        {
+            var project = new ProjectModel
+            {
+                json = jsonModel.json
+            };
+            ProjectDataService dataService = new ProjectDataService(ConnectionStrings);
+            return dataService.UpdateProject(project);
+        }
         public HttpResponses DeleteProjects(int id_project)
         {
             ProjectDataService dataService = new ProjectDataService(ConnectionStrings);

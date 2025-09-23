@@ -9,6 +9,7 @@ namespace Construction.Interface
         public string? ConnectionStrings { get; set; }
         List<ProjectModel> GetProject(ProjectModel data);
 
+        HttpResponses UpdateProject(ProjectModel project);
         HttpResponses DeleteProjects(int id_project);
 
     }

@@ -30,6 +30,12 @@ namespace Construction.DomainModel.Project
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; } = 0;
         public DateTime? ModifiedOn { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
+        public string CustomerAddress { get; set; } = string.Empty;
+        public string MobileNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+
+        public string json { get; set; } = string.Empty;
 
         public int? ModifiedBy { get; set; } = 0;
     }
