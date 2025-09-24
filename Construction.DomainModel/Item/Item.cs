@@ -1,6 +1,6 @@
 using System;
 
-namespace Construction.DomainModel
+namespace Construction.DomainModel.Item
 {
     public class Item
     {

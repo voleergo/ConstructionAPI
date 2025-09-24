@@ -693,10 +693,7 @@ namespace Construction.DataAccess
                         ? Convert.ToInt32(dataReader["ID_MenuRole"])
                         : 0;
 
-                    menus.FK_MenuClient = dataReader["FK_MenuClient"] != DBNull.Value
-                        ? Convert.ToInt32(dataReader["FK_MenuClient"])
-                        : 0;
-
+                   
                     menus.MenuRole = Convert.ToString(dataReader["MenuRole"]);
 
                     menus.IsAdd = dataReader["IsAdd"] != DBNull.Value && Convert.ToBoolean(dataReader["IsAdd"]);
@@ -706,12 +703,12 @@ namespace Construction.DataAccess
                     menus.IsPrint = dataReader["IsPrint"] != DBNull.Value && Convert.ToBoolean(dataReader["IsPrint"]);
                     menus.Active = dataReader["IsActive"] != DBNull.Value && Convert.ToBoolean(dataReader["IsActive"]);
 
-                    // From MenuClient
-                    menus.FK_Menu = dataReader["FK_Menu"] != DBNull.Value
-                        ? Convert.ToInt32(dataReader["FK_Menu"])
-                        : 0;
+                    menus.FK_MenuClient = dataReader["FK_MenuClient"] != DBNull.Value
+                         ? Convert.ToInt32(dataReader["FK_MenuClient"])
+                         : 0;
 
-                    menus.MenuName = Convert.ToString(dataReader["UserMenu"]);
+
+                    menus.UserMenu = Convert.ToString(dataReader["UserMenu"]);
 
                     // Extra property (if your model needs it)
                     menus.Header = 0;
