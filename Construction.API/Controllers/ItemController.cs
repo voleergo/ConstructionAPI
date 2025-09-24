@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Construction.DomainModel.Item;
+using Construction.DomainModel.Project;
+using Construction.Service;
 
 namespace Construction.API.Controllers
 {
@@ -41,6 +43,150 @@ namespace Construction.API.Controllers
 
 
         }
-        
+
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        [ActionName("ProjectService")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetProjectServices(int fkProject, int idProjectService = 0)
+        {
+            List<ProjectServiceModel> result = new List<ProjectServiceModel>();
+            IActionResult response = Unauthorized();
+            try
+            {
+                ProjectServiceModel service = new ProjectServiceModel();
+                service.FK_Project = fkProject;
+                service.ID_ProjectService = idProjectService;
+                result = _itemService.GetProjectServices(service);
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Message = "No project Service found"
+
+                    });
+                }
+                return Ok(new
+                {
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while displaying the project.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("ProjectService")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult UpdateProjectService([FromBody] ProjectServiceModel service)
+        {
+            HttpResponses response = new HttpResponses();
+            try
+            {
+                if (service == null)
+                {
+                    return BadRequest(new
+                    {
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid input data",
+                        ResponseStatus = false
+                    });
+                }
+
+                response = _itemService.UpdateProjectService(service);
+
+                return Ok(new
+                {
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    ResponseProjectID = response.ResponseID,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Project Service Upsert");
+                return BadRequest(new
+                {
+                    ResponseCode = 0,
+                    ResponseMessage = ex.Message,
+                    ResponseStatus = false
+                });
+            }
+        }
+        [HttpDelete]
+        [ActionName("ProjectService")]
+        [EnableCors]
+        [ApiExplorerSettings(IgnoreApi = false)]
+
+        public IActionResult DeleteProjectService(int idProjectService)
+        {
+            try
+            {
+                var result = _itemService.DeleteProjectService(idProjectService);
+                return Ok(new
+                {
+                    ResponseMessage = result.ResponseMessage,
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while deleting the project.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        [ActionName("ServiceCategory")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetServiceCategory(int Id_ServiceCategory)
+        {
+            List<Item> result = new List<Item>();
+            IActionResult response = Unauthorized();
+            try
+            {
+                // FIX: Pass the ID_ServiceCategory directly as an integer
+                result = _itemService.GetServiceCategory(new Item { ID_Item = Id_ServiceCategory });
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Message = "No service category found"
+                    });
+                }
+                return Ok(new
+                {
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while displaying the project.",
+                    Error = ex.Message
+                });
+
+
+            }
+        }
     }
 }

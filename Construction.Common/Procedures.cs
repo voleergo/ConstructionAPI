@@ -27,6 +27,16 @@ namespace Construction.Common
         public const string SP_GetProjectStatus = "usp_GetProjectStatus";
         public const string SP_GetProjectType = "usp_GetProjectType";
 
+        //ServiceCategory
+        public const string SP_GetServiceCategory = "usp_GetServiceCategory";
+        public const string SP_DeleteServiceCategory = "usp_DeleteServiceCategory";
+        public const string SP_UpdateServiceCategory = "usp_UpdateServiceCategory";
+
+
+        //ProjectService Management
+        public const string SP_UpdateProjectService = "usp_UpdateProjectService";
+        public const string SP_DeleteProjectService = "usp_DeleteProjectService";
+        public const string SP_GetProjectService = "usp_GetProjectService";
 
         //User Management
         public const string SP_UsersDelete = "usp_User_Delete";

@@ -18,7 +18,7 @@ namespace Construction.Service
 
         
 
-        public Construction.DomainModel.HttpResponses UpdateProject(ProjectModel jsonModel)
+        public HttpResponses UpdateProject(ProjectModel jsonModel)
         {
             var project = new ProjectModel
             {
