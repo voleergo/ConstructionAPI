@@ -39,7 +39,6 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ILevelRepository, LevelRepository>();
 builder.Services.AddScoped<IProjectLevelRepository, ProjectLevelRepository>();
-builder.Services.AddScoped<IItemRepository, ServiceDataService>();
 builder.Services.AddScoped<IProjectTransRepository, ProjectTransRepository>();
 builder.Services.Configure<OTPConfig>(
     builder.Configuration.GetSection("OTPConfig"));
