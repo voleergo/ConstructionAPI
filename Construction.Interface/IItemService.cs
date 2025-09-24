@@ -10,7 +10,11 @@ namespace Construction.Interface
         HttpResponses UpdateProjectService(ProjectServiceModel service);
         HttpResponses DeleteProjectService(int idItem);
         List<ProjectServiceModel> GetProjectServices(ProjectServiceModel service);
+
+        // Service Category------------------------------------------
         List<Item> GetServiceCategory(Item item);
+
+        HttpResponses UpdateServiceCategory(Item service);
 
     }
 }

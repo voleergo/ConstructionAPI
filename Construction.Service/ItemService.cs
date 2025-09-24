@@ -27,11 +27,21 @@ namespace Construction.Service
             return dataService.GetProjectServices(service);
         }
 
+        // Service Category-------------------------------------
+
         public List<Item> GetServiceCategory(Item data)
         {
             ItemDataService dataService = new ItemDataService(ConnectionStrings);
             return dataService.GetServiceCategory(data);
         }
+
+        public HttpResponses UpdateServiceCategory(Item service)
+        {
+
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.UpdateServiceCategory(service);
+        }
+
 
 
     }

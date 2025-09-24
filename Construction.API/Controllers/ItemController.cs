@@ -123,6 +123,7 @@ namespace Construction.API.Controllers
                 });
             }
         }
+
         [HttpDelete]
         [ActionName("ProjectService")]
         [EnableCors]
@@ -150,6 +151,7 @@ namespace Construction.API.Controllers
             }
         }
 
+        //Service Category----------------------------------------------------
 
         [HttpGet]
         [EnableCors("AllowOrigin")]
@@ -186,6 +188,47 @@ namespace Construction.API.Controllers
                 });
 
 
+            }
+        }
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("ServiceCategory")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult UpdateServiceCategory([FromBody] Item service)
+        {
+            HttpResponses response = new HttpResponses();
+            try
+            {
+                if (service == null)
+                {
+                    return BadRequest(new
+                    {
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid input data",
+                        ResponseStatus = false
+                    });
+                }
+
+                response = _itemService.UpdateServiceCategory  (service);
+
+                return Ok(new
+                {
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    ResponseProjectID = response.ResponseID,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Project Service Upsert");
+                return BadRequest(new
+                {
+                    ResponseCode = 0,
+                    ResponseMessage = ex.Message,
+                    ResponseStatus = false
+                });
             }
         }
     }
