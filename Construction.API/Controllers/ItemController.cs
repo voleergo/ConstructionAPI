@@ -164,7 +164,7 @@ namespace Construction.API.Controllers
             try
             {
                 // FIX: Pass the ID_ServiceCategory directly as an integer
-                result = _itemService.GetServiceCategory(new Item { ID_Item = Id_ServiceCategory });
+                result = _itemService.GetServiceCategory(new Item { ID_ServiceCategory = Id_ServiceCategory });
 
                 if (result == null || result.Count == 0)
                 {
@@ -190,42 +190,83 @@ namespace Construction.API.Controllers
 
             }
         }
-        [HttpGet]
-        [EnableCors("AllowOrigin")]
-        [ActionName("Supplier")]
+        [HttpPost]
+        [ActionName("ServiceCategory")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult GetSuppliers(int idSupplier = 0, int fkServiceCategory = 0)
+        public IActionResult UpdateServiceCategory([FromBody] Item service)
         {
-            List<SupplierModel> result = new List<SupplierModel>();
-            IActionResult response = Unauthorized();
+            HttpResponses response = new HttpResponses();
             try
             {
-                SupplierModel supplier = new SupplierModel();
-                supplier.ID_Supplier = idSupplier;
-                supplier.FK_ServiceCategory = fkServiceCategory;
-                result = _itemService.GetSuppliers(supplier);
-
-                if (result == null || result.Count == 0)
+                if (service == null)
                 {
-                    return NotFound(new
+                    return BadRequest(new
                     {
-                        Message = "No suppliers found"
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid input data",
+                        ResponseStatus = false
                     });
                 }
+
+                response = _itemService.UpdateServiceCategory(service);
+
                 return Ok(new
                 {
-                    Result = result
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    ResponseProjectID = response.ResponseID,
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new
+                _logger.LogError(ex, "Project Service Upsert");
+                return BadRequest(new
                 {
-                    ResponseCode = "500",
-                    ResponseMessage = "An error occurred while retrieving suppliers.",
-                    Error = ex.Message
+                    ResponseCode = 0,
+                    ResponseMessage = ex.Message,
+                    ResponseStatus = false
                 });
             }
         }
+
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        [ActionName("Supplier")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+         public IActionResult GetSuppliers(int idSupplier = 0, int fkServiceCategory = 0)
+            {
+                List<SupplierModel> result = new List<SupplierModel>();
+                IActionResult response = Unauthorized();
+                try
+                {
+                    SupplierModel supplier = new SupplierModel();
+                    supplier.ID_Supplier = idSupplier;
+                    supplier.FK_ServiceCategory = fkServiceCategory;
+                    result = _itemService.GetSuppliers(supplier);
+
+                    if (result == null || result.Count == 0)
+                    {
+                        return NotFound(new
+                        {
+                            Message = "No suppliers found"
+                        });
+                    }
+                    return Ok(new
+                    {
+                        Result = result
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new
+                    {
+                        ResponseCode = "500",
+                        ResponseMessage = "An error occurred while retrieving suppliers.",
+                        Error = ex.Message
+                    });
+                }
+            }
     }
 }
+

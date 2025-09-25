@@ -169,7 +169,7 @@ namespace Construction.DataAccess
             string sqlCommand = Procedures.SP_GetServiceCategory;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
-            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int64, data.ID_Item);
+            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int64, data.ID_ServiceCategory);
 
             try
             {
@@ -178,8 +178,8 @@ namespace Construction.DataAccess
                     while (dataReader.Read())
                     {
                         Item item = new Item();
-                        item.ID_Item = Convert.ToInt32(dataReader["ID_ServiceCategory"]);
-                        item.ItemName = dataReader["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CategoryName"]);
+                        item.ID_ServiceCategory = Convert.ToInt32(dataReader["ID_ServiceCategory"]);
+                        item.CategoryName = dataReader["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CategoryName"]);
 
                         resultList.Add(item);
                     }
@@ -203,8 +203,8 @@ namespace Construction.DataAccess
             dbCommand.CommandTimeout = 0;
 
             // Add input parameters
-            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int32, service.ID_Item);
-            db.AddInParameter(dbCommand, "CategoryName", DbType.String, service.ItemName);
+            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int32, service.ID_ServiceCategory);
+            db.AddInParameter(dbCommand, "CategoryName", DbType.String, service.CategoryName);
 
             try
             {

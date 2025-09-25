@@ -34,6 +34,15 @@ namespace Construction.Service
             ItemDataService dataService = new ItemDataService(ConnectionStrings);
             return dataService.GetServiceCategory(data);
         }
+
+        public HttpResponses UpdateServiceCategory(Item service)
+        {
+
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.UpdateServiceCategory(service);
+        }
+
+
         public List<SupplierModel> GetSuppliers(SupplierModel supplier)
         {
             ItemDataService dataService = new ItemDataService(ConnectionStrings);

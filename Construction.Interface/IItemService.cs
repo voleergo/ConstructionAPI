@@ -13,6 +13,8 @@ namespace Construction.Interface
 
         // Service Category------------------------------------------
         List<Item> GetServiceCategory(Item item);
+        HttpResponses UpdateServiceCategory(Item service);
+
         List<SupplierModel> GetSuppliers(SupplierModel supplier);
     }
 }
