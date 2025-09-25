@@ -33,6 +33,7 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
             db.AddInParameter(dbCommand, "@Quantity", DbType.Int64, service.Quantity);
+            db.AddInParameter(dbCommand, "@Unit", DbType.String, service.Unit );
             db.AddInParameter(dbCommand, "@UnitPrice", DbType.Decimal, service.UnitPrice);
             db.AddInParameter(dbCommand, "@TotalPrice", DbType.Decimal, service.TotalPrice);
             db.AddInParameter(dbCommand, "@FK_Supplier", DbType.Int64, service.FK_Supplier);
