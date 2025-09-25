@@ -130,7 +130,7 @@ namespace Construction.DataAccess
         {
             List<SupplierModel> suppliers = new List<SupplierModel>();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = "usp_GetSupplier";
+            string sqlCommand = Procedures.SP_GetSupplier;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
