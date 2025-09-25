@@ -124,7 +124,40 @@ namespace Construction.DataAccess
             return services;
         }
 
+        // Add this method to your existing ItemDataService class
+        public List<SupplierModel> GetSuppliers(SupplierModel supplier)
+        {
+            List<SupplierModel> suppliers = new List<SupplierModel>();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetSupplier;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
 
+            db.AddInParameter(dbCommand, "@ID_Supplier", DbType.Int32, supplier.ID_Supplier);
+            db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, supplier.FK_ServiceCategory);
+
+            using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+            {
+                while (dataReader.Read())
+                {
+                    SupplierModel s = new SupplierModel
+                    {
+                        ID_Supplier = dataReader["ID_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["ID_Supplier"]) : 0,
+                        SupplierCode = dataReader["SupplierCode"] != DBNull.Value ? Convert.ToString(dataReader["SupplierCode"]) : string.Empty,
+                        SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty,
+                        CreatedOn = dataReader["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["CreatedOn"]) : DateTime.MinValue,
+                        CreatedBy = dataReader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["CreatedBy"]) : 0,
+                        ModifiedOn = dataReader["ModifiedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["ModifiedOn"]) : null,
+                        ModifiedBy = dataReader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["ModifiedBy"]) : null,
+                        FK_ServiceCategory = dataReader["FK_ServiceCategory"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_ServiceCategory"]) : 0,
+                        CategoryName = dataReader["CategoryName"] != DBNull.Value ? Convert.ToString(dataReader["CategoryName"]) : string.Empty
+                    };
+                    suppliers.Add(s);
+                }
+            }
+
+            return suppliers;
+        }
 
 
         public List<Item> GetServiceCategory(Item data)

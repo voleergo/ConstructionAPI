@@ -32,7 +32,11 @@ namespace Construction.Service
             ItemDataService dataService = new ItemDataService(ConnectionStrings);
             return dataService.GetServiceCategory(data);
         }
-
+        public List<SupplierModel> GetSuppliers(SupplierModel supplier)
+        {
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.GetSuppliers(supplier);
+        }
 
     }
 }

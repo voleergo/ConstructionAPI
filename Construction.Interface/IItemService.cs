@@ -11,6 +11,6 @@ namespace Construction.Interface
         HttpResponses DeleteProjectService(int idItem);
         List<ProjectServiceModel> GetProjectServices(ProjectServiceModel service);
         List<Item> GetServiceCategory(Item item);
-
+        List<SupplierModel> GetSuppliers(SupplierModel supplier);
     }
 }

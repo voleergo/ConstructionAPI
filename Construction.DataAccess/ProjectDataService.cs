@@ -43,6 +43,10 @@ namespace Construction.DataAccess
                         model.projectStatus = dataReader["ProjectStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectStatus"]);
                         model.FK_Customer = dataReader["FK_Customer"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_Customer"]);
                         model.customerCode = dataReader["CustomerCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerCode"]);
+                        model.CustomerName=dataReader["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerName"]);
+                        model.Email = dataReader["Email"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Email"]);
+                        model.CustomerAddress = dataReader["CustomerAddress"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerAddress"]);
+                        model.MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["MobileNumber"]);
                         model.startDate = dataReader["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["StartDate"]);
                         model.endDate = dataReader["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["EndDate"]);
                         model.budget = dataReader["Budget"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Budget"]);

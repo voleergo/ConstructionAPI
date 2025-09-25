@@ -188,5 +188,42 @@ namespace Construction.API.Controllers
 
             }
         }
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        [ActionName("Supplier")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetSuppliers(int idSupplier = 0, int fkServiceCategory = 0)
+        {
+            List<SupplierModel> result = new List<SupplierModel>();
+            IActionResult response = Unauthorized();
+            try
+            {
+                SupplierModel supplier = new SupplierModel();
+                supplier.ID_Supplier = idSupplier;
+                supplier.FK_ServiceCategory = fkServiceCategory;
+                result = _itemService.GetSuppliers(supplier);
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Message = "No suppliers found"
+                    });
+                }
+                return Ok(new
+                {
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while retrieving suppliers.",
+                    Error = ex.Message
+                });
+            }
+        }
     }
 }
