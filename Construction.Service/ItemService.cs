@@ -27,6 +27,8 @@ namespace Construction.Service
             return dataService.GetProjectServices(service);
         }
 
+        // Service Category-------------------------------------
+
         public List<Item> GetServiceCategory(Item data)
         {
             ItemDataService dataService = new ItemDataService(ConnectionStrings);
@@ -37,6 +39,7 @@ namespace Construction.Service
             ItemDataService dataService = new ItemDataService(ConnectionStrings);
             return dataService.GetSuppliers(supplier);
         }
+
 
     }
 }

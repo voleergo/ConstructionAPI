@@ -123,6 +123,7 @@ namespace Construction.API.Controllers
                 });
             }
         }
+
         [HttpDelete]
         [ActionName("ProjectService")]
         [EnableCors]
@@ -150,6 +151,7 @@ namespace Construction.API.Controllers
             }
         }
 
+        //Service Category----------------------------------------------------
 
         [HttpGet]
         [EnableCors("AllowOrigin")]

@@ -125,11 +125,12 @@ namespace Construction.DataAccess
         }
 
         // Add this method to your existing ItemDataService class
+        // Add this method to your existing ItemDataService class
         public List<SupplierModel> GetSuppliers(SupplierModel supplier)
         {
             List<SupplierModel> suppliers = new List<SupplierModel>();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_GetSupplier;
+            string sqlCommand = "usp_GetSupplier";
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
@@ -190,6 +191,42 @@ namespace Construction.DataAccess
             }
 
             return resultList;
+        }
+
+
+        public HttpResponses UpdateServiceCategory (Item service)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_UpdateServiceCategory;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            // Add input parameters
+            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int32, service.ID_Item);
+            db.AddInParameter(dbCommand, "CategoryName", DbType.String, service.ItemName);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = dataReader["ResponseID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseID"]) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseCode = "0";
+                response.ResponseMessage = ex.Message;
+                response.ResponseStatus = false;
+            }
+
+            return response;
         }
 
     }
