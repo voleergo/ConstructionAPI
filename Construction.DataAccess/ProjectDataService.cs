@@ -62,9 +62,7 @@ namespace Construction.DataAccess
                             CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["CreatedOn"]),
                             ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["ModifiedBy"]),
                             ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]),
-                            // Deserialize PaymentSchedules JSON
-                            PaymentSchedulejson = dataReader["PaymentSchedules"] == DBNull.Value ? "[]" : Convert.ToString(dataReader["PaymentSchedules"])
-                        };
+                           };
 
                         resultList.Add(model);
                     }
