@@ -144,8 +144,7 @@ namespace Construction.DataAccess
                 {
                     SupplierModel s = new SupplierModel
                     {
-                        ID_Supplier = dataReader["ID_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["ID_Supplier"]) : 0,
-                        SupplierCode = dataReader["SupplierCode"] != DBNull.Value ? Convert.ToString(dataReader["SupplierCode"]) : string.Empty,
+                        ID_Supplier = dataReader["ID_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["ID_Supplier"]) : 0, 
                         SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty,
                         CreatedOn = dataReader["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["CreatedOn"]) : DateTime.MinValue,
                         CreatedBy = dataReader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["CreatedBy"]) : 0,

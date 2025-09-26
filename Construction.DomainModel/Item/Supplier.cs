@@ -9,7 +9,6 @@ namespace Construction.DomainModel.Item
     public class SupplierModel
     {
         public int ID_Supplier { get; set; }
-        public string SupplierCode { get; set; }
         public string SupplierName { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
