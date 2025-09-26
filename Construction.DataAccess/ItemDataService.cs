@@ -19,46 +19,7 @@ namespace Construction.DataAccess
             _connectionString = connectionString;
         }
 
-        public HttpResponses UpdateProjectService(ProjectServiceModel service)
-        {
-            HttpResponses response = new HttpResponses();
-            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_UpdateProjectService; 
-            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            dbCommand.CommandTimeout = 0;
-
-            // Add input parameters
-            db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
-            db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
-            db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
-            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
-            db.AddInParameter(dbCommand, "@Quantity", DbType.Int64, service.Quantity);
-            db.AddInParameter(dbCommand, "@UnitPrice", DbType.Decimal, service.UnitPrice);
-            db.AddInParameter(dbCommand, "@TotalPrice", DbType.Decimal, service.TotalPrice);
-            db.AddInParameter(dbCommand, "@FK_Supplier", DbType.Int64, service.FK_Supplier);
-
-            try
-            {
-                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
-                {
-                    if (dataReader.Read())
-                    {
-                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
-                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
-                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = dataReader["ResponseID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseID"]) : 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                response.ResponseCode = "0";
-                response.ResponseMessage = ex.Message;
-                response.ResponseStatus = false;
-            }
-
-            return response;
-        }
+       
         public HttpResponses DeleteProjectService(int idProjectService)
         {
             HttpResponses response = new HttpResponses();
@@ -113,6 +74,7 @@ namespace Construction.DataAccess
                         ProjectService = dataReader["ProjectService"] != DBNull.Value ? Convert.ToString(dataReader["ProjectService"]) : string.Empty,
                         FK_Project = dataReader["FK_Project"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Project"]) : 0,
                         Quantity = dataReader["Quantity"] != DBNull.Value ? Convert.ToInt32(dataReader["Quantity"]) : 0,
+                        Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
                         FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0
@@ -124,8 +86,47 @@ namespace Construction.DataAccess
             return services;
         }
 
-        // Add this method to your existing ItemDataService class
-        // Add this method to your existing ItemDataService class
+        public HttpResponses UpdateProjectService(ProjectServiceModel service)
+        {
+            HttpResponses response = new HttpResponses();
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_UpdateProjectService;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            // Add input parameters
+            db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
+            db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
+            db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
+            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
+            db.AddInParameter(dbCommand, "@Unit", DbType.String, service.Unit);
+            db.AddInParameter(dbCommand, "@Quantity", DbType.Int64, service.Quantity);
+            db.AddInParameter(dbCommand, "@UnitPrice", DbType.Decimal, service.UnitPrice);
+            db.AddInParameter(dbCommand, "@TotalPrice", DbType.Decimal, service.TotalPrice);
+            db.AddInParameter(dbCommand, "@FK_Supplier", DbType.Int64, service.FK_Supplier);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = dataReader["ResponseID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseID"]) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseCode = "0";
+                response.ResponseMessage = ex.Message;
+                response.ResponseStatus = false;
+            }
+
+            return response;
+        }
         public List<SupplierModel> GetSuppliers(SupplierModel supplier)
         {
             List<SupplierModel> suppliers = new List<SupplierModel>();
