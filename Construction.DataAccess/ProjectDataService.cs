@@ -27,7 +27,9 @@ namespace Construction.DataAccess
             string sqlCommand = Procedures.SP_GetProject;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
+
             db.AddInParameter(dbCommand, "@ID_Project", DbType.Int64, inputModel.projectID);
+            db.AddInParameter(dbCommand, "@FK_User", DbType.Int64, inputModel.FK_User); // pass user
 
             try
             {
@@ -35,31 +37,34 @@ namespace Construction.DataAccess
                 {
                     while (dataReader.Read())
                     {
-                        ProjectModel model = new ProjectModel();
-
-                        model.projectID =Convert.ToInt32(dataReader["ID_Project"]);
-                        model.projectCode = dataReader["ProjectCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectCode"]);
-                        model.projectName = dataReader["ProjectName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectName"]);                  
-                        model.projectStatus = dataReader["ProjectStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectStatus"]);
-                        model.FK_Customer = dataReader["FK_Customer"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_Customer"]);
-                        model.customerCode = dataReader["CustomerCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerCode"]);
-                        model.CustomerName=dataReader["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerName"]);
-                        model.Email = dataReader["Email"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Email"]);
-                        model.CustomerAddress = dataReader["CustomerAddress"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerAddress"]);
-                        model.MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["MobileNumber"]);
-                        model.startDate = dataReader["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["StartDate"]);
-                        model.endDate = dataReader["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["EndDate"]);
-                        model.budget = dataReader["Budget"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Budget"]);
-                        model.expenses = dataReader["Expense"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Expense"]);
-                        model.description = dataReader["Description"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Description"]);
-                        model.projectType = dataReader["ProjectType"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectType"]);
-                        model.FK_User = dataReader["FK_User"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_User"]);
-                        model.IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]);
-                        model.IsDelete = dataReader["IsDelete"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsDelete"]);
-                        model.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["CreatedBy"]);
-                        model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["CreatedOn"]);
-                        model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["ModifiedBy"]);
-                        model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]);
+                        ProjectModel model = new ProjectModel
+                        {
+                            projectID = dataReader["ID_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_Project"]),
+                            projectCode = dataReader["ProjectCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectCode"]),
+                            projectName = dataReader["ProjectName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectName"]),
+                            projectStatus = dataReader["ProjectStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectStatus"]),
+                            FK_Customer = dataReader["FK_Customer"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_Customer"]),
+                            customerCode = dataReader["CustomerCode"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerCode"]),
+                            CustomerName = dataReader["CustomerName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerName"]),
+                            Email = dataReader["Email"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Email"]),
+                            CustomerAddress = dataReader["CustomerAddress"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CustomerAddress"]),
+                            MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["MobileNumber"]),
+                            startDate = dataReader["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["StartDate"]),
+                            endDate = dataReader["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["EndDate"]),
+                            budget = dataReader["Budget"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Budget"]),
+                            expenses = dataReader["Expense"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Expense"]),
+                            description = dataReader["Description"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Description"]),
+                            projectType = dataReader["ProjectType"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["ProjectType"]),
+                            FK_User = dataReader["FK_User"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_User"]),
+                            IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]),
+                            IsDelete = dataReader["IsDelete"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsDelete"]),
+                            CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["CreatedBy"]),
+                            CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["CreatedOn"]),
+                            ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["ModifiedBy"]),
+                            ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                            // Deserialize PaymentSchedules JSON
+                            PaymentSchedulejson = dataReader["PaymentSchedules"] == DBNull.Value ? "[]" : Convert.ToString(dataReader["PaymentSchedules"])
+                        };
 
                         resultList.Add(model);
                     }
@@ -84,7 +89,9 @@ namespace Construction.DataAccess
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
+            // Pass both JSON and FK_User
             db.AddInParameter(dbCommand, "@JsonData", DbType.String, project.json);
+            db.AddInParameter(dbCommand, "@FK_User", DbType.Int64, project.FK_User);
 
             try
             {
@@ -92,11 +99,17 @@ namespace Construction.DataAccess
                 {
                     if (dataReader.Read())
                     {
-                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
-                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
-                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = dataReader["ResponseProjectID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseProjectID"]) : 0;
-                        // response.ExtraID = dataReader["ResponseCustomerID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseCustomerID"]) : 0; // optional field for new customer ID
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseCode"]) : "0";
+
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
+
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value
+                            && Convert.ToBoolean(dataReader["ResponseStatus"]);
+
+                        response.ResponseID = dataReader["ResponseProjectID"] != DBNull.Value
+                            ? Convert.ToInt64(dataReader["ResponseProjectID"]) : 0;
                     }
                 }
             }
@@ -109,6 +122,7 @@ namespace Construction.DataAccess
 
             return response;
         }
+
         public HttpResponses DeleteProjects(int id_project)
         {
             HttpResponses response = new HttpResponses();

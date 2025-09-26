@@ -170,7 +170,9 @@ namespace Construction.DataAccess
             string sqlCommand = Procedures.SP_GetServiceCategory;
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
+
             db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int64, data.ID_ServiceCategory);
+            db.AddInParameter(dbCommand, "@FK_ProjectType", DbType.Int64, data.FK_ProjectType);
 
             try
             {
@@ -178,9 +180,14 @@ namespace Construction.DataAccess
                 {
                     while (dataReader.Read())
                     {
-                        Item item = new Item();
-                        item.ID_ServiceCategory = Convert.ToInt32(dataReader["ID_ServiceCategory"]);
-                        item.CategoryName = dataReader["CategoryName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["CategoryName"]);
+                        Item item = new Item
+                        {
+                            ID_ServiceCategory = Convert.ToInt32(dataReader["ID_ServiceCategory"]),
+                            CategoryName = dataReader["CategoryName"] == DBNull.Value
+                                           ? string.Empty
+                                           : Convert.ToString(dataReader["CategoryName"]),
+                            FK_ProjectType = Convert.ToInt32(dataReader["FK_ProjectType"])
+                        };
 
                         resultList.Add(item);
                     }
@@ -193,6 +200,7 @@ namespace Construction.DataAccess
 
             return resultList;
         }
+
 
 
         public HttpResponses UpdateServiceCategory (Item service)
