@@ -157,14 +157,16 @@ namespace Construction.API.Controllers
         [EnableCors("AllowOrigin")]
         [ActionName("ServiceCategory")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult GetServiceCategory(int Id_ServiceCategory)
+        public IActionResult GetServiceCategory(int Id_ServiceCategory = 0, int FK_ProjectType = 0)
         {
             List<Item> result = new List<Item>();
-            IActionResult response = Unauthorized();
             try
             {
-                // FIX: Pass the ID_ServiceCategory directly as an integer
-                result = _itemService.GetServiceCategory(new Item { ID_ServiceCategory = Id_ServiceCategory });
+                result = _itemService.GetServiceCategory(new Item
+                {
+                    ID_ServiceCategory = Id_ServiceCategory,
+                    FK_ProjectType = FK_ProjectType
+                });
 
                 if (result == null || result.Count == 0)
                 {
@@ -173,6 +175,7 @@ namespace Construction.API.Controllers
                         Message = "No service category found"
                     });
                 }
+
                 return Ok(new
                 {
                     Result = result
@@ -183,13 +186,12 @@ namespace Construction.API.Controllers
                 return StatusCode(500, new
                 {
                     ResponseCode = "500",
-                    ResponseMessage = "An error occurred while displaying the project.",
+                    ResponseMessage = "An error occurred while fetching service categories.",
                     Error = ex.Message
                 });
-
-
             }
         }
+
         [HttpPost]
         [ActionName("ServiceCategory")]
         [ApiExplorerSettings(IgnoreApi = false)]

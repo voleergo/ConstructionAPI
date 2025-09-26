@@ -19,6 +19,6 @@ namespace Construction.DomainModel.Item
     {
         public int ID_ServiceCategory { get; set; }
         public  string CategoryName { get; set; }
-       
+        public int FK_ProjectType { get; set; }
     }
 }

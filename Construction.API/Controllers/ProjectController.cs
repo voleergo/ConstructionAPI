@@ -48,45 +48,70 @@ namespace Construction.API.Controllers
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetProjects(int Id_Project)
         {
-            List<ProjectModel> result = new List<ProjectModel>();
-            IActionResult response = Unauthorized();
             try
             {
-                ProjectModel project = new ProjectModel();
-                project.projectID = Id_Project;
-                result = _projectService.GetProject(project);
+                // Try to get logged-in user ID from claims
+                int loggedInUserId = 0;
+
+                if (User?.Identity?.IsAuthenticated == true)
+                {
+                    // Debug: print all claims for verification
+                    foreach (var claim in User.Claims)
+                    {
+                        Console.WriteLine($"Claim: {claim.Type} = {claim.Value}");
+                    }
+
+                    // Replace "UserID" with the actual claim type that contains user ID
+                    var userClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")
+                                    ?? User.Claims.FirstOrDefault(c => c.Type == "nameid"); // fallback
+
+                    if (userClaim != null && int.TryParse(userClaim.Value, out int userId))
+                    {
+                        loggedInUserId = userId;
+                    }
+                }
+
+                // Fallback for testing if claim is missing
+                if (loggedInUserId == 0)
+                {
+                    // For testing, use your known user ID (remove in production)
+                    loggedInUserId = 16;
+                    Console.WriteLine("Fallback user ID used: 16");
+                }
+
+                ProjectModel project = new ProjectModel
+                {
+                    projectID = Id_Project,
+                    FK_User = loggedInUserId
+                };
+
+                List<ProjectModel> result = _projectService.GetProject(project);
 
                 if (result == null || result.Count == 0)
                 {
-                    return NotFound(new
-                    {
-                        Message = "No project found"
-
-                    });
+                    return NotFound(new { Message = "No project found" });
                 }
-                return Ok(new
-                {
-                    Result = result
-                });
+
+                return Ok(new { Result = result });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new
                 {
                     ResponseCode = "500",
-                    ResponseMessage = "An error occurred while displaying the project.",
+                    ResponseMessage = "An error occurred while retrieving projects.",
                     Error = ex.Message
                 });
             }
         }
-        
+
+
         [HttpPost]
         [EnableCors("AllowOrigin")]
         [ActionName("Project")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdateProject([FromBody] ProjectModel project)
         {
-            HttpResponses response = new HttpResponses();
             try
             {
                 if (project == null || string.IsNullOrEmpty(project.json))
@@ -99,14 +124,35 @@ namespace Construction.API.Controllers
                     });
                 }
 
-                response = _projectService.UpdateProject(project);
+                // Get logged-in user ID from claims
+                int loggedInUserId = 0;
+                if (User?.Identity?.IsAuthenticated == true)
+                {
+                    var userClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")
+                                    ?? User.Claims.FirstOrDefault(c => c.Type == "nameid"); // fallback
+                    if (userClaim != null && int.TryParse(userClaim.Value, out int userId))
+                    {
+                        loggedInUserId = userId;
+                    }
+                }
+
+                // Fallback for testing (remove in production)
+                if (loggedInUserId == 0)
+                {
+                    loggedInUserId = 16;
+                }
+
+                // Pass FK_User to service
+                project.FK_User = loggedInUserId;
+
+                HttpResponses response = _projectService.UpdateProject(project);
 
                 return Ok(new
                 {
                     ResponseCode = response.ResponseCode,
                     ResponseMessage = response.ResponseMessage,
                     ResponseStatus = response.ResponseStatus,
-                    ResponseProjectID = response.ResponseID,
+                    ResponseProjectID = response.ResponseID
                 });
             }
             catch (Exception ex)
@@ -120,6 +166,7 @@ namespace Construction.API.Controllers
                 });
             }
         }
+
         [HttpDelete]
         [ActionName("Project")]
         [EnableCors]
