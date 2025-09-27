@@ -17,4 +17,12 @@ namespace Construction.DomainModel.Item
         public int FK_ServiceCategory { get; set; }
         public string CategoryName { get; set; }
     }
+
+    public class AddSupplierModel
+    {
+        public int ID_Supplier { get; set; }
+        public string SupplierName { get; set; }
+        public int CreatedBy { get; set; }
+        public int FK_ServiceCategory { get; set; }
+    }
 }

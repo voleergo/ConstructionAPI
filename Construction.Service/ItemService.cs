@@ -49,6 +49,12 @@ namespace Construction.Service
             return dataService.GetSuppliers(supplier);
         }
 
+        public HttpResponses AddSupplier(AddSupplierModel model)
+        {
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.AddSupplier(model);
+        }
+
 
     }
 }

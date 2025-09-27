@@ -269,6 +269,39 @@ namespace Construction.API.Controllers
                     });
                 }
             }
+
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("Supplier")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public async Task<IActionResult> AddSupplier([FromBody] AddSupplierModel model)
+        {
+            try
+            {
+                var result = _itemService.AddSupplier(model);
+                return Ok(new
+                {
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Add Supplier");
+
+                // Even on exception, send proper response format like SP does
+                return Ok(new
+                {
+                    Result = new
+                    {
+                        ResponseCode = -1,
+                        ResponseMessage = ex.Message,
+                        ResponseStatus = 0,
+                        ResponseID = model.ID_Supplier
+                    }
+                });
+            }
+        }
     }
 }
 
