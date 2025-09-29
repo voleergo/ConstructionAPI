@@ -11,10 +11,10 @@ namespace Construction.DomainModel.PaymentSchedule
         public DateTime? ScheduleDate { get; set; }
         public decimal? AmountReceived { get; set; }
         public decimal? AmountDue { get; set; }  // changed from string → decimal
-        public DateTime ReceivedDate { get; set; }
+        public DateTime? ReceivedDate { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
         public bool IsActive { get; set; }

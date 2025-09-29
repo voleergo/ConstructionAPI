@@ -1,6 +1,6 @@
 ﻿using Construction.Common;
 using Construction.DomainModel;
-using Construction.DomainModel.Project; // Use the actual namespace
+using Construction.DomainModel.Project; 
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using System.Collections.Generic;
 using System.Data;
@@ -42,24 +42,21 @@ namespace Construction.DataAccess
                     {
                         PaymentScheduleModel model = new PaymentScheduleModel();
                         {
-                            model.ID_PaymentSchedule = dataReader["ID_PaymentSchedule"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_PaymentSchedule"]);
-                            model.FK_Project = dataReader["FK_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Project"]);
-                            model.FK_User = dataReader["FK_User"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_User"]);
-
                             model.ScheduleAmount = dataReader["ScheduleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dataReader["ScheduleAmount"]);
                             model.ScheduleDate = dataReader["ScheduleDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ScheduleDate"]);
 
                             model.AmountReceived = dataReader["AmountReceived"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountReceived"]);
                             model.AmountDue = dataReader["AmountDue"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountDue"]);
-                            model.ReceivedDate = (DateTime)(dataReader["ReceivedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ReceivedDate"]));
+                            model.ReceivedDate = dataReader["ReceivedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ReceivedDate"]);
 
                             model.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]);
                             model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
                             model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]);
-                            model.ModifiedOn = (DateTime)(dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]));
+                            model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]);
 
                             model.IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]);
                             model.IsDeleted = dataReader["IsDeleted"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsDeleted"]);
+
 
                             model.PaymentStatus = dataReader["PaymentStatus"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["PaymentStatus"]);
 
