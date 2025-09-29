@@ -151,5 +151,49 @@ namespace Construction.DataAccess
             }
             return response;
         }
+
+
+        public List<ProjectUserModel> GetProjectUsers(int projectId)
+        {
+            List<ProjectUserModel> resultList = new List<ProjectUserModel>();
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetProjectUsers;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, projectId);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        ProjectUserModel item = new ProjectUserModel
+                        {
+                            ID_ProjectUser = Convert.ToInt32(dataReader["ID_ProjectUser"]),
+                            FK_Project = Convert.ToInt32(dataReader["FK_Project"]),
+                            FK_User = Convert.ToInt32(dataReader["FK_User"]),
+                            IsActive = dataReader["IsActive"] != DBNull.Value && Convert.ToBoolean(dataReader["IsActive"]),
+                            IsDeleted = dataReader["IsDeleted"] != DBNull.Value && Convert.ToBoolean(dataReader["IsDeleted"]),
+                            CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]),
+                            CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]),
+                            ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]),
+                            ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["ModifiedBy"])
+                        };
+
+                        resultList.Add(item);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return resultList;
+        }
+
     }
 }

@@ -32,5 +32,12 @@ namespace Construction.Service
             ProjectDataService dataService = new ProjectDataService(ConnectionStrings);
             return dataService.DeleteProjects(id_project);
         }
+
+        public List<ProjectUserModel> GetProjectUsers(int projectId)
+        {
+            ProjectDataService dataService = new ProjectDataService(ConnectionStrings);
+            return dataService.GetProjectUsers(projectId);
+        }
+
     }
 }

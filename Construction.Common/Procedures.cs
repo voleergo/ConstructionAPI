@@ -26,7 +26,7 @@ namespace Construction.Common
 
         public const string SP_GetProjectStatus = "usp_GetProjectStatus";
         public const string SP_GetProjectType = "usp_GetProjectType";
-
+        public const string SP_GetProjectUsers = "usp_GetProjectUsers";
 
         //Supplier management
         public const string SP_GetSupplier = "usp_GetSupplier";
