@@ -175,6 +175,7 @@ namespace Construction.DataAccess
                             ID_ProjectUser = Convert.ToInt32(dataReader["ID_ProjectUser"]),
                             FK_Project = Convert.ToInt32(dataReader["FK_Project"]),
                             FK_User = Convert.ToInt32(dataReader["FK_User"]),
+                            UserName = dataReader["UserName"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["UserName"]),
                             IsActive = dataReader["IsActive"] != DBNull.Value && Convert.ToBoolean(dataReader["IsActive"]),
                             IsDeleted = dataReader["IsDeleted"] != DBNull.Value && Convert.ToBoolean(dataReader["IsDeleted"]),
                             CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]),
