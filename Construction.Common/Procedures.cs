@@ -92,7 +92,11 @@ namespace Construction.Common
        
         public const string SP_LogError = "usp_LogError";
 
-        
+
+        //Payment Schedule ---------------------------------------------------
+        public const string SP_GetPaymentSchedule = "usp_GetPaymentSchedule";
+        public const string SP_UpdatePaymentSchedule = "usp_UpdatePaymentSchedule";
+        public const string SP_DeletePaymentSchedule = "usp_DeletePaymentSchedule";
 
 
     }

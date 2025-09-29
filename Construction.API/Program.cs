@@ -39,7 +39,9 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ILevelRepository, LevelRepository>();
 builder.Services.AddScoped<IProjectLevelRepository, ProjectLevelRepository>();
-builder.Services.AddScoped<IProjectTransRepository, ProjectTransRepository>();
+
+
+
 builder.Services.Configure<OTPConfig>(
     builder.Configuration.GetSection("OTPConfig"));
 
@@ -54,7 +56,10 @@ builder.Services.AddScoped<IProjectLevelService, ProjectLevelService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILoggerService, LoggerService>();
 builder.Services.AddScoped<IItemService, ItemService>();
-builder.Services.AddScoped<IProjectTransService, ProjectTransService>();
+builder.Services.AddScoped<IPaymentScheduleService>(provider =>
+    new PaymentScheduleService(
+        builder.Configuration.GetSection("ConnectionString")["DefaultConnection"]
+    ));
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
