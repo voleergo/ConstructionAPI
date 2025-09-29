@@ -103,6 +103,7 @@ namespace Construction.DataAccess
 
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, service.FK_Project);
             db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
+            db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
 
             using (IDataReader dataReader = db.ExecuteReader(dbCommand))
             {
@@ -117,7 +118,9 @@ namespace Construction.DataAccess
                         Quantity = dataReader["Quantity"] != DBNull.Value ? Convert.ToInt32(dataReader["Quantity"]) : 0,
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
-                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0
+                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0,
+                        ServiceCategoryName = dataReader["ServiceCategoryName"] != DBNull.Value ? Convert.ToString(dataReader["ServiceCategoryName"]) : string.Empty,
+                        SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty
                     };
                     services.Add(s);
                 }

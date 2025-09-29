@@ -48,7 +48,7 @@ namespace Construction.API.Controllers
         [EnableCors("AllowOrigin")]
         [ActionName("ProjectService")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult GetProjectServices(int fkProject, int idProjectService = 0)
+        public IActionResult GetProjectServices(int fkProject, int idProjectService = 0, int FK_ServiceCategory = 0)
         {
             List<ProjectServiceModel> result = new List<ProjectServiceModel>();
             IActionResult response = Unauthorized();
@@ -57,6 +57,7 @@ namespace Construction.API.Controllers
                 ProjectServiceModel service = new ProjectServiceModel();
                 service.FK_Project = fkProject;
                 service.ID_ProjectService = idProjectService;
+                service.FK_ServiceCategory = FK_ServiceCategory;
                 result = _itemService.GetProjectServices(service);
 
                 if (result == null || result.Count == 0)
