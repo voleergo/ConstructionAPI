@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Construction.DomainModel.Project;
+using Construction.DomainModel.Item;
+using Construction.Service;
 
 namespace Construction.API.Controllers
 {
@@ -193,6 +195,54 @@ namespace Construction.API.Controllers
                 });
             }
         }
+
+        [HttpGet]
+        [EnableCors("AllowOrigin")]
+        [ActionName("ProjectUsers")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetProjectUsers(int projectId)
+        {
+            try
+            {
+                if (projectId <= 0)
+                {
+                    return BadRequest(new
+                    {
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid project ID",
+                        ResponseStatus = false
+                    });
+                }
+
+                // Call service method
+                List<ProjectUserModel> result = _projectService.GetProjectUsers(projectId);
+
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Message = "No users found for the project"
+                    });
+                }
+
+                return Ok(new
+                {
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching project users");
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while retrieving project users.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+
 
     }
 }

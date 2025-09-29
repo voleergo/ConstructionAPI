@@ -11,6 +11,7 @@ namespace Construction.Interface
 
         HttpResponses UpdateProject(ProjectModel project);
         HttpResponses DeleteProjects(int id_project);
+        List<ProjectUserModel> GetProjectUsers(int projectId);
 
     }
 }

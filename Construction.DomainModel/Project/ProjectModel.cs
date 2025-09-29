@@ -38,6 +38,6 @@ namespace Construction.DomainModel.Project
         public string json { get; set; } = string.Empty;
 
         public int? ModifiedBy { get; set; } = 0;
-        public string? PaymentSchedulejson { get; set; }
+   
     }
 }

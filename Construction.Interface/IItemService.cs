@@ -16,5 +16,6 @@ namespace Construction.Interface
         HttpResponses UpdateServiceCategory(Item service);
 
         List<SupplierModel> GetSuppliers(SupplierModel supplier);
+        HttpResponses AddSupplier(AddSupplierModel model);
     }
 }
