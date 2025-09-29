@@ -1,6 +1,7 @@
 using Construction.Common;
 using Construction.DomainModel;
 using Construction.DomainModel.Item; // Use the actual namespace
+using Construction.DomainModel.User;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using System.Collections.Generic;
 using System.Data;
@@ -144,8 +145,7 @@ namespace Construction.DataAccess
                 {
                     SupplierModel s = new SupplierModel
                     {
-                        ID_Supplier = dataReader["ID_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["ID_Supplier"]) : 0,
-                        SupplierCode = dataReader["SupplierCode"] != DBNull.Value ? Convert.ToString(dataReader["SupplierCode"]) : string.Empty,
+                        ID_Supplier = dataReader["ID_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["ID_Supplier"]) : 0, 
                         SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty,
                         CreatedOn = dataReader["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["CreatedOn"]) : DateTime.MinValue,
                         CreatedBy = dataReader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["CreatedBy"]) : 0,
@@ -160,6 +160,39 @@ namespace Construction.DataAccess
 
             return suppliers;
         }
+
+        public HttpResponses AddSupplier(AddSupplierModel model)
+        {
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            HttpResponses response = new HttpResponses();
+            string sqlCommand = Procedures.SP_UpdateSupplier;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+            db.AddInParameter(dbCommand, "@SupplierName", DbType.String, model.SupplierName);
+            db.AddInParameter(dbCommand, "@CreatedBy", DbType.String, model.CreatedBy);
+            db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, model.FK_ServiceCategory);
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        response.ResponseCode = Convert.ToString(dataReader["ResponseCode"]);
+                        response.ResponseMessage = Convert.ToString(dataReader["ResponseMessage"]);
+                        response.ResponseStatus = Convert.ToBoolean(dataReader["ResponseStatus"]);
+                      
+                    }
+                }
+            }   
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return response;
+        }
+
+
+
 
 
         public List<Item> GetServiceCategory(Item data)

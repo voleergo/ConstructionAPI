@@ -9,7 +9,6 @@ namespace Construction.DomainModel.Item
     public class SupplierModel
     {
         public int ID_Supplier { get; set; }
-        public string SupplierCode { get; set; }
         public string SupplierName { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
@@ -17,5 +16,13 @@ namespace Construction.DomainModel.Item
         public int? ModifiedBy { get; set; }
         public int FK_ServiceCategory { get; set; }
         public string CategoryName { get; set; }
+    }
+
+    public class AddSupplierModel
+    {
+        public int ID_Supplier { get; set; }
+        public string SupplierName { get; set; }
+        public int CreatedBy { get; set; }
+        public int FK_ServiceCategory { get; set; }
     }
 }
