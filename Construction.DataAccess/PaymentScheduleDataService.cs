@@ -131,7 +131,7 @@ namespace Construction.DataAccess
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
             string sqlCommand = Procedures.SP_DeletePaymentSchedule;                
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
-            db.AddInParameter(dbCommand, "@ID_paymentSchedule", DbType.Int32, id_paymentSchedule);
+            db.AddInParameter(dbCommand, "@ID_PaymentSchedule", DbType.Int32, id_paymentSchedule);
             try
             {
                 using (IDataReader dataReader = db.ExecuteReader(dbCommand))
