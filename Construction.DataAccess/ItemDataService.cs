@@ -118,6 +118,7 @@ namespace Construction.DataAccess
                         Quantity = dataReader["Quantity"] != DBNull.Value ? Convert.ToInt32(dataReader["Quantity"]) : 0,
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
+                        Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,
                         FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0,
                         ServiceCategoryName = dataReader["ServiceCategoryName"] != DBNull.Value ? Convert.ToString(dataReader["ServiceCategoryName"]) : string.Empty,
                         SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty
@@ -249,6 +250,7 @@ namespace Construction.DataAccess
 
             // Add input parameters
             db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int32, service.ID_ServiceCategory);
+            db.AddInParameter(dbCommand, "@FK_ProjectType", DbType.Int32, service.FK_ProjectType);
             db.AddInParameter(dbCommand, "CategoryName", DbType.String, service.CategoryName);
 
             try
