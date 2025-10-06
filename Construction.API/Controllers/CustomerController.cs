@@ -7,7 +7,7 @@ namespace Construction.API.Controllers
 {
     [ApiController]
     [Route("v1/[action]")]
-    [EnableCors] // Enable CORS for all actions in this controller
+    [EnableCors("ProductionPolicy")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
@@ -17,7 +17,7 @@ namespace Construction.API.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet]
+        [HttpGet]      
         public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
         {
             try

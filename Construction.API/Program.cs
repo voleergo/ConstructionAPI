@@ -68,7 +68,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://your-auth-server.com";
+        options.Authority = "https://abcdhomes.com/";
         options.Audience = "your-api-resource";
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
@@ -83,19 +83,37 @@ builder.Services.AddAuthentication(options =>
     });
 // Add CORS - Cross Origin Resource Sharing for all endpoints
 builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
+{    
+
+    // Production Policy - More restrictive (uncomment and modify as needed)
+    options.AddPolicy("ProductionPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(
+                "http://localhost:3000",     // React development
+                "http://localhost:4200",     // Angular development
+                "http://localhost:8080",     // Vue development
+                "https://localhost:3000",    // React HTTPS
+                "https://localhost:4200",    // Angular HTTPS
+                "https://localhost:8080",    // Vue HTTPS
+                "https://www.walkingtrees.in",    // Your production domain               
+                "https://walkingtrees.in",
+                "https://walkingtree.voleergo.com",
+                 "https://www.walkingtree.voleergo.com"
+              // Your production domain with www
+              )
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .WithExposedHeaders("Content-Disposition", "Content-Length", "X-Total-Count");
     });
-    // Match controller attributes using "AllowOrigin"
-    options.AddPolicy("AllowOrigin", policy =>
+
+    // Set default policy to AllowAll for development
+    options.AddDefaultPolicy(policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .WithExposedHeaders("Content-Disposition", "Content-Length", "X-Total-Count", "Authorization");
     });
 });
 
@@ -118,7 +136,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 // Enable CORS - Must be called before UseAuthorization
-app.UseCors("AllowOrigin");
+app.UseCors("ProductionPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
