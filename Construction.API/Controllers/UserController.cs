@@ -18,6 +18,7 @@ namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     public class UserController : BaseController
     {
         private const string connectstring = "ConnectionString:DefaultConnection";
@@ -58,7 +59,6 @@ namespace Construction.API.Controllers
 
         [HttpPost]
         [ActionName("login")]
-        [EnableCors("AllowOrigin")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -120,8 +120,6 @@ namespace Construction.API.Controllers
         #region Forgot Password
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
-        [ActionName("forgotpassword")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> ForgotPassword([FromBody] PasswordModel model)
         {
@@ -173,7 +171,6 @@ namespace Construction.API.Controllers
 
 
         [HttpDelete]
-        [EnableCors("AllowOrigin")]
         [ActionName("User")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> UsersDelete(Int64 id_Users)
@@ -205,7 +202,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("User")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public async Task<IActionResult> UsersUpdate([FromBody] UserUpdateModel model)
@@ -237,7 +233,6 @@ namespace Construction.API.Controllers
 
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("User")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> UsersSelect(Int64 id_Users)
@@ -287,7 +282,6 @@ namespace Construction.API.Controllers
 
         [HttpGet]
         [ActionName("DropDownData")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> DropDownData()
         {
@@ -305,7 +299,6 @@ namespace Construction.API.Controllers
 
         [HttpGet]
         [ActionName("CommonDropDownData")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> CommonDropDownData()
         {
@@ -327,7 +320,6 @@ namespace Construction.API.Controllers
 
         [HttpPost]
         [ActionName("updatemenu")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> PostMenuModel([FromBody] MenuModel menu)
         {
@@ -345,7 +337,6 @@ namespace Construction.API.Controllers
 
         [HttpGet]
         [ActionName("getMenu")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> GetMenuModel(int ID_Menu = 0)
         {
@@ -364,7 +355,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpDelete]
-        [EnableCors("AllowOrigin")]
         [ActionName("menuDelete")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> MenuDelete(int ID_Menu)
@@ -387,7 +377,6 @@ namespace Construction.API.Controllers
         #region Role
         [HttpPost]
         [ActionName("Roles")]
-        [EnableCors("AllowOrigin")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdateRole([FromBody] JsonModel package)
         {
@@ -408,7 +397,6 @@ namespace Construction.API.Controllers
 
         [HttpGet]
         [ActionName("Roles")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetRoles(int idRole)
         {
@@ -429,7 +417,6 @@ namespace Construction.API.Controllers
 
         [HttpDelete]
         [ActionName("Roles")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult DeleteRoles(int idRole)
         {
@@ -454,7 +441,6 @@ namespace Construction.API.Controllers
         #region MenuRole
         [HttpGet]
         [ActionName("menurole")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> GetMenuRole(int FK_Role, int FK_Tenant)
         {
@@ -484,7 +470,6 @@ namespace Construction.API.Controllers
         }
         [HttpPost]
         [ActionName("UpdateMenuRole")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdateMenuRole([FromBody] MenuRoleModel menu)
         {

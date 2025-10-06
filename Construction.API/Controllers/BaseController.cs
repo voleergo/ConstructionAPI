@@ -14,6 +14,7 @@ namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseController : ControllerBase, IActionFilter
     {

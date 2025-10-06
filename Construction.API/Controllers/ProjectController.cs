@@ -12,6 +12,7 @@ namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     public class ProjectController : BaseController
     {
         private const string connectstring = "ConnectionString:DefaultConnection";
@@ -45,7 +46,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("Project")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetProjects(int Id_Project)
@@ -109,7 +109,6 @@ namespace Construction.API.Controllers
 
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("Project")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdateProject([FromBody] ProjectModel project)
@@ -171,7 +170,6 @@ namespace Construction.API.Controllers
 
         [HttpDelete]
         [ActionName("Project")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
 
         public IActionResult DeleteProject(int id_project)
@@ -197,7 +195,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("ProjectUsers")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetProjectUsers(int projectId)

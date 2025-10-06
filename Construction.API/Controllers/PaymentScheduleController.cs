@@ -9,6 +9,7 @@ namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     public class PaymentScheduleController : ControllerBase
     {
         private readonly IPaymentScheduleService _paymentScheduleService;
@@ -19,7 +20,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("PaymentSchedule")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetPaymentSchedules(int projectId, int paymentScheduleId)
@@ -46,7 +46,6 @@ namespace Construction.API.Controllers
 
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("PaymentSchedule")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdatePaymentSchedule([FromBody] PaymentScheduleUpdateModel model)
@@ -85,7 +84,6 @@ namespace Construction.API.Controllers
         }
         [HttpDelete]
         [ActionName("PaymentSchedule")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
 
         public IActionResult DeletePaymentSchedule(int id_paymentSchedule)

@@ -12,6 +12,7 @@ namespace Construction.API.Controllers
 {
     [Route("v1/[action]")]
     [ApiController]
+    [EnableCors("ProductionPolicy")]
     public class ItemController : BaseController
     {
         private const string connectstring = "ConnectionString:DefaultConnection";
@@ -45,7 +46,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("ProjectService")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetProjectServices(int fkProject, int idProjectService = 0, int FK_ServiceCategory = 0)
@@ -85,7 +85,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("ProjectService")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult UpdateProjectService([FromBody] ProjectServiceModel service)
@@ -127,7 +126,6 @@ namespace Construction.API.Controllers
 
         [HttpDelete]
         [ActionName("ProjectService")]
-        [EnableCors]
         [ApiExplorerSettings(IgnoreApi = false)]
 
         public IActionResult DeleteProjectService(int idProjectService)
@@ -155,7 +153,6 @@ namespace Construction.API.Controllers
         //Service Category----------------------------------------------------
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("ServiceCategory")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult GetServiceCategory(int Id_ServiceCategory = 0, int FK_ProjectType = 0)
@@ -234,7 +231,6 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
-        [EnableCors("AllowOrigin")]
         [ActionName("Supplier")]
         [ApiExplorerSettings(IgnoreApi = false)]
          public IActionResult GetSuppliers(int idSupplier = 0, int fkServiceCategory = 0)
@@ -273,7 +269,6 @@ namespace Construction.API.Controllers
 
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("Supplier")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public async Task<IActionResult> AddSupplier([FromBody] AddSupplierModel model)
@@ -308,7 +303,6 @@ namespace Construction.API.Controllers
 
 
         [HttpPost]
-        [EnableCors("AllowOrigin")]
         [ActionName("CategoryAndSupplier")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public IActionResult AddCategoryAndSupplier([FromBody] AddCategoryAndSupplierModel model)

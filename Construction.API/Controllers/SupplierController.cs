@@ -7,7 +7,7 @@ namespace Construction.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors] // Enable CORS for all actions in this controller
+    [EnableCors("ProductionPolicy")]
     public class SupplierController : ControllerBase
     {
         private readonly ISupplierService _supplierService;
