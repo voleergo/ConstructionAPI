@@ -17,5 +17,8 @@ namespace Construction.Interface
 
         List<SupplierModel> GetSuppliers(SupplierModel supplier);
         HttpResponses AddSupplier(AddSupplierModel model);
+
+        HttpResponses AddCategoryAndSupplier(AddCategoryAndSupplierModel model);
+
     }
 }

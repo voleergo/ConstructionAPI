@@ -276,5 +276,51 @@ namespace Construction.DataAccess
             return response;
         }
 
+
+        public HttpResponses AddCategoryAndSupplier(AddCategoryAndSupplierModel model)
+        {
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            HttpResponses response = new HttpResponses();
+            string sqlCommand = Procedures.SP_AddCategoryAndSupplier;  // SP name
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            db.AddInParameter(dbCommand, "@ID_ServiceCategory", DbType.Int32, model.ID_ServiceCategory);
+            db.AddInParameter(dbCommand, "@CategoryName", DbType.String, model.CategoryName);
+            db.AddInParameter(dbCommand, "@FK_ProjectType", DbType.Int32, model.FK_ProjectType);
+            db.AddInParameter(dbCommand, "@SupplierName", DbType.String, model.SupplierName);
+            db.AddInParameter(dbCommand, "@CreatedBy", DbType.Int32, model.CreatedBy);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseCode"]) : "0";
+
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
+
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value
+                            && Convert.ToBoolean(dataReader["ResponseStatus"]);
+
+                        response.ResponseID = dataReader["SupplierID"] != DBNull.Value
+                            ? Convert.ToInt64(dataReader["SupplierID"]) : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ResponseCode = "0";
+                response.ResponseMessage = ex.Message;
+                response.ResponseStatus = false;
+            }
+
+            return response;
+        }
+
+
     }
 }

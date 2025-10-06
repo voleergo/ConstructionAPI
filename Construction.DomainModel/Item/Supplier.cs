@@ -25,4 +25,15 @@ namespace Construction.DomainModel.Item
         public int CreatedBy { get; set; }
         public int FK_ServiceCategory { get; set; }
     }
+    
+        public class AddCategoryAndSupplierModel
+        {
+            public int ID_ServiceCategory { get; set; }   // 0 if new category
+            public string? CategoryName { get; set; }     // required if new
+            public int? FK_ProjectType { get; set; }      // required if new
+            public string SupplierName { get; set; }
+            public int CreatedBy { get; set; }
+        }
+    
+
 }

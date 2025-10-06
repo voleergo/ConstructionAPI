@@ -31,7 +31,7 @@ namespace Construction.Common
         //Supplier management
         public const string SP_GetSupplier = "usp_GetSupplier";
         public const string SP_UpdateSupplier = "usp_UpdateSupplier";
-
+        public const string SP_AddCategoryAndSupplier = "usp_AddCategoryAndSupplier";
 
 
         //ServiceCategory

@@ -56,5 +56,12 @@ namespace Construction.Service
         }
 
 
+        public HttpResponses AddCategoryAndSupplier(AddCategoryAndSupplierModel model)
+        {
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.AddCategoryAndSupplier(model);
+        }
+
+
     }
 }

@@ -303,6 +303,50 @@ namespace Construction.API.Controllers
                 });
             }
         }
+
+
+
+
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [ActionName("CategoryAndSupplier")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult AddCategoryAndSupplier([FromBody] AddCategoryAndSupplierModel model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return BadRequest(new
+                    {
+                        ResponseCode = 0,
+                        ResponseMessage = "Invalid input data",
+                        ResponseStatus = false
+                    });
+                }
+
+                var response = _itemService.AddCategoryAndSupplier(model);
+
+                return Ok(new
+                {
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    ResponseID = response.ResponseID
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Add Category + Supplier");
+                return BadRequest(new
+                {
+                    ResponseCode = 0,
+                    ResponseMessage = ex.Message,
+                    ResponseStatus = false
+                });
+            }
+        }
+
     }
 }
 
