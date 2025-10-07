@@ -94,9 +94,9 @@ builder.Services.AddCors(options =>
                 "http://localhost:8080",     // Vue development
                 "https://localhost:3000",    // React HTTPS
                 "https://localhost:4200",    // Angular HTTPS
-                "https://localhost:8080",    // Vue HTTPS                       
-                "https://abcapi.voleergo.com",
-                "https://www.abcapi.voleergo.com"
+                "https://localhost:8080",    // Vue HTTPS   
+                "https://abcdhomes.com",
+                "https://www.abcdhomes.com"
 
               // Your production domain with www
               )
