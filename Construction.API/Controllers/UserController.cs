@@ -58,6 +58,7 @@ namespace Construction.API.Controllers
         #region Authentication
 
         [HttpPost]
+        [EnableCors("ProductionPolicy")]
         [ActionName("login")]
         [ApiExplorerSettings(IgnoreApi = false)]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
