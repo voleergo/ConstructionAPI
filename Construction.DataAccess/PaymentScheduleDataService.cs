@@ -45,9 +45,14 @@ namespace Construction.DataAccess
                             model.ScheduleAmount = dataReader["ScheduleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dataReader["ScheduleAmount"]);
                             model.ScheduleDate = dataReader["ScheduleDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ScheduleDate"]);
 
+                            model.ID_PaymentSchedule = dataReader["ID_PaymentSchedule"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_PaymentSchedule"]);
+                            model.FK_Project = dataReader["FK_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Project"]);
+                            model.FK_User = dataReader["FK_User"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_User"]);
                             model.AmountReceived = dataReader["AmountReceived"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountReceived"]);
                             model.AmountDue = dataReader["AmountDue"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountDue"]);
                             model.ReceivedDate = dataReader["ReceivedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ReceivedDate"]);
+                            model.ProjectName = dataReader["ProjectName"] == DBNull.Value ? null : dataReader["ProjectName"].ToString();
+
 
                             model.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]);
                             model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);

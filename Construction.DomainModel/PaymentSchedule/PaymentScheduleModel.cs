@@ -7,6 +7,7 @@ namespace Construction.DomainModel.PaymentSchedule
         public int ID_PaymentSchedule { get; set; }
         public int FK_Project { get; set; }
         public int FK_User { get; set; }
+        public string ProjectName { get; set; }
         public decimal ScheduleAmount { get; set; }
         public DateTime? ScheduleDate { get; set; }
         public decimal? AmountReceived { get; set; }
