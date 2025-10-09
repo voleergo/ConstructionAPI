@@ -8,6 +8,8 @@ namespace Construction.DomainModel.User
 {
     public class MenuRoleModel
     {
+        public bool IsAssigned;
+
         public int? FK_MenuTenant { get; set; }
         public int? FK_MenuClient { get; set; }
         public int? FK_Role { get; set; }

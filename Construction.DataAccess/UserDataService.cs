@@ -688,13 +688,31 @@ namespace Construction.DataAccess
                 {
                     var menus = new MenuRoleModel();
 
-                    // From MenuRole
+                    // From MenuClient
+                    menus.FK_MenuClient = dataReader["FK_MenuClient"] != DBNull.Value
+                        ? Convert.ToInt32(dataReader["FK_MenuClient"])
+                        : 0;
+
+                    menus.FK_Menu = dataReader["FK_Menu"] != DBNull.Value
+                        ? Convert.ToInt32(dataReader["FK_Menu"])
+                        : 0;
+
+                    menus.UserMenu = dataReader["UserMenu"] != DBNull.Value
+                        ? Convert.ToString(dataReader["UserMenu"])
+                        : string.Empty;
+
+                    menus.MenuName = dataReader["MenuName"] != DBNull.Value
+                        ? Convert.ToString(dataReader["MenuName"])
+                        : string.Empty;
+
+                    // From MenuRole (if exists)
                     menus.ID_Menufilter = dataReader["ID_MenuRole"] != DBNull.Value
                         ? Convert.ToInt32(dataReader["ID_MenuRole"])
                         : 0;
 
-                   
-                    menus.MenuRole = Convert.ToString(dataReader["MenuRole"]);
+                    menus.MenuRole = dataReader["MenuRole"] != DBNull.Value
+                        ? Convert.ToString(dataReader["MenuRole"])
+                        : menus.UserMenu; // Fallback to UserMenu if MenuRole is null
 
                     menus.IsAdd = dataReader["IsAdd"] != DBNull.Value && Convert.ToBoolean(dataReader["IsAdd"]);
                     menus.IsEdit = dataReader["IsEdit"] != DBNull.Value && Convert.ToBoolean(dataReader["IsEdit"]);
@@ -703,23 +721,23 @@ namespace Construction.DataAccess
                     menus.IsPrint = dataReader["IsPrint"] != DBNull.Value && Convert.ToBoolean(dataReader["IsPrint"]);
                     menus.Active = dataReader["IsActive"] != DBNull.Value && Convert.ToBoolean(dataReader["IsActive"]);
 
-                    menus.FK_MenuClient = dataReader["FK_MenuClient"] != DBNull.Value
-                         ? Convert.ToInt32(dataReader["FK_MenuClient"])
-                         : 0;
+                    // Additional properties
+                    menus.FK_Role = dataReader["FK_Role"] != DBNull.Value
+                        ? Convert.ToInt32(dataReader["FK_Role"])
+                        : menu.FK_Role;
 
+                    menus.FK_Tenant = dataReader["FK_Tenant"] != DBNull.Value
+                        ? Convert.ToInt32(dataReader["FK_Tenant"])
+                        : menu.FK_Tenant;
 
-                    menus.UserMenu = Convert.ToString(dataReader["UserMenu"]);
-
-                    // Extra property (if your model needs it)
-                    menus.Header = 0;
+                    // Flag to indicate if this menu-role relationship exists
+                    menus.IsAssigned = menus.ID_Menufilter > 0;
 
                     menurole.Add(menus);
                 }
             }
             return menurole;
         }
-
-
 
         public HttpResponses PostMenuModel(MenuModel model)
         {
