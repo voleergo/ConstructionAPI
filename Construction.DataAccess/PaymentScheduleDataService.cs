@@ -44,12 +44,12 @@ namespace Construction.DataAccess
                         {
                             model.ScheduleAmount = dataReader["ScheduleAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(dataReader["ScheduleAmount"]);
                             model.ScheduleDate = dataReader["ScheduleDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ScheduleDate"]);
-
                             model.ID_PaymentSchedule = dataReader["ID_PaymentSchedule"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_PaymentSchedule"]);
                             model.FK_Project = dataReader["FK_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Project"]);
                             model.FK_User = dataReader["FK_User"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_User"]);
                             model.AmountReceived = dataReader["AmountReceived"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountReceived"]);
                             model.AmountDue = dataReader["AmountDue"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["AmountDue"]);
+
                             model.ReceivedDate = dataReader["ReceivedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ReceivedDate"]);
                             model.ProjectName = dataReader["ProjectName"] == DBNull.Value ? null : dataReader["ProjectName"].ToString();
 
@@ -99,13 +99,13 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, model.FK_Project);
             db.AddInParameter(dbCommand, "@FK_User", DbType.Int32, model.FK_User);
             db.AddInParameter(dbCommand, "@ScheduleAmount", DbType.Decimal, model.ScheduleAmount);
-            db.AddInParameter(dbCommand, "@ScheduleDate", DbType.Date, model.ScheduleDate);
-            db.AddInParameter(dbCommand, "@AmountReceived", DbType.Decimal, model.AmountReceived);
-            db.AddInParameter(dbCommand, "@ReceivedDate", DbType.Date, model.ReceivedDate);
-            db.AddInParameter(dbCommand, "@CreatedOn", DbType.Int32, model.CreatedOn);
-            //db.AddInParameter(dbCommand, "@ModifiedOn", DbType.Int32, model.ModifiedOn);
+            db.AddInParameter(dbCommand, "@ScheduleDate", DbType.Date, model.ScheduleDate);  // DateTime OK
+            db.AddInParameter(dbCommand, "@AmountReceived", DbType.Decimal, model.AmountReceived ?? 0);
+            db.AddInParameter(dbCommand, "@ReceivedDate", DbType.Date, model.ReceivedDate);  // DateTime OK
+            db.AddInParameter(dbCommand, "@ModifiedBy", DbType.Int32, model.ModifiedBy);
             db.AddInParameter(dbCommand, "@IsActive", DbType.Boolean, model.IsActive);
             db.AddInParameter(dbCommand, "@IsDeleted", DbType.Boolean, model.IsDeleted);
+            db.AddInParameter(dbCommand, "@PaymentStatus", DbType.String, model.PaymentStatus);
 
             try
             {
@@ -113,10 +113,17 @@ namespace Construction.DataAccess
                 {
                     if (dataReader.Read())
                     {
-                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value ? Convert.ToString(dataReader["ResponseCode"]) : "0";
-                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value ? Convert.ToString(dataReader["ResponseMessage"]) : string.Empty;
-                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = dataReader["ResponseID"] != DBNull.Value ? Convert.ToInt64(dataReader["ResponseID"]) : 0;
+                        response.ResponseCode = dataReader["ResponseCode"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseCode"])
+                            : "0";
+                        response.ResponseMessage = dataReader["ResponseMessage"] != DBNull.Value
+                            ? Convert.ToString(dataReader["ResponseMessage"])
+                            : string.Empty;
+                        response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value
+                            && Convert.ToBoolean(dataReader["ResponseStatus"]);
+                        response.ResponseID = dataReader["ResponseID"] != DBNull.Value
+                            ? Convert.ToInt64(dataReader["ResponseID"])
+                            : 0;
                     }
                 }
             }
