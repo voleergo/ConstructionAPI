@@ -44,5 +44,22 @@ namespace Construction.Service
             PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
             return dataService.DeletePaymentSchedule(id_paymentSchedule);
         }
+
+        public List<PaymentScheduleModel> GetUpcomingPaymentReminders(int fkUser)
+        {
+            PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
+            return dataService.GetUpcomingPaymentReminders(fkUser);
+        }
+        public HttpResponses UpdatePayment(PaymentScheduleUpdateModel model)
+        {
+            PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
+            return dataService.UpdatePayment(model);
+        }
+        public List<PaymentModel> GetPayments(int projectId, int paymentScheduleId)
+        {
+            PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
+            return dataService.GetPayments(projectId, paymentScheduleId);
+        }
+
     }
 }

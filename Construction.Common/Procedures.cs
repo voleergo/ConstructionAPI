@@ -99,6 +99,8 @@ namespace Construction.Common
         public const string SP_UpdatePaymentSchedule = "usp_UpdatePaymentSchedule";
         public const string SP_DeletePaymentSchedule = "usp_DeletePaymentSchedule";
 
-
+        public const string SP_DeletePayment = "usp_DeletePayment";
+        public const string SP_UpdatePayment = "usp_UpdatePayment";
+        public const string SP_GetPayment = "usp_GetPayment";
     }
 }
