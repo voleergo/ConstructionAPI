@@ -38,6 +38,7 @@ namespace Construction.DomainModel.PaymentSchedule
         public int ModifiedBy { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public string PaymentStatus { get; set; }
+        public string? PaymentStatus { get; set; }
+
     }
 }
