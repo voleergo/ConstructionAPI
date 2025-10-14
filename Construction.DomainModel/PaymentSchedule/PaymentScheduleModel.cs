@@ -57,7 +57,7 @@ namespace Construction.DomainModel.PaymentSchedule
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool IsActive { get; set; }
-        public bool IsDelete { get; set; }
+        public bool IsDelete { get; set; } = false; 
         public int ID_Users { get; set; }
         public decimal? Budget { get; set; }
 

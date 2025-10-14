@@ -19,7 +19,7 @@ namespace Construction.Interface
 
         List<PaymentScheduleModel> GetUpcomingPaymentReminders(int fkUser);
 
-        HttpResponses UpdatePayment(PaymentScheduleUpdateModel model);
+        HttpResponses UpdatePayment(PaymentModel model);
         List<PaymentModel> GetPayments(int projectId, int paymentScheduleId);
 
     }

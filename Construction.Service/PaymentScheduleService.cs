@@ -50,7 +50,7 @@ namespace Construction.Service
             PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
             return dataService.GetUpcomingPaymentReminders(fkUser);
         }
-        public HttpResponses UpdatePayment(PaymentScheduleUpdateModel model)
+        public HttpResponses UpdatePayment(PaymentModel model)
         {
             PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
             return dataService.UpdatePayment(model);

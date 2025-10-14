@@ -141,7 +141,7 @@ namespace Construction.API.Controllers
         [HttpPost]
         [ActionName("Payment")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult UpdatePayment([FromBody] PaymentScheduleUpdateModel model)
+        public IActionResult UpdatePayment([FromBody] PaymentModel model)
         {
             try
             {
