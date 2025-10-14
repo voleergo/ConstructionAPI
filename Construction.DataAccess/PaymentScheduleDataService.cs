@@ -70,6 +70,7 @@ namespace Construction.DataAccess
                             model.UserID = dataReader["ID_Users"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_Users"]);
                             model.Budget = dataReader["Budget"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Budget"]);
 
+                            
                         }
                         ;
 
@@ -296,20 +297,19 @@ namespace Construction.DataAccess
                         resultList.Add(model);
                     }
 
-                    // Move to next result set: Total_Due
+                    // Move to next result set: totals (Total_Due, Received_Amount, Balance_Amount)
                     if (reader.NextResult() && reader.Read())
                     {
-                        decimal? totalDue = reader["Total_Due"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(reader["Total_Due"]);
-                        foreach (var model in resultList)
-                            model.TotalDue = totalDue;
-                    }
+                        decimal totalDue = reader["Total_Due"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Total_Due"]);
+                        decimal receivedAmount = reader["Received_Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Received_Amount"]);
+                        decimal balanceAmount = reader["Balance_Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Balance_Amount"]);
 
-                    // Move to next result set: Received_Amount
-                    if (reader.NextResult() && reader.Read())
-                    {
-                        decimal? receivedAmount = reader["Recieved_Amount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(reader["Recieved_Amount"]);
                         foreach (var model in resultList)
+                        {
+                            model.TotalDue = totalDue;
                             model.ReceivedAmount = receivedAmount;
+                            model.BalanceAmount = balanceAmount;
+                        }
                     }
                 }
             }
@@ -317,7 +317,6 @@ namespace Construction.DataAccess
             {
                 throw;
             }
-
             return resultList;
         }
 
