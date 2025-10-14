@@ -210,7 +210,7 @@ namespace Construction.DataAccess
                         model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]);
                         model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
                         model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["ModifiedOn"]);
-                       
+                        model.Roles = dataReader["Roles"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Roles"]);
                         resultList.Add(model);
                     }
                 }

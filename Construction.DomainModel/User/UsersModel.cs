@@ -32,7 +32,7 @@ namespace Construction.DomainModel.User
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; } = 0;
         public DateTime? ModifiedOn { get; set; }
-
+        public string? Roles {get; set; }
         public int? ModifiedBy { get; set; } = 0;
         public DateTime? LastPasswordChangeDate { get; set; }
         public int? LoginAttemptCount { get; set; }
