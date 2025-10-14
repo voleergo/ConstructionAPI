@@ -38,7 +38,31 @@ namespace Construction.DomainModel.PaymentSchedule
         public int ModifiedBy { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public string? PaymentStatus { get; set; }
+        public string PaymentStatus { get; set; }
+        public decimal Amount { get; set; }
+        public string Mode { get; set; }
+    }
+    public class PaymentModel
+    {
+        public int ID_PaymentSchedule { get; set; }
+        public int FK_Project { get; set; }
+        public string ProjectName { get; set; }
+        public int FK_User { get; set; }
+        public decimal Amount { get; set; }
+        public string Mode { get; set; }
+        public DateTime? ScheduleDate { get; set; }
+        public DateTime? RecievedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public int ModifiedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDelete { get; set; }
+        public int ID_Users { get; set; }
+        public decimal? Budget { get; set; }
 
+        // Extra fields for totals
+        public decimal? TotalDue { get; set; }
+        public decimal? ReceivedAmount { get; set; }
     }
 }
