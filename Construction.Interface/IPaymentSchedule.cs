@@ -16,6 +16,12 @@ namespace Construction.Interface
         HttpResponses UpdatePaymentSchedule(PaymentScheduleUpdateModel model);
 
         HttpResponses DeletePaymentSchedule(int id_paymentSchedule);
+
+        List<PaymentScheduleModel> GetUpcomingPaymentReminders(int fkUser);
+
+        HttpResponses UpdatePayment(PaymentScheduleUpdateModel model);
+        List<PaymentModel> GetPayments(int projectId, int paymentScheduleId);
+
     }
 
 

@@ -108,6 +108,98 @@ namespace Construction.API.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("Reminders")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetUpcomingPaymentReminders(int fkUser)
+        {
+            try
+            {
+                var result = _paymentScheduleService.GetUpcomingPaymentReminders(fkUser);
+
+                return Ok(new
+                {
+                    ResponseCode = 1,
+                    ResponseMessage = result.Count > 0
+                        ? "Upcoming payment reminders fetched successfully."
+                        : "No upcoming payment reminders found.",
+                    ResponseStatus = true,
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = 0,
+                    ResponseMessage = "An error occurred while fetching payment reminders.",
+                    ResponseStatus = false,
+                    Error = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        [ActionName("Payment")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult UpdatePayment([FromBody] PaymentScheduleUpdateModel model)
+        {
+            try
+            {
+                if (model == null)
+                {
+                    return BadRequest(new { ResponseCode = 0, ResponseMessage = "Invalid input data", ResponseStatus = false });
+                }
+
+                var response = _paymentScheduleService.UpdatePayment(model);
+
+                return Ok(new
+                {
+                    ResponseCode = response.ResponseCode,
+                    ResponseMessage = response.ResponseMessage,
+                    ResponseStatus = response.ResponseStatus,
+                    PaymentId = response.ResponseID
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while updating payment.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        [ActionName("Payment")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetPayments(int projectId = 0, int paymentScheduleId = 0)
+        {
+            try
+            {
+                var result = _paymentScheduleService.GetPayments(projectId, paymentScheduleId);
+                if (result == null || result.Count == 0)
+                    return Ok(new { ResponseCode = 0, ResponseMessage = "No payment records found.", Result = result });
+
+                return Ok(new
+                {
+                    ResponseCode = 1,
+                    ResponseMessage = "Payment details retrieved successfully.",
+                    Result = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while retrieving payments.",
+                    Error = ex.Message
+                });
+            }
+        }
+
     }
 }
 
