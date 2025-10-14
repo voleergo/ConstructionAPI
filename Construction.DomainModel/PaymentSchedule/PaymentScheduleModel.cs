@@ -46,7 +46,7 @@ namespace Construction.DomainModel.PaymentSchedule
     {
         public int ID_PaymentSchedule { get; set; }
         public int FK_Project { get; set; }
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; } = string.Empty;
         public int FK_User { get; set; }
         public decimal Amount { get; set; }
         public string Mode { get; set; }
@@ -57,7 +57,7 @@ namespace Construction.DomainModel.PaymentSchedule
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool IsActive { get; set; }
-        public bool IsDelete { get; set; } = false; 
+        public bool IsDelete { get; set; } = false;
         public int ID_Users { get; set; }
         public decimal? Budget { get; set; }
 
