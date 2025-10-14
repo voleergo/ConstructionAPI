@@ -210,7 +210,7 @@ namespace Construction.DataAccess
 
             return resultList;
         }
-        public HttpResponses UpdatePayment(PaymentScheduleUpdateModel model)
+        public HttpResponses UpdatePayment(PaymentModel model)
         {
             HttpResponses response = new HttpResponses();
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
@@ -227,9 +227,9 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@Amount", DbType.Decimal, model.Amount);
             db.AddInParameter(dbCommand, "@Mode", DbType.String, model.Mode); // Use 'Mode' for payment method
             db.AddInParameter(dbCommand, "@ScheduleDate", DbType.Date, model.ScheduleDate);
-            db.AddInParameter(dbCommand, "@RecievedDate", DbType.Date, model.ReceivedDate);
+            db.AddInParameter(dbCommand, "@RecievedDate", DbType.Date, model.RecievedDate);
             db.AddInParameter(dbCommand, "@IsActive", DbType.Boolean, model.IsActive);
-            db.AddInParameter(dbCommand, "@IsDelete", DbType.Boolean, model.IsDeleted);
+            db.AddInParameter(dbCommand, "@IsDelete", DbType.Boolean, model.IsDelete);
 
             try
             {
