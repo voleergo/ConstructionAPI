@@ -64,5 +64,9 @@ namespace Construction.DomainModel.PaymentSchedule
         // Extra fields for totals
         public decimal? TotalDue { get; set; }
         public decimal? ReceivedAmount { get; set; }
+
+        public decimal? BalanceAmount { get; set; }
+
+
     }
 }

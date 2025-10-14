@@ -26,7 +26,7 @@ namespace Construction.Interface
         
         HttpResponses UserDataUpdate(UsersModel inputModel);
 
-        List<UsersModel> GetUsers(UsersModel data);
+        List<UserGetModel> GetUsers(UserGetModel inputModel);
 
         HttpResponses UsersDelete(UsersModel inputModel);
 
@@ -69,6 +69,7 @@ namespace Construction.Interface
 
         public List<MenuModel> GetMenuModel(MenuModel model);
         HttpResponses MenuDelete(MenuModel model);
+
 
         
 

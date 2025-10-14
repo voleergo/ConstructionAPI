@@ -81,7 +81,7 @@ namespace Construction.Service
      }
 
 
-     public List<UsersModel> GetUsers(UsersModel inputModel)
+     public List<UserGetModel> GetUsers(UserGetModel inputModel)
      {
          UserDataService dataService = new UserDataService(ConnectionStrings);
          return dataService.GetUsers(inputModel);

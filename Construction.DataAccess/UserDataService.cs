@@ -179,9 +179,9 @@ namespace Construction.DataAccess
 
 
 
-        public List<UsersModel> GetUsers(UsersModel inputModel)
+        public List<UserGetModel> GetUsers(UserGetModel inputModel)
         {
-            List<UsersModel> resultList = new List<UsersModel>();
+            List<UserGetModel> resultList = new List<UserGetModel>();
             DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
             string sqlCommand = Procedures.SP_GetUsers;
@@ -210,8 +210,9 @@ namespace Construction.DataAccess
                         model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]);
                         model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
                         model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["ModifiedOn"]);
-                       
-                        resultList.Add(model);
+                        model.Roles = dataReader["Roles"] == DBNull.Value ? string.Empty : Convert.ToString(dataReader["Roles"]);
+
+                        resultList.Add(inputModel);
                     }
                 }
             }
