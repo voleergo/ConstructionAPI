@@ -238,11 +238,11 @@ namespace Construction.API.Controllers
         [ApiExplorerSettings(IgnoreApi = false)]
         public Task<IActionResult> UsersSelect(Int64 id_Users)
         {
-            List<UserGetModel> result = new List<UserGetModel>();
+            List<UsersModel> result = new List<UsersModel>();
             IActionResult response = Unauthorized();
             try
             {
-                UserGetModel model = new UserGetModel();
+                UsersModel model = new UsersModel();
 
                 model.ID_Users = id_Users;
 

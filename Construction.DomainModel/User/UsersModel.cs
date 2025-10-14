@@ -23,7 +23,7 @@ namespace Construction.DomainModel.User
     {
         public Int64 ID_Users { get; set; }
         public string? UserName { get; set; }
-       public string? Password { get; set; }
+        public string? Password { get; set; }
         public string? MobileNumber { get; set; } = string.Empty;
         public string? Email { get; set; } = string.Empty;
         public int FK_Role { get; set; }
@@ -84,7 +84,7 @@ namespace Construction.DomainModel.User
 
         public bool IsMobile { get; set; }
         public string? MenuJson { get; set; }
-        public string? Roles { get; set; }
+
 
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
@@ -119,16 +119,44 @@ namespace Construction.DomainModel.User
         public UsersModel()
         {
             ID_Users = 0;
-           
+            ID_PartyMember = 0;
             FK_Role = 0;
             RegistrationID = string.Empty;
             UserName = string.Empty;
-            
+            Password = string.Empty;
             IsActive = false;
-            Roles = string.Empty;
+            FirstName = string.Empty;
+            LastName = string.Empty;
             MobileNumber = string.Empty;
             Email = string.Empty;
-           
+            CompanyEmail = string.Empty;
+            FK_UserRole = 0;
+            IDProof = string.Empty;
+            Photo = string.Empty;
+            FK_UserImages = 0;
+            TmpCompany = string.Empty;
+            UserPasswordStr = string.Empty;
+            MessageText = string.Empty;
+            CompanyIDNumber = string.Empty;
+            FK_UserRoleStr = string.Empty;
+            ImageURL = string.Empty;
+            StateName = string.Empty;
+            IsUserExist = 0;
+            ID_UserProfile = 0;
+            FK_Gender = 0;
+            FK_Profession = 0;
+            FK_IdentityProofType = 0;
+            FK_State = 0;
+            FK_Country = 0;
+            ProofNumber = string.Empty;
+            //IsCompany = false;
+            Address1 = string.Empty;
+            Address2 = string.Empty;
+            City = string.Empty;
+            PostalCode = string.Empty;
+            Company = 0;
+            IsMobile = false;
+            Designation = 0;
 
 
 
@@ -145,39 +173,5 @@ namespace Construction.DomainModel.User
         public string? MobileNumber { get; set; } = string.Empty;
 
         public int FK_Role { get; set; } = 0;
-    }
-
-
-
-
-    public class UserGetModel
-    {
-        public Int64 ID_Users { get; set; }
-        public string? UserName { get; set; }
-        public string? Password { get; set; }
-        public string? MobileNumber { get; set; } = string.Empty;
-        public string? Email { get; set; } = string.Empty;
-        public int FK_Role { get; set; }
-        public bool IsActive { get; set; }
-        public string? UserStatus { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public int? CreatedBy { get; set; } = 0;
-        public DateTime? ModifiedOn { get; set; }
-
-        public int? ModifiedBy { get; set; } = 0;
-      
-        public Int32 FK_Users { get; set; }
-
-        public string? RegistrationID { get; set; }
-
-
-
-       
-        public string? MenuJson { get; set; }
-        public string? Roles { get; set; }
-
-        public bool IsSuccess { get; set; }
-        
-
     }
 }

@@ -296,19 +296,20 @@ namespace Construction.DataAccess
                         resultList.Add(model);
                     }
 
-                    // Move to next result set: totals (Total_Due, Received_Amount, Balance_Amount)
+                    // Move to next result set: Total_Due
                     if (reader.NextResult() && reader.Read())
                     {
-                        decimal totalDue = reader["Total_Due"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Total_Due"]);
-                        decimal receivedAmount = reader["Received_Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Received_Amount"]);
-                        decimal balanceAmount = reader["Balance_Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Balance_Amount"]);
-
+                        decimal? totalDue = reader["Total_Due"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(reader["Total_Due"]);
                         foreach (var model in resultList)
-                        {
                             model.TotalDue = totalDue;
+                    }
+
+                    // Move to next result set: Received_Amount
+                    if (reader.NextResult() && reader.Read())
+                    {
+                        decimal? receivedAmount = reader["Recieved_Amount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(reader["Recieved_Amount"]);
+                        foreach (var model in resultList)
                             model.ReceivedAmount = receivedAmount;
-                            model.BalanceAmount = balanceAmount;
-                        }
                     }
                 }
             }
@@ -319,7 +320,6 @@ namespace Construction.DataAccess
 
             return resultList;
         }
-
 
 
 
