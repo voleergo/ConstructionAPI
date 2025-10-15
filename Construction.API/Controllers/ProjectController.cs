@@ -1,12 +1,13 @@
 using Construction.DomainModel;
+using Construction.DomainModel.Item;
+using Construction.DomainModel.Project;
 using Construction.DomainModel.User;
 using Construction.Interface;
+using Construction.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Construction.DomainModel.Project;
-using Construction.DomainModel.Item;
-using Construction.Service;
 
 namespace Construction.API.Controllers
 {
@@ -46,53 +47,22 @@ namespace Construction.API.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         [ActionName("Project")]
         [ApiExplorerSettings(IgnoreApi = false)]
-        public IActionResult GetProjects(int Id_Project)
+        public IActionResult GetProjects(int Id_Project = 0, int userId = 0) // Default to 28
         {
             try
             {
-                // Try to get logged-in user ID from claims
-                int loggedInUserId = 0;
-
-                if (User?.Identity?.IsAuthenticated == true)
-                {
-                    // Debug: print all claims for verification
-                    foreach (var claim in User.Claims)
-                    {
-                        Console.WriteLine($"Claim: {claim.Type} = {claim.Value}");
-                    }
-
-                    // Replace "UserID" with the actual claim type that contains user ID
-                    var userClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID")
-                                    ?? User.Claims.FirstOrDefault(c => c.Type == "nameid"); // fallback
-
-                    if (userClaim != null && int.TryParse(userClaim.Value, out int userId))
-                    {
-                        loggedInUserId = userId;
-                    }
-                }
-
-                // Fallback for testing if claim is missing
-                if (loggedInUserId == 0)
-                {
-                    // For testing, use your known user ID (remove in production)
-                    loggedInUserId = 16;
-                    Console.WriteLine("Fallback user ID used: 16");
-                }
-
-                ProjectModel project = new ProjectModel
+                var project = new ProjectModel
                 {
                     projectID = Id_Project,
-                    FK_User = loggedInUserId
+                    FK_User = userId
                 };
 
-                List<ProjectModel> result = _projectService.GetProject(project);
-
+                var result = _projectService.GetProject(project);
                 if (result == null || result.Count == 0)
-                {
-                    return NotFound(new { Message = "No project found" });
-                }
+                    return NotFound(new { Message = "No projects found for user ID: " + userId });
 
                 return Ok(new { Result = result });
             }
