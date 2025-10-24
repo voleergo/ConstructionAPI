@@ -326,7 +326,68 @@ namespace Construction.DataAccess
             return resultList;
         }
 
+        public List<InvoiceModel> GetInvoices(int invoiceId, int projectId, int customerId)
+        {
+            List<InvoiceModel> resultList = new List<InvoiceModel>();
+            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory(), false);
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetInvoice;  // your procedure name
 
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+            dbCommand.CommandTimeout = 0;
+
+            db.AddInParameter(dbCommand, "@ID_Invoice", DbType.Int32, invoiceId);
+            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, projectId);
+            db.AddInParameter(dbCommand, "@FK_Customer", DbType.Int32, customerId);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    while (dataReader.Read())
+                    {
+                        InvoiceModel model = new InvoiceModel();
+                        {
+                            model.ID_Invoice = dataReader["ID_Invoice"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ID_Invoice"]);
+                            model.Code = dataReader["Code"] == DBNull.Value ? null : dataReader["Code"].ToString();
+                            model.Mode = dataReader["Mode"] == DBNull.Value ? null : dataReader["Mode"].ToString();
+                            model.Amount = dataReader["Amount"] == DBNull.Value ? 0 : Convert.ToDecimal(dataReader["Amount"]);
+                            model.InvoiceDate = dataReader["InvoiceDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["InvoiceDate"]);
+                            model.FK_Payment = dataReader["FK_Payment"] == DBNull.Value ? (int?)null : Convert.ToInt32(dataReader["FK_Payment"]);
+                            model.FK_Customer = dataReader["FK_Customer"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Customer"]);
+                            model.CustomerName = dataReader["CustomerName"] == DBNull.Value ? null : dataReader["CustomerName"].ToString();
+                            model.MobileNumber = dataReader["MobileNumber"] == DBNull.Value ? null : dataReader["MobileNumber"].ToString();
+                            model.FK_Project = dataReader["FK_Project"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["FK_Project"]);
+                            model.ProjectName = dataReader["ProjectName"] == DBNull.Value ? null : dataReader["ProjectName"].ToString();
+                            model.Budget = dataReader["Budget"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Budget"]);
+                            model.ScheduledDate = dataReader["ScheduledDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ScheduledDate"]);
+                            model.RecievedDate = dataReader["RecievedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["RecievedDate"]);
+                            model.Description = dataReader["Description"] == DBNull.Value ? null : dataReader["Description"].ToString();
+                            model.Discount = dataReader["Discount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["Discount"]);
+                            model.RecievedAmount = dataReader["RecievedAmount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["RecievedAmount"]);
+                            model.ScheduledAmount = dataReader["ScheduledAmount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["ScheduledAmount"]);
+                            model.BalanceAmount = dataReader["BalanceAmount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["BalanceAmount"]);
+                            model.IsActive = dataReader["IsActive"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsActive"]);
+                            model.IsDelete = dataReader["IsDelete"] == DBNull.Value ? false : Convert.ToBoolean(dataReader["IsDelete"]);
+                            model.CreatedOn = dataReader["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(dataReader["CreatedOn"]);
+                            model.CreatedBy = dataReader["CreatedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["CreatedBy"]);
+                            model.ModifiedOn = dataReader["ModifiedOn"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(dataReader["ModifiedOn"]);
+                            model.ModifiedBy = dataReader["ModifiedBy"] == DBNull.Value ? 0 : Convert.ToInt32(dataReader["ModifiedBy"]);
+                            model.CalculatedAmount = dataReader["CalculatedAmount"] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(dataReader["CalculatedAmount"]);
+                        }
+                        ;
+
+                        resultList.Add(model);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return resultList;
+        }
 
     }
 

@@ -21,6 +21,7 @@ namespace Construction.Interface
 
         HttpResponses UpdatePayment(PaymentModel model);
         List<PaymentModel> GetPayments(int projectId, int paymentScheduleId);
+        List<InvoiceModel> GetInvoices(int invoiceId, int projectId, int customerId);
 
     }
 

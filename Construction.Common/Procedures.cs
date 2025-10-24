@@ -34,6 +34,11 @@ namespace Construction.Common
         public const string SP_AddCategoryAndSupplier = "usp_AddCategoryAndSupplier";
 
 
+
+        //Invoice Management
+        public const string SP_GetInvoice = "usp_GetInvoice";
+
+
         //ServiceCategory
         public const string SP_GetServiceCategory = "usp_GetServiceCategory";
         public const string SP_DeleteServiceCategory = "usp_DeleteServiceCategory";

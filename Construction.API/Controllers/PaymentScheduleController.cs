@@ -200,6 +200,21 @@ namespace Construction.API.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("Invoice")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetInvoices([FromQuery] int invoiceId = 0, [FromQuery] int projectId = 0, [FromQuery] int customerId = 0)
+        {
+            try
+            {
+                var invoices = _paymentScheduleService.GetInvoices(invoiceId, projectId, customerId);
+                return Ok(new { Success = true, Data = invoices, Message = "Invoices retrieved successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Success = false, Message = $"Error retrieving invoices: {ex.Message}" });
+            }
+        }
     }
 }
 

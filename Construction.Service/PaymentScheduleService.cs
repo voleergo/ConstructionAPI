@@ -61,5 +61,11 @@ namespace Construction.Service
             return dataService.GetPayments(projectId, paymentScheduleId);
         }
 
+        public List<InvoiceModel> GetInvoices(int invoiceId, int projectId, int customerId)
+        {
+            PaymentScheduleDataService dataService = new PaymentScheduleDataService(_connectionString);
+            return dataService.GetInvoices(invoiceId, projectId, customerId);
+        }
+
     }
 }
