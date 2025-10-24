@@ -17,6 +17,10 @@ namespace Construction.DomainModel
         public string ResponseData { get; set; }
         public  string MenuJson { get; set; }
 
+        public long PaymentID { get; set; }   
+        public long InvoiceID { get; set; }
+
+
 
         public HttpResponses()
         {

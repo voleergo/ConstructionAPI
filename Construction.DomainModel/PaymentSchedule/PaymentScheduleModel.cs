@@ -54,7 +54,7 @@ namespace Construction.DomainModel.PaymentSchedule
         public DateTime? RecievedDate { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool IsActive { get; set; }
         public bool IsDelete { get; set; } = false;
@@ -66,5 +66,13 @@ namespace Construction.DomainModel.PaymentSchedule
         public decimal? ReceivedAmount { get; set; }
         
         public decimal? BalanceAmount { get; set; }
+
+        public string? Description { get; set; }
+
+       public decimal? Discount { get; set; }
+
+       // public decimal? CalculatedAmount { get; set; }
     }
 }
+
+
