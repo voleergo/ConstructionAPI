@@ -221,16 +221,18 @@ namespace Construction.DataAccess
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
-            // Match parameters with stored procedure definition
+            // 🔹 Add parameters
             db.AddInParameter(dbCommand, "@ID_PaymentSchedule", DbType.Int32, model.ID_PaymentSchedule);
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, model.FK_Project);
             db.AddInParameter(dbCommand, "@FK_User", DbType.Int32, model.FK_User);
             db.AddInParameter(dbCommand, "@Amount", DbType.Decimal, model.Amount);
-            db.AddInParameter(dbCommand, "@Mode", DbType.String, model.Mode); // Use 'Mode' for payment method
+            db.AddInParameter(dbCommand, "@Mode", DbType.String, model.Mode);
             db.AddInParameter(dbCommand, "@ScheduleDate", DbType.Date, model.ScheduleDate);
             db.AddInParameter(dbCommand, "@RecievedDate", DbType.Date, model.RecievedDate);
             db.AddInParameter(dbCommand, "@IsActive", DbType.Boolean, model.IsActive);
             db.AddInParameter(dbCommand, "@IsDelete", DbType.Boolean, model.IsDelete);
+            db.AddInParameter(dbCommand, "@Description", DbType.String, model.Description);
+            db.AddInParameter(dbCommand, "@Discount", DbType.Decimal, model.Discount); // ✅ Fixed type to Decimal
 
             try
             {
@@ -241,7 +243,10 @@ namespace Construction.DataAccess
                         response.ResponseCode = dataReader["ResponseCode"]?.ToString() ?? "0";
                         response.ResponseMessage = dataReader["ResponseMessage"]?.ToString() ?? string.Empty;
                         response.ResponseStatus = dataReader["ResponseStatus"] != DBNull.Value && Convert.ToBoolean(dataReader["ResponseStatus"]);
-                        response.ResponseID = dataReader["ResponseID"] == DBNull.Value ? 0 : Convert.ToInt64(dataReader["ResponseID"]);
+
+                        // ✅ Read the PaymentID and InvoiceID returned by the stored procedure
+                        response.PaymentID = dataReader["PaymentID"] == DBNull.Value ? 0 : Convert.ToInt64(dataReader["PaymentID"]);
+                        response.InvoiceID = dataReader["InvoiceID"] == DBNull.Value ? 0 : Convert.ToInt64(dataReader["InvoiceID"]);
                     }
                 }
             }
@@ -254,6 +259,7 @@ namespace Construction.DataAccess
 
             return response;
         }
+
 
         public List<PaymentModel> GetPayments(int projectId, int paymentScheduleId)
         {
