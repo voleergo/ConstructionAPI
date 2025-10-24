@@ -121,6 +121,7 @@ namespace Construction.DataAccess
                         Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,
                         FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0,
                         ServiceCategoryName = dataReader["ServiceCategoryName"] != DBNull.Value ? Convert.ToString(dataReader["ServiceCategoryName"]) : string.Empty,
+                        ProjectName = dataReader["ProjectName"] != DBNull.Value ? Convert.ToString(dataReader["ProjectName"]) : string.Empty,
                         SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty
                     };
                     services.Add(s);

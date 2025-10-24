@@ -18,6 +18,7 @@ namespace Construction.DomainModel.Item
         public string Unit { get; set; }
         public decimal TotalPrice { get; set; }
         public int FK_Supplier { get; set; }
+        public string? ProjectName { get; set; }
     }
     public class Item
     {
