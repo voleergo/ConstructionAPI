@@ -33,12 +33,15 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
             db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
-            db.AddInParameter(dbCommand, "@Quantity", DbType.Int64, service.Quantity);
+            db.AddInParameter(dbCommand, "@Quantity", DbType.Decimal, service.Quantity);
             db.AddInParameter(dbCommand, "@Unit", DbType.String, service.Unit );
             db.AddInParameter(dbCommand, "@UnitPrice", DbType.Decimal, service.UnitPrice);
             db.AddInParameter(dbCommand, "@TotalPrice", DbType.Decimal, service.TotalPrice);
             db.AddInParameter(dbCommand, "@FK_Supplier", DbType.Int64, service.FK_Supplier);
-
+            db.AddInParameter(dbCommand, "@UserID", DbType.Int32, service.UserID);
+            db.AddInParameter(dbCommand, "@ServiceCategoryName", DbType.String, service.ServiceCategoryName);
+            db.AddInParameter(dbCommand, "@SupplierName", DbType.String, service.SupplierName);
+            db.AddInParameter(dbCommand, "@ProjectName", DbType.String, service.ProjectName);
             try
             {
                 using (IDataReader dataReader = db.ExecuteReader(dbCommand))
@@ -115,7 +118,7 @@ namespace Construction.DataAccess
                         FK_ServiceCategory = dataReader["FK_ServiceCategory"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_ServiceCategory"]) : 0,
                         ProjectService = dataReader["ProjectService"] != DBNull.Value ? Convert.ToString(dataReader["ProjectService"]) : string.Empty,
                         FK_Project = dataReader["FK_Project"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Project"]) : 0,
-                        Quantity = dataReader["Quantity"] != DBNull.Value ? Convert.ToInt32(dataReader["Quantity"]) : 0,
+                        Quantity = dataReader["Quantity"] != DBNull.Value ? Convert.ToDecimal(dataReader["Quantity"]) : 0,
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
                         Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,

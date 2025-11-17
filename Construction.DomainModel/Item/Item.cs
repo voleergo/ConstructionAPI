@@ -10,7 +10,7 @@ namespace Construction.DomainModel.Item
         public int FK_ServiceCategory { get; set; }
         public string ProjectService { get; set; }
         public int FK_Project { get; set; }
-        public  int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public string? ServiceCategoryName { get; set; }
         public string? SupplierName { get; set; }
@@ -19,6 +19,8 @@ namespace Construction.DomainModel.Item
         public decimal TotalPrice { get; set; }
         public int FK_Supplier { get; set; }
         public string? ProjectName { get; set; }
+
+        public int UserID { get; set; }
     }
     public class Item
     {
