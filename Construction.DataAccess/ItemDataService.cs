@@ -24,11 +24,11 @@ namespace Construction.DataAccess
         {
             HttpResponses response = new HttpResponses();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_UpdateProjectService; 
+            string sqlCommand = "usp_UpdateProjectService"; // Updated to match procedure name
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
-            // Add input parameters
+            // Add input parameters - updated to match stored procedure
             db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
             db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
             db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
@@ -100,11 +100,12 @@ namespace Construction.DataAccess
         {
             List<ProjectServiceModel> services = new List<ProjectServiceModel>();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = Procedures.SP_GetProjectService;
+            string sqlCommand = "usp_GetProjectService"; // Updated to match procedure name
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
-            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int32, service.FK_Project);
+            // Update parameter types to match stored procedure
+            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project); // Changed to Int64
             db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
             db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
 
@@ -122,10 +123,15 @@ namespace Construction.DataAccess
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
                         Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,
-                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0,
+                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0, // Changed to Int64
                         ServiceCategoryName = dataReader["ServiceCategoryName"] != DBNull.Value ? Convert.ToString(dataReader["ServiceCategoryName"]) : string.Empty,
                         ProjectName = dataReader["ProjectName"] != DBNull.Value ? Convert.ToString(dataReader["ProjectName"]) : string.Empty,
-                        SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty
+                        SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty,
+                        // Add new fields from stored procedure
+                        CreatedOn = dataReader["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["CreatedOn"]) : DateTime.MinValue,
+                        ModifiedDate = dataReader["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(dataReader["ModifiedDate"]) : DateTime.MinValue,
+                        CreatedBy = dataReader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["CreatedBy"]) : 0,
+                        ModifiedBy = dataReader["ModifiedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["ModifiedBy"]) : 0
                     };
                     services.Add(s);
                 }
@@ -133,8 +139,6 @@ namespace Construction.DataAccess
 
             return services;
         }
-
-        // Add this method to your existing ItemDataService class
         // Add this method to your existing ItemDataService class
         public List<SupplierModel> GetSuppliers(SupplierModel supplier)
         {

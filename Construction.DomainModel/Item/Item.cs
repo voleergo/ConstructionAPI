@@ -19,8 +19,11 @@ namespace Construction.DomainModel.Item
         public decimal TotalPrice { get; set; }
         public int FK_Supplier { get; set; }
         public string? ProjectName { get; set; }
-
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? ModifiedBy { get; set; }
     }
     public class Item
     {
