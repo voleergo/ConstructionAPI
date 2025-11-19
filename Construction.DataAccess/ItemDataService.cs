@@ -24,7 +24,7 @@ namespace Construction.DataAccess
         {
             HttpResponses response = new HttpResponses();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = "usp_UpdateProjectService"; // Updated to match procedure name
+            string sqlCommand = "usp_UpdateProjectService";
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
@@ -34,14 +34,20 @@ namespace Construction.DataAccess
             db.AddInParameter(dbCommand, "@ProjectService", DbType.String, service.ProjectService);
             db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
             db.AddInParameter(dbCommand, "@Quantity", DbType.Decimal, service.Quantity);
-            db.AddInParameter(dbCommand, "@Unit", DbType.String, service.Unit );
+            db.AddInParameter(dbCommand, "@Unit", DbType.String, service.Unit);
             db.AddInParameter(dbCommand, "@UnitPrice", DbType.Decimal, service.UnitPrice);
             db.AddInParameter(dbCommand, "@TotalPrice", DbType.Decimal, service.TotalPrice);
             db.AddInParameter(dbCommand, "@FK_Supplier", DbType.Int64, service.FK_Supplier);
+
+            // Add new parameters for ServiceDate and Description
+            db.AddInParameter(dbCommand, "@ServiceDate", DbType.DateTime, service.ServiceDate);
+            db.AddInParameter(dbCommand, "@Description", DbType.String, service.Description);
+
             db.AddInParameter(dbCommand, "@UserID", DbType.Int32, service.UserID);
             db.AddInParameter(dbCommand, "@ServiceCategoryName", DbType.String, service.ServiceCategoryName);
             db.AddInParameter(dbCommand, "@SupplierName", DbType.String, service.SupplierName);
             db.AddInParameter(dbCommand, "@ProjectName", DbType.String, service.ProjectName);
+
             try
             {
                 using (IDataReader dataReader = db.ExecuteReader(dbCommand))
@@ -100,12 +106,12 @@ namespace Construction.DataAccess
         {
             List<ProjectServiceModel> services = new List<ProjectServiceModel>();
             Database db = EnterpriseExtentions.GetDatabase(_connectionString);
-            string sqlCommand = "usp_GetProjectService"; // Updated to match procedure name
+            string sqlCommand = "usp_GetProjectService";
             DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
             dbCommand.CommandTimeout = 0;
 
             // Update parameter types to match stored procedure
-            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project); // Changed to Int64
+            db.AddInParameter(dbCommand, "@FK_Project", DbType.Int64, service.FK_Project);
             db.AddInParameter(dbCommand, "@ID_ProjectService", DbType.Int32, service.ID_ProjectService);
             db.AddInParameter(dbCommand, "@FK_ServiceCategory", DbType.Int32, service.FK_ServiceCategory);
 
@@ -123,11 +129,15 @@ namespace Construction.DataAccess
                         UnitPrice = dataReader["UnitPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["UnitPrice"]) : 0,
                         TotalPrice = dataReader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(dataReader["TotalPrice"]) : 0,
                         Unit = dataReader["Unit"] != DBNull.Value ? Convert.ToString(dataReader["Unit"]) : string.Empty,
-                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0, // Changed to Int64
+                        FK_Supplier = dataReader["FK_Supplier"] != DBNull.Value ? Convert.ToInt32(dataReader["FK_Supplier"]) : 0,
                         ServiceCategoryName = dataReader["ServiceCategoryName"] != DBNull.Value ? Convert.ToString(dataReader["ServiceCategoryName"]) : string.Empty,
                         ProjectName = dataReader["ProjectName"] != DBNull.Value ? Convert.ToString(dataReader["ProjectName"]) : string.Empty,
                         SupplierName = dataReader["SupplierName"] != DBNull.Value ? Convert.ToString(dataReader["SupplierName"]) : string.Empty,
+
                         // Add new fields from stored procedure
+                        ServiceDate = dataReader["ServiceDate"] != DBNull.Value ? Convert.ToDateTime(dataReader["ServiceDate"]) : DateTime.MinValue,
+                        Description = dataReader["Descrption"] != DBNull.Value ? Convert.ToString(dataReader["Descrption"]) : string.Empty, // Note: Typo in DB column name
+
                         CreatedOn = dataReader["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(dataReader["CreatedOn"]) : DateTime.MinValue,
                         ModifiedDate = dataReader["ModifiedDate"] != DBNull.Value ? Convert.ToDateTime(dataReader["ModifiedDate"]) : DateTime.MinValue,
                         CreatedBy = dataReader["CreatedBy"] != DBNull.Value ? Convert.ToInt32(dataReader["CreatedBy"]) : 0,
@@ -327,6 +337,33 @@ namespace Construction.DataAccess
             }
 
             return response;
+        }
+
+        public decimal GetTotalExpenseByServices()
+        {
+            decimal totalExpense = 0;
+            Database db = EnterpriseExtentions.GetDatabase(_connectionString);
+            string sqlCommand = Procedures.SP_GetTotalExpenseByServices;
+            DbCommand dbCommand = db.GetStoredProcCommand(sqlCommand);
+
+            try
+            {
+                using (IDataReader dataReader = db.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        totalExpense = dataReader["TotalExpense"] != DBNull.Value
+                            ? Convert.ToDecimal(dataReader["TotalExpense"])
+                            : 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching total expense: " + ex.Message);
+            }
+
+            return totalExpense;
         }
 
 

@@ -341,6 +341,33 @@ namespace Construction.API.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("TotalExpense")]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public IActionResult GetTotalExpense()
+        {
+            try
+            {
+                var result = _itemService.GetTotalExpenseByServices();
+
+                return Ok(new
+                {
+                    TotalExpense = result
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Get Total Expense");
+                return StatusCode(500, new
+                {
+                    ResponseCode = "500",
+                    ResponseMessage = "An error occurred while calculating total expense.",
+                    Error = ex.Message
+                });
+            }
+        }
+
+
     }
 }
 

@@ -63,5 +63,12 @@ namespace Construction.Service
         }
 
 
+        public decimal GetTotalExpenseByServices()
+        {
+            ItemDataService dataService = new ItemDataService(ConnectionStrings);
+            return dataService.GetTotalExpenseByServices();
+        }
+
+
     }
 }

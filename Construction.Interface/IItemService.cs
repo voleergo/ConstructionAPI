@@ -20,5 +20,8 @@ namespace Construction.Interface
 
         HttpResponses AddCategoryAndSupplier(AddCategoryAndSupplierModel model);
 
+        decimal GetTotalExpenseByServices();
+
+
     }
 }

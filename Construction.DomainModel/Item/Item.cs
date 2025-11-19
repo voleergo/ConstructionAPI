@@ -24,6 +24,8 @@ namespace Construction.DomainModel.Item
         public DateTime? ModifiedDate { get; set; }
         public int? CreatedBy { get; set; }
         public int? ModifiedBy { get; set; }
+        public DateTime ServiceDate { get; set; }
+        public string? Description { get; set; }
     }
     public class Item
     {

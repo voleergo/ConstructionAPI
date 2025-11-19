@@ -107,5 +107,7 @@ namespace Construction.Common
         public const string SP_DeletePayment = "usp_DeletePayment";
         public const string SP_UpdatePayment = "usp_UpdatePayment";
         public const string SP_GetPayment = "usp_GetPayment";
+
+        public const string SP_GetTotalExpenseByServices = "usp_GetTotalExpenseByServices";
     }
 }
